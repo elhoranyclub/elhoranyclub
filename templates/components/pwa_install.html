@@ -1,43 +1,51 @@
 {% load i18n %}
-<div x-data="pwaInstall()" x-init="init()" x-show="available" x-cloak class="pwa-install fixed z-40" style="bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 4.6rem); inset-inline-start: .9rem;" role="complementary" aria-label="{% trans 'ثبّت التطبيق' %}">
+{# رسالة «ثبّت التطبيق» — بـ JavaScript عادي (مش Alpine) عشان تشتغل حتى لو Alpine اتعطّل #}
+<div id="pwa-install" class="pwa-install fixed z-40 hidden" style="bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 4.6rem); inset-inline-start: .9rem;" role="complementary" aria-label="{% trans 'ثبّت التطبيق' %}">
   <div class="flex items-center gap-1 card shadow-xl pe-1 ps-3 py-1.5" style="background: var(--brand-navy); color: #fff;">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-    <button type="button" class="text-[11px] font-extrabold py-2" @click="install()">{% trans "ثبّت التطبيق على شاشتك" %}</button>
-    <button type="button" class="p-1.5 text-white/60 hover:text-white" @click="dismiss()" aria-label="{% trans 'إغلاق' %}">
+    <button type="button" id="pwa-install-btn" class="text-[11px] font-extrabold py-2">{% trans "ثبّت التطبيق على شاشتك" %}</button>
+    <button type="button" id="pwa-install-close" class="p-1.5 text-white/60 hover:text-white" aria-label="{% trans 'إغلاق' %}">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
 </div>
 <script>
-  window.pwaInstall = function () {
-    return {
-      available: false,
-      deferred: null,
-      init: function () {
-        var self = this;
-        window.addEventListener('beforeinstallprompt', function (e) {
-          e.preventDefault();
-          self.deferred = e;
-          self.available = !localStorage.getItem('pwa-hidden');
-        });
-        window.addEventListener('appinstalled', function () {
-          localStorage.setItem('pwa-hidden', '1');
-          self.available = false;
-        });
-      },
-      install: function () {
-        if (!this.deferred) return;
-        var self = this;
-        this.deferred.prompt();
-        this.deferred.userChoice.then(function (choice) {
-          if (choice && choice.outcome === 'accepted') localStorage.setItem('pwa-hidden', '1');
-          self.available = false;
-        });
-      },
-      dismiss: function () {
-        localStorage.setItem('pwa-hidden', '1');
-        this.available = false;
-      },
-    };
-  };
+  (function () {
+    var box = document.getElementById('pwa-install');
+    var btn = document.getElementById('pwa-install-btn');
+    var close = document.getElementById('pwa-install-close');
+    if (!box) return;
+
+    var hidden = false;
+    try { hidden = localStorage.getItem('pwa-hidden') === '1'; } catch (e) { hidden = false; }
+
+    function hide() {
+      box.classList.add('hidden');
+      try { localStorage.setItem('pwa-hidden', '1'); } catch (e) {}
+    }
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      window.__pwaDeferred = e;
+      if (!hidden) box.classList.remove('hidden');
+    });
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var e = window.__pwaDeferred;
+        if (!e) { hide(); return; }
+        e.prompt();
+        if (e.userChoice) {
+          e.userChoice.then(function (choice) {
+            if (choice && choice.outcome === 'accepted') hide();
+          });
+        }
+      });
+    }
+    if (close) close.addEventListener('click', hide);
+
+    // زر إغلاق إضافي بـ Esc + إخفاء تلقائي بعد ٢٠ ثانية (عشان ما تقفشش على المحتوى)
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+    setTimeout(function () { if (!box.classList.contains('hidden')) hide(); }, 20000);
+  })();
 </script>
