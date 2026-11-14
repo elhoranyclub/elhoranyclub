@@ -17,6 +17,9 @@ environ.Env.read_env(BASE_DIR / ".env")
 # — من غير كده المتصفح بيconsiderه ملف عادي وبيتجاهل تثبيت التطبيق.
 mimetypes.add_type("application/manifest+json", ".webmanifest")
 
+# رمز تحقق Google Search Console (بيتحط في <head> تلقائيًا)
+GOOGLE_SITE_VERIFICATION = env("GOOGLE_SITE_VERIFICATION", default="")
+
 # الدفع الإلكتروني المباشر (كارت عبر Paymob) — مقفول لحد ما تتفعّل بوابة حقيقية
 ONLINE_PAYMENT_ENABLED = env.bool("ONLINE_PAYMENT_ENABLED", default=False)
 
