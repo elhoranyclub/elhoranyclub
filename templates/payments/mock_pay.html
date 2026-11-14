@@ -4,7 +4,7 @@
 {% block content %}
 <div class="min-h-[70vh] flex items-center justify-center px-4 py-10" style="background: radial-gradient(700px 400px at 50% -10%, #1d3a56, #050f1c);">
   <div class="w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl" style="background: linear-gradient(165deg, #123252, #081c30); border:1.5px solid rgba(212,175,55,.5);">
-    <img src="{% static 'img/logo.svg' %}" alt="" class="w-16 h-16 mx-auto">
+    <img src="{% static 'img/logo.png' %}" alt="" class="w-16 h-16 mx-auto">
     <p class="text-white/60 text-[10px] font-black tracking-[0.25em] mt-2">{% trans "بوابة الدفع — وضع تجريبي" %}</p>
     <p class="text-4xl font-black mt-4" style="color: var(--brand-gold);">{{ payment.amount }} {% trans "ج" %}</p>
     <p class="text-white/80 text-xs font-bold mt-1">{{ payment.membership.membership_type.name_ar }}</p>

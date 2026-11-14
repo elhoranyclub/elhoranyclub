@@ -14,7 +14,7 @@
       <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "المدة" %}</dt><dd class="font-bold">{{ mtype.duration_months }} {% trans "شهرًا من تاريخ التفعيل" %}</dd></div>
       <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "السعر" %}</dt><dd class="font-bold">{{ quote.base }} {% trans "ج" %}</dd></div>
       {% if quote.discount %}<div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "الخصم" %}{% if quote.coupon %} ({{ quote.coupon.code }}){% endif %}</dt><dd class="font-bold text-[var(--brand-green)]">− {{ quote.discount }} {% trans "ج" %}</dd></div>{% endif %}
-      {% if quote.fine and quote.fine > 0 %}<div class="py-2 flex justify-between gap-4 border-t border-slate-100 pt-2"><dt class="text-[#b8932f] font-bold">{% trans "غرامة التأخير (بعد سنة من آخر دفع)" %}</dt><dd class="font-black text-[#b8932f]">+ {{ quote.fine }} {% trans "ج" %}</dd></div>{% endif %}
+      {% if quote.fine and quote.fine > 0 %}<div class="py-2 flex justify-between gap-4 border-t border-slate-100 pt-2"><dt class="text-[#d63f1a] font-bold">{% trans "غرامة التأخير (بعد سنة من آخر دفع)" %}</dt><dd class="font-black text-[#d63f1a]">+ {{ quote.fine }} {% trans "ج" %}</dd></div>{% endif %}
       <div class="py-3 flex justify-between gap-4"><dt class="font-black">{% trans "الإجمالي المطلوب" %}</dt><dd class="text-2xl font-black text-[var(--brand-navy)]">{{ quote.total }} {% trans "ج" %}</dd></div>
     </dl>
 

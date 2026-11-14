@@ -26,7 +26,7 @@
           <td align="center" style="background-color:{{ brand_navy }}; padding:26px 24px 20px; border-bottom:4px solid {{ brand_gold }};">
             <img src="{{ logo_src }}" alt="{{ site_name }}" width="84" height="84" style="display:block; width:84px; height:84px; border:0; outline:none; text-decoration:none;" />
             <div style="margin-top:12px; color:#ffffff; font-size:19px; font-weight:800; letter-spacing:0.2px;">{{ site_name }}</div>
-            {% if site_tagline %}<div style="margin-top:4px; color:#d4af37; font-size:11px; font-weight:700;">{{ site_tagline }}</div>{% endif %}
+            {% if site_tagline %}<div style="margin-top:4px; color:#f05225; font-size:11px; font-weight:700;">{{ site_tagline }}</div>{% endif %}
           </td>
         </tr>
 
@@ -43,7 +43,7 @@
             <div style="color:#ffffff; font-size:12px; font-weight:800;">{{ site_name }}</div>
             {% if site_address %}<div style="margin-top:6px; color:#a9bfd4; font-size:11px; line-height:1.8;">{{ site_address }}</div>{% endif %}
             <div style="margin-top:6px; color:#a9bfd4; font-size:11px;">
-              {% if site_phone %}<a href="tel:{{ site_phone }}" style="color:#d4af37; text-decoration:none; font-weight:700;" dir="ltr">{{ site_phone }}</a>{% endif %}
+              {% if site_phone %}<a href="tel:{{ site_phone }}" style="color:#f05225; text-decoration:none; font-weight:700;" dir="ltr">{{ site_phone }}</a>{% endif %}
               {% if site_hours %}{% if site_phone %} &nbsp;·&nbsp; {% endif %}{{ site_hours }}{% endif %}
             </div>
             <div style="margin-top:10px; color:#6f8ba3; font-size:10px;">© {% now "Y" %} مهندس/ صالح محمد صالح — جميع الحقوق محفوظة</div>

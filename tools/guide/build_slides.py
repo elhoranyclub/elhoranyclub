@@ -146,7 +146,7 @@ def header(chapter, idx):
     return f"""
   <div class="top">
     <div class="brand">
-      <img src="assets/logo.svg" alt="logo">
+      <img src="assets/logo.png" alt="logo">
       <div>
         <div class="bname">مركز شباب الحوراني</div>
         <div class="bsub">الموقع الإلكتروني للمركز</div>
@@ -208,7 +208,7 @@ def build_slide(s, total, role_label=""):
         )
         body = f"""
   <div class="title-slide">
-    <div class="logos"><img src="assets/logo.svg"></div>
+    <div class="logos"><img src="assets/logo.png"></div>
     <div class="kicker">مركز شباب الحوراني — {role_label}</div>
     <h1><span class="hl">دليل</span> استخدام الموقع</h1>
     <p>{s['subtitle']}</p>
@@ -348,3 +348,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

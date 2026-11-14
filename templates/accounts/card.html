@@ -2,27 +2,27 @@
 {% load static i18n %}
 {% block title %}{% trans "كارت العضوية" %} — {{ site_name }}{% endblock %}
 {% block content %}
-<div class="min-h-[70vh] flex flex-col items-center justify-center px-4 py-8" style="background: radial-gradient(800px 500px at 50% -10%, #17405f, var(--brand-navy-deep));">
+<div class="min-h-[70vh] flex flex-col items-center justify-center px-4 py-8" style="background: radial-gradient(800px 500px at 50% -10%, #244a70, var(--brand-navy-deep));">
   <p class="no-print text-white/70 text-xs font-bold mb-4 tracking-widest">{% trans "اعرض هذا الكارت لموظف الاستقبال" %}</p>
 
   <article class="mcard w-[min(92vw,24rem)]" aria-label="{% trans 'كارت العضوية الرقمي' %}">
     <div class="mcard-inner">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <img src="{% static 'img/logo.svg' %}" alt="" class="h-9 w-9">
+          <img src="{% static 'img/logo.png' %}" alt="" class="h-9 w-9">
           <div class="leading-tight">
             <p class="text-[12px] font-black">{{ site_name }}</p>
             <p class="mcard-label">{% trans "كارت عضوية رقمي" %}</p>
           </div>
         </div>
-        <span class="text-[10px] font-black" style="color:var(--c-gold,#d4af37);">MEMBER</span>
+        <span class="text-[10px] font-black" style="color:var(--c-gold,#f05225);">MEMBER</span>
       </div>
 
       <div class="mt-4 flex items-center gap-4">
         {% if profile.photo %}
           <img src="{{ profile.photo.url }}" alt="{{ profile.full_name_ar }}" class="mcard-photo">
         {% else %}
-          <span class="mcard-photo flex items-center justify-center text-3xl font-black" style="color:#d4af37;">{{ profile.full_name_ar.0|default:"ح" }}</span>
+          <span class="mcard-photo flex items-center justify-center text-3xl font-black" style="color:#f05225;">{{ profile.full_name_ar.0|default:"ح" }}</span>
         {% endif %}
         <div class="min-w-0">
           <p class="text-lg font-black leading-snug">{{ profile.full_name_ar }}</p>
@@ -45,7 +45,7 @@
 
       {% if profile.is_general_assembly or card_fine.due %}
       <div class="mt-3 flex flex-wrap items-center gap-1.5">
-        {% if profile.is_general_assembly %}<span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-black" style="background: rgba(212,175,55,.18); color:#f6e27a; border:1px solid rgba(212,175,55,.45);">{% trans "اللجنة العمومية" %}{% if profile.assembly_position %} — {{ profile.assembly_position }}{% endif %}</span>{% endif %}
+        {% if profile.is_general_assembly %}<span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-black" style="background: rgba(212,175,55,.18); color:#ff8a5c; border:1px solid rgba(212,175,55,.45);">{% trans "اللجنة العمومية" %}{% if profile.assembly_position %} — {{ profile.assembly_position }}{% endif %}</span>{% endif %}
         {% if card_fine.due %}<span class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-black" style="background: rgba(180,35,24,.35); color:#ffd7d2; border:1px solid rgba(255,255,255,.18);">{% trans "غرامة تأخير:" %} {{ card_fine.amount }} {% trans "ج" %}</span>{% endif %}
       </div>
       {% endif %}

@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{% block title %}{{ site_name }}{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{{ site_name }} — {{ site_tagline }}. اشتراكات، بطولات، دورات، رحلات وأخبار المركز في مكان واحد.{% endblock %}">
-  <meta name="theme-color" content="{{ site_settings.primary_color|default:'#0e2a47' }}">
-  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <meta name="theme-color" content="{{ site_settings.primary_color|default:'#183159' }}">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.png' %}">
   <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
   <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
 
@@ -26,7 +26,7 @@
   <meta property="og:locale" content="{% if LANGUAGE_CODE == 'ar' %}ar_EG{% else %}en_US{% endif %}">
   <meta property="og:title" content="{% block og_title %}{{ site_name }}{% endblock %}">
   <meta property="og:description" content="{{ site_tagline }}">
-  {% block og_image %}<meta property="og:image" content="{% static 'img/logo.svg' %}">{% endblock %}
+  {% block og_image %}<meta property="og:image" content="{% static 'img/og-cover.png' %}">{% endblock %}
 
   <!-- Fonts: Cairo (عربي) + fallback stack -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,7 @@
   <style>
     :root {
       --brand-navy: {{ site_settings.primary_color|default:'#0e2a47' }};
-      --brand-gold: {{ site_settings.gold_color|default:'#d4af37' }};
+      --brand-gold: {{ site_settings.gold_color|default:'#f05225' }};
       --brand-green: {{ site_settings.green_color|default:'#146b3a' }};
     }
     [x-cloak] { display: none !important; }

@@ -36,7 +36,7 @@
       <dl class="text-sm">
         <div class="flex justify-between py-1.5"><dt class="text-slate-500">{% trans "السعر الأساسي" %}</dt><dd class="font-bold">{{ quote.base }} {% trans "ج" %}</dd></div>
         <div class="flex justify-between py-1.5"><dt class="text-slate-500">{% trans "الخصم" %}</dt><dd class="font-bold text-[var(--brand-green)]">− {{ quote.discount }} {% trans "ج" %}</dd></div>
-        {% if quote.fine and quote.fine > 0 %}<div class="flex justify-between py-1.5"><dt class="text-[#b8932f] font-bold">{% trans "غرامة التأخير (بعد سنة من آخر دفع)" %}</dt><dd class="font-black text-[#b8932f]">+ {{ quote.fine }} {% trans "ج" %}</dd></div>{% endif %}
+        {% if quote.fine and quote.fine > 0 %}<div class="flex justify-between py-1.5"><dt class="text-[#d63f1a] font-bold">{% trans "غرامة التأخير (بعد سنة من آخر دفع)" %}</dt><dd class="font-black text-[#d63f1a]">+ {{ quote.fine }} {% trans "ج" %}</dd></div>{% endif %}
         <div class="flex justify-between py-2.5 mt-1 border-t border-slate-200"><dt class="font-black">{% trans "الإجمالي" %}</dt><dd class="text-xl font-black text-[var(--brand-navy)]">{{ quote.total }} {% trans "ج" %}</dd></div>
       </dl>
       <p class="help-text">{% trans "الدفع: نقدي في المركز أو أونلاين/محفظة فور تفعيل بوابة الدفع — هتوصلك تعليمات الدفع بالتفصيل بعد التأكيد." %}</p>

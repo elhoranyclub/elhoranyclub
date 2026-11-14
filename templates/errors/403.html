@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{% trans "غير مصرح بالوصول" %} · {{ site_name }}</title>
   <meta name="theme-color" content="#0e2a47">
-  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.png' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
@@ -13,7 +13,7 @@
 </head>
 <body class="font-cairo hero min-h-screen flex items-center justify-center text-center">
   <div class="px-6">
-    <img src="{% static 'img/logo.svg' %}" alt="{{ site_name }}" class="w-20 h-20 mx-auto mb-6">
+    <img src="{% static 'img/logo.png' %}" alt="{{ site_name }}" class="w-20 h-20 mx-auto mb-6">
     <p class="font-black text-7xl sm:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[var(--brand-gold)] to-[var(--brand-gold-dark)]" aria-hidden="true">403</p>
     <h1 class="text-2xl font-black text-white mt-2">{% trans "غير مصرح لك بالوصول" %}</h1>
     <p class="text-[#bcd0e0] text-sm font-semibold mt-2">{% trans "هذه الصفحة مخصصة للموظفين المعتمدين بالمركز فقط." %}</p>

@@ -58,7 +58,7 @@ img, video, iframe, table { max-width: 100%; }
 /* ---------- Badges / chips ---------- */
 .badge { display: inline-flex; align-items: center; gap: .35rem; padding: .25rem .65rem; border-radius: 999px; font-size: .72rem; font-weight: 800; }
 .badge-green { background: var(--brand-green-soft); color: var(--brand-green); }
-.badge-gold  { background: var(--brand-gold-soft); color: #8a6d1a; }
+.badge-gold  { background: var(--brand-gold-soft); color: #9a3c14; }
 .badge-navy  { background: #e6edf4; color: var(--brand-navy); }
 .badge-red   { background: #fde8e8; color: #b42318; }
 .badge-gray  { background: #eef0f3; color: var(--muted); }

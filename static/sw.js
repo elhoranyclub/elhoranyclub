@@ -1,6 +1,6 @@
 /* مركز شباب الحوراني — Service Worker
    Cache-first للـ static، network-first للصفحات مع صفحة offline كـ fallback. */
-const VERSION = 'hourani-v6';
+const VERSION = 'hourani-v7';
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 
@@ -14,9 +14,9 @@ const PRECACHE = [
   '/static/css/overrides.css',
   '/static/css/print.css',
   '/static/js/app.js',
-  '/static/img/logo.svg',
-  '/static/img/favicon.svg',
-  '/static/icons/icon.svg',
+  '/static/img/logo.png',
+  '/static/img/favicon.png',
+  '/static/icons/icon-192.png',
   '/static/manifest.webmanifest',
 ];
 

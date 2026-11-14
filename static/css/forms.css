@@ -22,11 +22,11 @@
 
 /* ---------- Digital membership card ---------- */
 .mcard {
-  --c-navy:#0e2a47; --c-deep:#081c30; --c-gold:#d4af37;
+  --c-navy:#0e2a47; --c-deep:#081c30; --c-gold:#f05225;
   position:relative; overflow:hidden; border-radius:1.4rem; color:#fff;
   background: radial-gradient(700px 350px at 120% -20%, rgba(212,175,55,.4), transparent 55%),
               radial-gradient(500px 300px at -10% 120%, rgba(20,107,58,.45), transparent 55%),
-              linear-gradient(160deg, var(--c-deep) 0%, var(--c-navy) 60%, #17405f 100%);
+              linear-gradient(160deg, var(--c-deep) 0%, var(--c-navy) 60%, #244a70 100%);
   border:1.5px solid rgba(212,175,55,.55); box-shadow: var(--shadow-lg);
 }
 .mcard::after {
@@ -35,7 +35,7 @@
 }
 .mcard-inner { position:relative; padding:1.15rem 1.15rem .95rem; }
 .mcard-number { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing:.14em; font-size:1.02rem; color:var(--c-gold); font-weight:700; }
-.mcard-photo { width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--c-gold);background:#17405f; }
+.mcard-photo { width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--c-gold);background:#244a70; }
 .mcard-qr { background:#fff; padding:.55rem; border-radius:.9rem; display:inline-flex; }
 .mcard-label { font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:#9db4c6; font-weight:800; }
 

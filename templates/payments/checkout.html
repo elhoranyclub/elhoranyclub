@@ -11,7 +11,7 @@
       <p class="text-xs font-bold text-slate-500">{% trans "المطلوب" %}</p>
       <p class="font-extrabold text-[var(--brand-navy)] leading-6">{{ payable_label }}</p>
       <p class="text-[11px] font-bold text-slate-400 mt-0.5" dir="ltr">{{ reference }}</p>
-      {% if membership and membership.fine_amount > 0 %}<p class="text-[11px] font-black text-[#b8932f] mt-0.5">{% trans "منها غرامة تأخير:" %} {{ membership.fine_amount }} {% trans "ج" %}</p>{% endif %}
+      {% if membership and membership.fine_amount > 0 %}<p class="text-[11px] font-black text-[#d63f1a] mt-0.5">{% trans "منها غرامة تأخير:" %} {{ membership.fine_amount }} {% trans "ج" %}</p>{% endif %}
     </div>
     <p class="text-3xl font-black text-[var(--brand-navy)] shrink-0">{{ total }}<small class="text-sm font-extrabold text-slate-400"> {% trans "ج" %}</small></p>
   </div>

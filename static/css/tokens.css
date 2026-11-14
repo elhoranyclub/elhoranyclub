@@ -7,10 +7,10 @@
   /* Brand palette (navy / gold / green) — defaults, overridable via DB settings */
   --brand-navy: #0e2a47;
   --brand-navy-deep: #081c30;
-  --brand-navy-light: #17405f;
-  --brand-gold: #d4af37;
-  --brand-gold-dark: #b8932f;
-  --brand-gold-soft: #f5ead0;
+  --brand-navy-light: #244a70;
+  --brand-gold: #f05225;
+  --brand-gold-dark: #d63f1a;
+  --brand-gold-soft: #ffe0d1;
   --brand-green: #146b3a;
   --brand-green-soft: #e4f2ea;
 

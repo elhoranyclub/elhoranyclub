@@ -9,7 +9,7 @@
     <div class="mcard-inner">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2">
-          <img src="{% static 'img/logo.svg' %}" alt="" class="h-8 w-8">
+          <img src="{% static 'img/logo.png' %}" alt="" class="h-8 w-8">
           <span class="text-[11px] font-extrabold tracking-widest" style="color:#9db4c6;">{{ site_name }}</span>
         </div>
         <span class="mcard-label">{% trans "كارت عضوية" %}</span>
@@ -18,7 +18,7 @@
         {% if profile.photo %}
           <img src="{{ profile.photo.url }}" alt="{{ profile.full_name_ar }}" class="mcard-photo">
         {% else %}
-          <span class="mcard-photo flex items-center justify-center text-2xl font-black" style="color:#d4af37;">{{ profile.full_name_ar.0|default:"ح" }}</span>
+          <span class="mcard-photo flex items-center justify-center text-2xl font-black" style="color:#f05225;">{{ profile.full_name_ar.0|default:"ح" }}</span>
         {% endif %}
         <div class="min-w-0">
           <p class="text-xl font-black leading-snug truncate">{{ profile.full_name_ar }}</p>
