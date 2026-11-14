@@ -6,11 +6,16 @@ Secrets are read from .env (see .env.example). Nothing secret is hard-coded here
 from pathlib import Path
 
 import environ
+import mimetypes
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
+
+# بيخلي WhiteNoise يقدّم ملف الـ PWA manifest بنوعه الصح (application/manifest+json)
+# — من غير كده المتصفح بيconsiderه ملف عادي وبيتجاهل تثبيت التطبيق.
+mimetypes.add_type("application/manifest+json", ".webmanifest")
 
 # ---------------------------------------------------------------- Core
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-only-key-change-me")

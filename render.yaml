@@ -10,7 +10,7 @@
 
 services:
   - type: web
-    name: hourani-club
+    name: elhoranyclub
     runtime: python
     plan: starter          # free tier ببلاش برضو، بس فيه حدّ시간 شهري
     region: frankfurt      # اختر أقرب منطقة لـ Neon بتاعك
@@ -32,9 +32,9 @@ services:
       - key: DATABASE_URL
         sync: false          # connection string بتاع Neon (pooled) — انظر README
       - key: ALLOWED_HOSTS
-        value: "hourani-club.onrender.com,.onrender.com"
+        value: "elhoranyclub.onrender.com,.onrender.com"
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://hourani-club.onrender.com"
+        value: "https://elhoranyclub.onrender.com"
       - key: CONN_MAX_AGE
         value: "300"
       - key: PAYMENT_PROVIDER
@@ -71,3 +71,4 @@ services:
         sync: false
       - key: PAYMOB_HMAC_SECRET
         sync: false
+
