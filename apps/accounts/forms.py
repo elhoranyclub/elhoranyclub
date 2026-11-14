@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 
+from apps.core.images import clean_photo as validate_photo
 from django import forms
 from django.contrib.auth import password_validation
 from django.contrib.auth.password_validation import validate_password
@@ -124,7 +125,11 @@ class ProfileForm(StyledFormMixin, forms.ModelForm):
             "emergency_contact_phone": forms.TextInput(attrs={"inputmode": "tel", "dir": "ltr"}),
             "address": forms.TextInput(attrs={"autocomplete": "street-address"}),
             "health_notes": forms.Textarea(attrs={"rows": 2}),
+            "photo": forms.ClearableFileInput(attrs={"accept": "image/jpeg,image/png,image/webp,image/heic,image/heif,*/*"}),
         }
+
+    def clean_photo(self):
+        return validate_photo(self.cleaned_data.get("photo"))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -153,6 +158,9 @@ class DependentForm(StyledFormMixin, forms.ModelForm):
             "national_id": forms.TextInput(attrs={"inputmode": "numeric", "dir": "ltr", "autocomplete": "off"}),
             "health_notes": forms.Textarea(attrs={"rows": 2}),
         }
+
+    def clean_photo(self):
+        return validate_photo(self.cleaned_data.get("photo"))
 
     def clean_national_id(self):
         nid = (self.cleaned_data.get("national_id") or "").strip()

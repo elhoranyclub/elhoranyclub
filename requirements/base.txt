@@ -13,3 +13,4 @@ arabic-reshaper>=3.0 # تشكيل العربي في الفاتورة (apps/payme
 python-bidi>=0.4      # ترتيب النص العربي في الفاتورة
 nh3>=0.2              # تنظيف HTML في الأخبار (apps/news/models.py)
 requests>=2.31       #-webhooks و Paymob
+pillow-heif>=0.18   # صور آيفون HEIC/HEIF (الملف الشخصي والوثائق)

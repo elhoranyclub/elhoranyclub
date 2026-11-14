@@ -26,7 +26,8 @@
       <div class="min-w-0">
         <label class="label" for="{{ form.photo.id_for_label }}">{% trans "الصورة الشخصية" %}</label>
         {{ form.photo }}
-        <p class="help-text">{% trans "JPG/PNG/WebP — حتى ٥ ميجابايت. اختار صورة من معرض الصور أو صوّرها بالكاميرا." %}</p>
+        {% for error in form.photo.errors %}<p class="error-list" style="margin:.2rem 0 0"><li>{{ error }}</li></p>{% endfor %}
+        <p class="help-text">{% trans "JPG/PNG/WebP — حتى ٥ ميجابايت. اختار من معرض الصور أو صوّرها بالكاميرا — الموقع بيقبل صور آيفون (HEIC) كمان. لو الصورة اترفضت، صغّرها من إعدادات الموبايل وحاول تاني." %}</p>
         {% if media_is_temporary %}
         <p class="help-text" style="color:#b45309;">{% trans "ملاحظة: السيرفر دلوقتي بيخزن الصور مؤقتًا — فعّل تخزين سحابي (Cloudinary) قبل النشر النهائي." %}</p>
         {% endif %}
