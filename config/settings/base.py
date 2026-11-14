@@ -17,6 +17,9 @@ environ.Env.read_env(BASE_DIR / ".env")
 # — من غير كده المتصفح بيconsiderه ملف عادي وبيتجاهل تثبيت التطبيق.
 mimetypes.add_type("application/manifest+json", ".webmanifest")
 
+# Django 6.0 هيتغيّر سلوك التحقق من الروابط — نفترض https (أأمن) ونكتم التحذير
+FORMS_URLFIELD_ASSUME_HTTPS = True
+
 # ---------------------------------------------------------------- Core
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-only-key-change-me")
 DEBUG = env.bool("DEBUG", default=False)

@@ -12,6 +12,14 @@
   </div>
   <div class="p-3 flex items-center justify-between gap-2">
     <span class="text-[10px] text-slate-500 font-bold truncate">{{ event.location }}</span>
-    {% if event.is_free %}<span class="badge badge-green">{% trans "مجاني" %}</span>{% else %}<span class="badge badge-gold">{{ event.price }} {% trans "ج" %}</span>{% endif %}
+    <span class="flex items-center gap-1.5">
+      {% if event.external_url %}
+      <span class="badge badge-gold inline-flex items-center gap-1" title="{{ event.external_label|default:'رابط خارجي' }}">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+        {% trans "لينك" %}
+      </span>
+      {% endif %}
+      {% if event.is_free %}<span class="badge badge-green">{% trans "مجاني" %}</span>{% else %}<span class="badge badge-gold">{{ event.price }} {% trans "ج" %}</span>{% endif %}
+    </span>
   </div>
 </a>

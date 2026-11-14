@@ -70,6 +70,25 @@ class NewsArticle(TimeStampedModel):
     published_at = models.DateTimeField(_("تاريخ النشر"), null=True, blank=True, db_index=True)
     is_featured = models.BooleanField(_("خبر مميز (تظهر في الرئيسية)"), default=False)
 
+
+    # ===== لينك خارجي (اختياري) =====
+    # زي: برنامج/training على موقع وزارة الشباب والرياضة أو أي موقع تاني.
+    # لو فاضي — مش بيظهر زرار في الواجهة.
+    external_url = models.URLField(
+        _("لينك خارجي"),
+        max_length=500,
+        blank=True,
+        default="",
+        help_text=_("اختياري — لينك صفحة خارجية (برنامج، كراسة شروط، موقع وزارة الشباب). اتركه فاضي لو مفيش."),
+    )
+    external_label = models.CharField(
+        _("نص زرار اللينك"),
+        max_length=80,
+        blank=True,
+        default="",
+        help_text=_("اختياري — النص اللي هيظهر على الزرار (مثال: «رابط البرنامج على موقع الوزارة»)."),
+    )
+
     class Meta:
         verbose_name = _("خبر")
         verbose_name_plural = _("الأخبار")

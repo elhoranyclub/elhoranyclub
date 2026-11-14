@@ -30,6 +30,8 @@
 
       <h1 class="text-2xl sm:text-3xl font-black text-[var(--brand-navy)] leading-snug mt-3">{{ course.name }}</h1>
 
+      {% include "components/external_link.html" with obj=course %}
+
       <dl class="grid sm:grid-cols-2 gap-2 text-xs mt-4">
         <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "المواعيد" %}</dt><dd class="font-extrabold">{{ course.schedule }}</dd></div>
         <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "المكان" %}</dt><dd class="font-extrabold">{{ course.location }}</dd></div>

@@ -34,6 +34,8 @@
 
       <h1 class="text-2xl sm:text-3xl font-black text-[var(--brand-navy)] leading-snug mt-3">{{ tournament.name }}</h1>
 
+      {% include "components/external_link.html" with obj=tournament %}
+
       <dl class="grid sm:grid-cols-2 gap-2 text-xs mt-4">
         {% if tournament.registration_start or tournament.registration_end %}
         <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "فترة التسجيل" %}</dt><dd class="font-extrabold">{{ tournament.registration_start|date:"Y-m-d"|default:"—" }} ← {{ tournament.registration_end|date:"Y-m-d"|default:"—" }}</dd></div>

@@ -11,6 +11,12 @@
     <div class="flex items-center gap-2">
       {% if article.category %}<span class="badge badge-navy">{{ article.category.name_ar }}</span>{% endif %}
       {% if article.is_featured %}<span class="badge badge-gold">{% trans "مميز" %}</span>{% endif %}
+      {% if article.external_url %}
+      <span class="badge badge-gold inline-flex items-center gap-1" title="{{ article.external_label|default:'رابط خارجي' }}">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+        {% trans "لينك خارجي" %}
+      </span>
+      {% endif %}
     </div>
     <h3 class="font-extrabold text-[var(--brand-navy)] leading-6 mt-2 line-clamp-2 min-h-[3rem]">{{ article.title }}</h3>
     <p class="text-[11px] text-slate-400 font-bold mt-2">{{ article.published_at|date:"Y / m / d" }}</p>

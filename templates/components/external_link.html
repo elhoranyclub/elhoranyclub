@@ -1,0 +1,11 @@
+{% comment %}زرار اللينك الخارجي — بيظهر بس لو المحتوى عليه لينك{% endcomment %}
+{% if obj.external_url %}
+<a href="{{ obj.external_url }}" target="_blank" rel="noopener noreferrer"
+   class="external-link inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-extrabold"
+   style="background: var(--brand-gold-soft, #fdf6e3); color: var(--brand-navy, #0e2a47); border:1px solid var(--brand-gold, #d4af37);">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/>
+  </svg>
+  <span>{{ obj.external_label|default:"افتح الرابط الخارجي" }}</span>
+</a>
+{% endif %}

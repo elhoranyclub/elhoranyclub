@@ -65,6 +65,25 @@ class Course(TimeStampedModel):
     cover = models.ImageField(_("الغلاف"), upload_to="courses/", blank=True, null=True)
     coach = models.ForeignKey("accounts.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="coached_courses", verbose_name=_("المدرب"))
 
+
+    # ===== لينك خارجي (اختياري) =====
+    # زي: برنامج/training على موقع وزارة الشباب والرياضة أو أي موقع تاني.
+    # لو فاضي — مش بيظهر زرار في الواجهة.
+    external_url = models.URLField(
+        _("لينك خارجي"),
+        max_length=500,
+        blank=True,
+        default="",
+        help_text=_("اختياري — لينك صفحة خارجية (برنامج، كراسةموقع وزارة الشباب). اتركه فاضي لو مفيش."),
+    )
+    external_label = models.CharField(
+        _("نص زرار اللينك"),
+        max_length=80,
+        blank=True,
+        default="",
+        help_text=_("اختياري — النص اللي هيظهر على الزرار (مثال: «رابط البرنامج على موقع الوزارة»)."),
+    )
+
     class Meta:
         verbose_name = _("دورة")
         verbose_name_plural = _("الدورات")
