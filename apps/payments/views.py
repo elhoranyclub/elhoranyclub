@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 
 from apps.memberships.models import Membership
 
-from .gateways.base import get_gateway
+from .gateways.base import GatewayNotConfigured, get_gateway
 from .invoice_pdf import render_invoice_pdf
 from .models import Invoice, Payment, PaymentProof
 from .services import confirm_payment, create_payment, record_wallet_proof, review_proof
@@ -113,6 +113,11 @@ def pay_online(request: HttpRequest, reference: str) -> HttpResponse:
     gateway = get_gateway()
     try:
         result = gateway.create_checkout(payment)
+    except GatewayNotConfigured as exc:
+        # البوابة مش مهيّأة (مفاتيح ناقصة) — مش خطأ في طلب العضو
+        logger.warning("payment gateway not configured: %s", exc)
+        messages.error(request, _("بوابة الدفع مش مهيّأة لسه — اختر الدفع نقدي في المركز."))
+        return redirect("payments:checkout", reference=reference)
     except Exception as exc:
         logger.error("gateway error: %s", exc)
         messages.error(request, _("بوابة الدفع غير متاحة حاليًا — اختر طريقة أخرى."))
@@ -290,7 +295,11 @@ def proof_file(request: HttpRequest, proof_id: int) -> HttpResponse:
 @csrf_exempt
 @require_POST
 def webhook(request: HttpRequest) -> HttpResponse:
-    gateway = get_gateway()
+    try:
+        gateway = get_gateway()
+    except GatewayNotConfigured as exc:
+        logger.warning("webhook rejected (gateway not configured): %s", exc)
+        return HttpResponse("gateway not configured", status=400)
     ok, data = gateway.verify_webhook(request.headers, request.body)
     if not ok:
         logger.warning("webhook rejected: %s", data)

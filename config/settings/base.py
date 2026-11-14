@@ -16,7 +16,13 @@ environ.Env.read_env(BASE_DIR / ".env")
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-dev-only-key-change-me")
 DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+# Django 4+ يشترط إن كل أصل يكون بصيغة http:// أو https:// — بنتجاهل أي قيمة ناقصة
+# (زي «*») بدل ما يفشل البناء كله بسببها.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in env.list("CSRF_TRUSTED_ORIGINS", default=[])
+    if origin.strip().startswith(("http://", "https://"))
+]
 
 # ------------------------------------------------------------- Apps
 DJANGO_APPS = [
