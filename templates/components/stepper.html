@@ -1,0 +1,22 @@
+{% load i18n %}
+{% comment %}شريط تقدم خطوات — يمرر: steps=[(1,'الخطوة')], current=1{% endcomment %}
+<ol class="flex items-center justify-center gap-0 my-5 select-none" aria-label="{% trans 'خطوات العملية' %}">
+  {% for n, label in steps %}
+    <li class="flex items-center">
+      <span class="flex flex-col items-center">
+        <span class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-black border-2
+          {% if n < current %}bg-[var(--brand-green)] border-[var(--brand-green)] text-white
+          {% elif n == current %}bg-[var(--brand-navy)] border-[var(--brand-gold)] text-[var(--brand-gold)] shadow-[0_0_0_4px_rgba(212,175,55,.25)]
+          {% else %}border-slate-300 text-slate-400 bg-white{% endif %}">
+          {% if n < current %}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+          {% else %}{{ n }}{% endif %}
+        </span>
+        <span class="text-[10px] font-extrabold mt-1 {% if n == current %}text-[var(--brand-navy)]{% else %}text-slate-400{% endif %}">{{ label }}</span>
+      </span>
+      {% if not forloop.last %}
+        <span class="w-8 sm:w-12 h-0.5 mx-1 mb-5 rounded {% if n < current %}bg-[var(--brand-green)]{% else %}bg-slate-300{% endif %}" aria-hidden="true"></span>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ol>

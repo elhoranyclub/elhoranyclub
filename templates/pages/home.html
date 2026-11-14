@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block content %}
+
+{% comment %}
+HOME — مركز شباب الحوراني
+Phase 0: hero + quick actions + sections (data-driven parts land in later phases)
+{% endcomment %}
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-pattern" aria-hidden="true"></div>
+  <div class="max-w-7xl mx-auto px-4 pt-5 pb-12 sm:pt-14 sm:pb-20 relative">
+    <span class="hero-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 5.88 6.5.95-4.7 4.58 1.1 6.47L12 17.4 6.2 20.9l1.1-6.47-4.7-4.58 6.5-.95L12 2z"/></svg>
+      {% trans "الموسم الرياضي 2026 / 2027" %}
+    </span>
+
+    <h1 class="mt-3 sm:mt-4 text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.25] sm:leading-[1.2] text-white max-w-2xl">
+      {{ site_name }}<br>
+      <span class="text-transparent bg-clip-text bg-gradient-to-l from-[var(--brand-gold)] via-[#f6e27a] to-[var(--brand-gold-dark)]">{{ site_tagline }}</span>
+    </h1>
+
+    <p class="mt-3 sm:mt-4 text-[#bcd0e0] text-sm sm:text-lg font-semibold leading-6 sm:leading-8 max-w-xl">
+      {% trans "من تجديد الاشتراك والبطولات للدورات والرحلات — كل خدمات المركز على موبايلك، في دقائق." %}
+    </p>
+
+    <div class="mt-5 sm:mt-7 flex flex-wrap items-center gap-2 sm:gap-3">
+      <a href="{% url 'memberships:renew' %}" class="btn btn-gold btn-lg">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+        {% trans "تجديد الاشتراك" %}
+      </a>
+      <a href="{% url 'events:list' %}" class="btn btn-outline-light btn-lg">
+        {% trans "استكشف الأنشطة" %}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: scaleX(-1);"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <dl class="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-white/15 flex flex-wrap gap-x-6 gap-y-3 sm:gap-x-8 sm:gap-y-4">
+      <div class="hero-stat"><dt><b>+1,200</b></dt><dd><small>{% trans "عضو مسجل" %}</small></dd></div>
+      <div class="hero-stat"><dt><b>6</b></dt><dd><small>{% trans "ملاعب وصالات" %}</small></dd></div>
+      <div class="hero-stat"><dt><b>+25</b></dt><dd><small>{% trans "مدرب معتمد" %}</small></dd></div>
+      <div class="hero-stat"><dt><b>1985</b></dt><dd><small>{% trans "سنة التأسيس" %}</small></dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ QUICK ACTIONS (overlap card) ============ -->
+<div class="max-w-7xl mx-auto px-4 relative z-10">
+  <div class="card shadow-lg p-3 sm:p-4 -mt-8 sm:-mt-12 grid grid-cols-4 gap-2" role="navigation" aria-label="{% trans 'اختصارات سريعة' %}">
+    <a href="{% url 'memberships:renew' %}" class="quick-tile">
+      <span class="quick-tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg></span>
+      <span class="label">{% trans "تجديد الاشتراك" %}</span>
+    </a>
+    <a href="{% url 'tournaments:list' %}" class="quick-tile">
+      <span class="quick-tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg></span>
+      <span class="label">{% trans "البطولات" %}</span>
+    </a>
+    <a href="{% url 'courses:list' %}" class="quick-tile">
+      <span class="quick-tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/><path d="M12 4v16M4 12h16"/></svg></span>
+      <span class="label">{% trans "الدورات" %}</span>
+    </a>
+    <a href="{% url 'trips:list' %}" class="quick-tile">
+      <span class="quick-tile-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1.2 1.5l4.9 4.9-2.3 2.3-2.6-.4a.8.8 0 0 0-.9 1.2L4.5 18l2.1 1.6 1.7 2.4a.8.8 0 0 0 1.5-.6l-.4-2.6 2.3-2.3 4.9 4.9a1 1 0 0 0 1.2-2.8z"/></svg></span>
+      <span class="label">{% trans "الرحلات" %}</span>
+    </a>
+  </div>
+</div>
+
+<!-- ============ WHY US ============ -->
+<section class="max-w-7xl mx-auto px-4 mt-10 mb-4">
+  <h2 class="section-title mb-3">{% trans "لماذا مركز الحوراني؟" %}</h2>
+  <div class="grid sm:grid-cols-3 gap-3">
+    <div class="card card-hover p-4 flex items-start gap-3">
+      <span class="quick-tile-icon" style="width:2.6rem;height:2.6rem;border-radius:.75rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6l-8-4z"/><path d="m9.5 12 2 2 3.5-4"/></svg></span>
+      <div><p class="font-extrabold text-[var(--brand-navy)]">{% trans "إشراف طبي ورياضي" %}</p><p class="text-xs text-slate-500 leading-6 mt-1">{% trans "فحص طبي دوري ومتابعة لياقة قبل وبعد المنافسات." %}</p></div>
+    </div>
+    <div class="card card-hover p-4 flex items-start gap-3">
+      <span class="quick-tile-icon" style="width:2.6rem;height:2.6rem;border-radius:.75rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></span>
+      <div><p class="font-extrabold text-[var(--brand-navy)]">{% trans "بطولات على مدار العام" %}</p><p class="text-xs text-slate-500 leading-6 mt-1">{% trans "دوريات وفئات عمرية من البراعم وحتى الكبار في كل الألعاب." %}</p></div>
+    </div>
+    <div class="card card-hover p-4 flex items-start gap-3">
+      <span class="quick-tile-icon" style="width:2.6rem;height:2.6rem;border-radius:.75rem;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M21 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <div><p class="font-extrabold text-[var(--brand-navy)]">{% trans "مجتمع رياضي عائلي" %}</p><p class="text-xs text-slate-500 leading-6 mt-1">{% trans "من الصغير للكبير — اشتراكات وأسرة وأنشطة تجمع الكل." %}</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OFFER BANNER (static demo — will be CMS-driven) ============ -->
+<section class="max-w-7xl mx-auto px-4 mt-8">
+  <div class="offer-banner rounded-2xl px-5 py-4 sm:px-7 sm:py-6 flex flex-col sm:flex-row sm:items-center gap-4">
+    <svg class="shrink-0 hidden sm:block" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 11 3.8A2 2 0 0 0 9.6 3H4a1 1 0 0 0-1 1v5.6a2 2 0 0 0 .6 1.4l9.6 9.6a2 2 0 0 0 2.8 0l4.6-4.6a2 2 0 0 0 0-2.8z"/><circle cx="7.5" cy="6.5" r=".5" fill="currentColor"/></svg>
+    <div class="min-w-0">
+      <p class="font-black text-lg sm:text-xl leading-snug">{% trans "خصم 20٪ لطلاب المدارس على الاشتراك السنوي" %}</p>
+      <p class="text-xs sm:text-sm font-bold opacity-85 mt-1">{% trans "بمناسبة بداية العام الدراسي — قدّم إيصال المدرسة عند الاستقبال." %}</p>
+    </div>
+    <a href="{% url 'memberships:renew' %}" class="btn btn-gold shrink-0 ms-auto">{% trans "احجز مكانك" %}</a>
+  </div>
+</section>
+
+<!-- ============ UPCOMING ACTIVITIES ============ -->
+<section class="max-w-7xl mx-auto px-4 mt-10">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="section-title">{% trans "الأنشطة القادمة" %}</h2>
+    <a class="section-link inline-flex items-center gap-1" href="{% url 'events:list' %}">{% trans "الكل" %} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: scaleX(-1);" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  {% if upcoming_events %}
+  <div class="h-scroll no-scrollbar -mx-4 px-4 pb-1">
+    {% for event in upcoming_events %}{% include "components/event_card.html" with event=event %}{% endfor %}
+  </div>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد أنشطة مجدولة الآن" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "سيتم نشر الأنشطة والفعاليات هنا أولًا بأول — ترقبوا الجديد." %}</p>
+  </div>
+  {% endif %}
+</section>
+
+<!-- ============ LATEST NEWS ============ -->
+<section class="max-w-7xl mx-auto px-4 mt-10">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="section-title">{% trans "آخر الأخبار" %}</h2>
+    <a class="section-link inline-flex items-center gap-1" href="{% url 'news:list' %}">{% trans "الكل" %} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform: scaleX(-1);" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  {% if featured_news %}
+  <div class="h-scroll no-scrollbar -mx-4 px-4 pb-1">
+    {% for article in featured_news %}{% include "components/news_card.html" with article=article %}{% endfor %}
+  </div>
+  {% endif %}
+  {% if latest_news %}
+  <div class="news-grid mt-3">
+    {% for article in latest_news %}{% include "components/news_card.html" with article=article %}{% endfor %}
+  </div>
+  {% elif not featured_news %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h13a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/><path d="M18 9h2.5v9a2 2 0 0 1-2 2M8 10h5M8 14h5"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد أخبار منشورة بعد" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "أخبار البطولات والفعاليات ستظهر هنا — تابعنا." %}</p>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

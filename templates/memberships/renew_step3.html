@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تجديد الاشتراك — الخطوة ٣" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="section-title text-2xl">{% trans "تأكيد الطلب" %}</h1>
+  {% include "components/stepper.html" with steps=steps current=step %}
+
+  <div class="card p-6">
+    <p class="mcard-label">{% trans "ملخص الطلب" %}</p>
+    <dl class="mt-3 text-sm divide-y divide-slate-100">
+      <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "المستفيد" %}</dt><dd class="font-bold">{% if for_dependent %}{{ for_dependent.full_name_ar }}{% else %}{{ request.user }}{% endif %}</dd></div>
+      <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "نوع الاشتراك" %}</dt><dd class="font-bold">{{ mtype.name_ar }}</dd></div>
+      <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "المدة" %}</dt><dd class="font-bold">{{ mtype.duration_months }} {% trans "شهرًا من تاريخ التفعيل" %}</dd></div>
+      <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "السعر" %}</dt><dd class="font-bold">{{ quote.base }} {% trans "ج" %}</dd></div>
+      {% if quote.discount %}<div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "الخصم" %}{% if quote.coupon %} ({{ quote.coupon.code }}){% endif %}</dt><dd class="font-bold text-[var(--brand-green)]">− {{ quote.discount }} {% trans "ج" %}</dd></div>{% endif %}
+      {% if quote.fine and quote.fine > 0 %}<div class="py-2 flex justify-between gap-4 border-t border-slate-100 pt-2"><dt class="text-[#b8932f] font-bold">{% trans "غرامة التأخير (بعد سنة من آخر دفع)" %}</dt><dd class="font-black text-[#b8932f]">+ {{ quote.fine }} {% trans "ج" %}</dd></div>{% endif %}
+      <div class="py-3 flex justify-between gap-4"><dt class="font-black">{% trans "الإجمالي المطلوب" %}</dt><dd class="text-2xl font-black text-[var(--brand-navy)]">{{ quote.total }} {% trans "ج" %}</dd></div>
+    </dl>
+
+    <div class="mt-4 rounded-2xl px-4 py-3 text-[13px] leading-7" style="background:var(--brand-gold-soft); color:#57430d; border:1px solid rgba(212,175,55,.5);">
+      <p class="font-black">{% trans "طريقة الدفع:" %}</p>
+      <ol class="list-decimal ps-5">
+        <li>{% trans "روح للاستقبال في المركز وادفع المبلغ نقدًا أو بالكارت." %}</li>
+        <li>{% trans "اذكر كود طلبك (هيظهرلك بعد التأكيد) — هيفعّلوا اشتراكك فورًا." %}</li>
+        <li>{% trans "قريبان الدفع أونلاين (Paymob) ورفع إيصال المحفظة من الموبايل." %}</li>
+      </ol>
+    </div>
+
+    <form method="post" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "تأكيد الطلب" %}</button>
+    </form>
+    <a href="{% url 'memberships:renew_step2' %}" class="block text-center text-sm font-bold text-slate-400 hover:underline mt-2">{% trans "رجوع للسعر والكوبون" %}</a>
+  </div>
+</div>
+{% endblock %}

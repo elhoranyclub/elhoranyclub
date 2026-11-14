@@ -1,0 +1,6 @@
+
+/* ============ Print: isolate receipt sheet (in addition to mcard rules) ============ */
+@media print {
+  .receipt-sheet, .receipt-sheet * { visibility: visible !important; }
+  .receipt-sheet { visibility: visible !important; position: fixed; inset: 0; margin: 0; border: none; box-shadow: none; border-radius: 0; }
+}

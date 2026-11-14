@@ -1,0 +1,72 @@
+{% load static i18n %}
+<footer class="text-[#c3d2de]" style="background: linear-gradient(180deg, var(--brand-navy) 0%, var(--brand-navy-deep) 100%);">
+  <div class="max-w-7xl mx-auto px-4 pt-6 pb-5 sm:pt-10 sm:pb-6">
+    <div class="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-2 lg:grid-cols-4 text-sm">
+
+      <!-- Brand (full width on mobile, tighter copy) -->
+      <div class="col-span-2 md:col-span-1 lg:col-span-1">
+        <a href="{% url 'core:home' %}" class="flex items-center gap-2 mb-2">
+          <img src="{% static 'img/logo.svg' %}" alt="{{ site_name }}" class="h-10 w-10 sm:h-12 sm:w-12" width="48" height="48" loading="lazy">
+          <span class="font-black text-base sm:text-lg text-white">{{ site_name }}</span>
+        </a>
+        <p class="text-[#9db4c6] leading-6 sm:leading-7 text-xs sm:text-[0.875rem]">{{ site_tagline }}. {% trans "اشتراكات، بطولات، دورات، رحلات وأنشطة — كلها في مكان واحد ومن موبايلك." %}</p>
+        {% if site_settings.facebook_url or site_settings.instagram_url or site_settings.youtube_url or site_settings.tiktok_url %}
+        <div class="flex items-center gap-2 mt-3">
+          {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}" rel="noopener" target="_blank" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs font-black" aria-label="Facebook">FB</a>{% endif %}
+          {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}" rel="noopener" target="_blank" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs font-black" aria-label="Instagram">IG</a>{% endif %}
+          {% if site_settings.youtube_url %}<a href="{{ site_settings.youtube_url }}" rel="noopener" target="_blank" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs font-black" aria-label="YouTube">YT</a>{% endif %}
+          {% if site_settings.tiktok_url %}<a href="{{ site_settings.tiktok_url }}" rel="noopener" target="_blank" class="w-9 h-9 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs font-black" aria-label="TikTok">TT</a>{% endif %}
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Quick links -->
+      <nav aria-label="{% trans 'روابط سريعة' %}">
+        <p class="text-white font-extrabold mb-2 sm:mb-3">{% trans "روابط سريعة" %}</p>
+        <ul class="space-y-1.5 sm:space-y-2">
+          <li><a class="hover:text-white transition-colors" href="{% url 'memberships:renew' %}">{% trans "تجديد الاشتراك" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'tournaments:list' %}">{% trans "البطولات" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'courses:list' %}">{% trans "الدورات التدريبية" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'trips:list' %}">{% trans "الرحلات الترفيهية" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'news:list' %}">{% trans "أخبار المركز" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'gallery:list' %}">{% trans "المعرض" %}</a></li>
+        </ul>
+      </nav>
+
+      <!-- My account -->
+      <nav aria-label="{% trans 'حسابي' %}">
+        <p class="text-white font-extrabold mb-2 sm:mb-3">{% trans "حسابي" %}</p>
+        <ul class="space-y-1.5 sm:space-y-2">
+          <li><a class="hover:text-white transition-colors" href="{% url 'accounts:profile' %}">{% trans "الملف الشخصي" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'accounts:my_services' %}">{% trans "خدماتي وطلباتي" %}</a></li>
+          {% if request.user.is_authenticated %}<li><a class="hover:text-white transition-colors" href="{% url 'accounts:logout' %}">{% trans "خروج من الحساب" %}</a></li>{% else %}<li><a class="hover:text-white transition-colors" href="{% url 'accounts:login' %}">{% trans "تسجيل الدخول" %}</a></li>{% endif %}
+          <li><a class="hover:text-white transition-colors" href="{% url 'pages:pricing' %}">{% trans "أسعار الاشتراكات" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'pages:regulation' %}">{% trans "لائحة المركز" %}</a></li>
+          <li><a class="hover:text-white transition-colors" href="{% url 'pages:faq' %}">{% trans "الأسئلة الشائعة" %}</a></li>
+        </ul>
+      </nav>
+
+      <!-- Contact (full width on mobile, beside the link columns) -->
+      <div class="col-span-2 md:col-span-1 lg:col-span-1">
+        <p class="text-white font-extrabold mb-2 sm:mb-3">{% trans "تواصل معنا" %}</p>
+        <ul class="space-y-1.5 sm:space-y-2">
+          <li><a dir="ltr" class="hover:text-white transition-colors inline-flex items-center gap-2" href="tel:{{ site_settings.phone }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 11.91a16 16 0 0 0 4 4l3.27-1.22a2 2 0 0 1 2.11.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>{{ site_settings.phone }}</a></li>
+          <li><a class="hover:text-white transition-colors inline-flex items-center gap-2" href="https://wa.me/{{ site_settings.whatsapp|cut:'+'|cut:' ' }}" rel="noopener" target="_blank"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3 .8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.25-.12-1.47-.72-1.7-.8-.23-.09-.4-.12-.56.12-.17.25-.65.8-.8.97-.15.17-.3.19-.55.06a6.7 6.7 0 0 1-3.3-2.9c-.25-.43.25-.4.72-1.33.08-.17.04-.31-.02-.44-.06-.12-.55-1.3-.75-1.78-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3c-.22.25-.86.85-.86 2.07 0 1.22.88 2.4 1 2.56.12.18 1.73 2.65 4.2 3.7 1.57.68 2.2.73 3 0 1-.48 1.7-.93 1.94-1.4.24-.85.24-1.2.17-1.4-.06-.18-.23-.27-.48-.37z"/></svg>{% trans "واتساب" %}</a></li>
+          <li><a class="hover:text-white transition-colors inline-flex items-center gap-2" href="mailto:{{ site_settings.email }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>{{ site_settings.email }}</a></li>
+          <li><span class="inline-flex items-start gap-2"><svg class="mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>{{ site_settings.address_ar }}</span></li>
+          <li><span class="inline-flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>{{ site_settings.working_hours_ar }}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 min-h-12 py-2 flex items-center justify-between flex-wrap gap-x-3 gap-y-1 text-[10px] sm:text-[11px] font-bold">
+      <p>© <span data-year></span> مهندس/ صالح محمد صالح — {% trans "جميع الحقوق محفوظة" %}</p>
+      <div class="flex items-center gap-4">
+        <a href="{% url 'pages:regulation' %}" class="hover:text-white transition-colors">{% trans "اللائحة" %}</a>
+        <a href="{% url 'pages:contact' %}" class="hover:text-white transition-colors">{% trans "الخصوصية والشروط" %}</a>
+      </div>
+    </div>
+  </div>
+</footer>

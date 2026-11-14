@@ -1,0 +1,73 @@
+# Render Blueprint — مركز شباب الحوراني
+# طريقة الاستخدام: New → Blueprint → اختر الريبو ده (أو ارفعه يدوي على GitHub)
+#
+# ملاحظات مهمة قبل الرفع:
+#  ١) لازم يكون عندك قاعدة Neon على neon.tech — حط الـ connection string في متغير DATABASE_URL
+#  ٢) SECRET_KEY: ولّده بنفسك (Secret key generator) وحطّه في متغيرات البيئة
+#  ٣) ALLOWED_HOSTS و CSRF_TRUSTED_ORIGINS: بعد ما تعمل أول نشر، حدّثهم بالـ domain الحقيقي
+#  ٤) OTP بيوصل بالإيميل → لازم تضبط EMAIL_* صح، أو اربط NOTIFICATIONS_PROVIDER=whatsapp
+#  ٥) الدفع mock → لازم تربط Paymob (PAYMENT_PROVIDER=paymob + PAYMOB_*)
+
+services:
+  - type: web
+    name: hourani-club
+    runtime: python
+    plan: starter          # free tier ببلاش برضو، بس فيه حدّ시간 شهري
+    region: frankfurt      # اختر أقرب منطقة لـ Neon بتاعك
+    branch: main
+    buildCommand: pip install -r requirements/prod.txt
+    preDeployCommand: python manage.py migrate --noinput --settings=config.settings.prod && python manage.py collectstatic --noinput --settings=config.settings.prod
+    startCommand: gunicorn config.wsgi:application --env DJANGO_SETTINGS_MODULE=config.settings.prod --workers 3 --bind 0.0.0.0:$PORT --timeout 60 --access-logfile -
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.9
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.prod
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        sync: false          # حطّه يدوي في Render
+      - key: DATABASE_URL
+        sync: false          # connection string بتاع Neon (pooled) — انظر README
+      - key: ALLOWED_HOSTS
+        value: "hourani-club.onrender.com,.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://hourani-club.onrender.com"
+      - key: CONN_MAX_AGE
+        value: "300"
+      - key: PAYMENT_PROVIDER
+        value: mock
+      - key: NOTIFICATIONS_PROVIDER
+        value: console
+      - key: OTP_PROVIDER
+        value: email
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USE_TLS
+        value: "True"
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+      - key: USE_CLOUDINARY
+        value: "False"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: PAYMOB_API_KEY
+        sync: false
+      - key: PAYMOB_INTEGRATION_ID
+        sync: false
+      - key: PAYMOB_HMAC_SECRET
+        sync: false

@@ -1,0 +1,9 @@
+{{ site_name }} — {{ site_tagline }}
+====================================
+{% block content %}{% endblock %}
+====================================
+{{ site_name }}
+{% if site_address %}{{ site_address }}
+{% endif %}{% if site_phone %}تليفون: {{ site_phone }}{% endif %}
+
+{% block disclaimer %}لو ماطلبتش الرسالة دي، تجاهلها تمامًا.{% endblock %}

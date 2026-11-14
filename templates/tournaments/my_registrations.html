@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n dict_filters %}
+{% block title %}{% trans "تسجيلاتي في البطولات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "تسجيلاتي في البطولات" %}</h1>
+  <p class="auth-sub mb-4">{% trans "حالة كل طلب مشاركة — ومكان استلام البطولات قريبًا" %}</p>
+
+  {% if registrations %}
+  <ul class="space-y-3">
+    {% for reg in registrations %}
+    {% with payment=payments|dict_get:reg.pk %}
+    <li class="card p-4">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <a href="{{ reg.tournament.get_absolute_url }}" class="font-extrabold text-[var(--brand-navy)] leading-6 line-clamp-2">{{ reg.tournament.name }}</a>
+          <p class="text-[11px] text-slate-500 font-bold mt-0.5">{{ reg.category.name_ar }} · {% if reg.kind == 'team' %}{{ reg.team.name }}{% else %}{{ reg.player_name }}{% endif %}</p>
+          <p class="text-[10px] font-bold text-slate-400" dir="ltr">{{ reg.reference }}</p>
+        </div>
+        <span class="badge shrink-0 {% if reg.status == 'accepted' %}badge-green{% elif reg.status == 'pending' %}badge-gold{% else %}badge-red{% endif %}">{{ reg.get_status_display }}</span>
+      </div>
+      <div class="mt-3 flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
+        <span class="text-xs text-slate-500">{% if reg.fee_amount %}{{ reg.fee_amount }} {% trans "ج" %}{% else %}{% trans "مجاني" %}{% endif %}</span>
+        <span class="flex items-center gap-2">
+          {% if payment and payment.status == 'paid' %}
+            <a href="{% url 'payments:receipt' payment.reference %}" class="section-link text-xs">{% trans "الإيصال" %}</a>
+          {% elif payment and payment.status == 'pending' %}
+            <a href="{% url 'payments:checkout' payment.reference %}" class="btn btn-gold btn-sm">{% trans "أكمل الدفع" %}</a>
+          {% endif %}
+        </span>
+      </div>
+    </li>
+    {% endwith %}
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لسه ما سجلتش في أي بطولة" %}</p>
+    <a href="{% url 'tournaments:list' %}" class="btn btn-gold mt-3">{% trans "تصفح البطولات" %}</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

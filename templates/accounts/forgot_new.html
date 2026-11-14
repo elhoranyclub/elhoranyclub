@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "كلمة سر جديدة" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="text-center mb-5">
+    <h1 class="auth-title">{% trans "كلمة سر جديدة" %}</h1>
+    <p class="auth-sub">{% trans "اختار كلمة سر قوية — مش هتتقاسمها مع أي حد" %}</p>
+  </div>
+  <form method="post" class="card auth-card form-grid" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      {% include "components/form_field.html" with field=field %}
+    {% endfor %}
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "حفظ كلمة السر" %}</button>
+  </form>
+</div>
+{% endblock %}

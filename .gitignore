@@ -1,0 +1,50 @@
+# Secrets & env
+.env
+.env.local
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+/media/
+/staticfiles/
+*.log
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+backup.json
+
+# Node (Tailwind build)
+node_modules/
+npm-debug.log*
+
+# مخلفات بناء فيديوهات الدليل (تتولّد من tools/guide — مش محتاجة على السيرفر)
+tools/guide/out/
+tools/guide/audio/
+tools/guide/seg/
+tools/guide/slides/
+tools/guide/*.mp4
+tools/guide/web-*.mp4
+tools/guide/poster-*.jpg
+tools/guide/narrations.json
+
+# فيديوهات التسليم في جذر المشروع (نسخة 1080p — موجودة على جهازك)
+/دليل_*.mp4
+
+# مجلدات مؤقتة
+.tmp.drivedownload/
+.tmp.driveupload/
+

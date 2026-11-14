@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "التسجيل في" %} {{ tournament.name }} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{{ tournament.get_absolute_url }}" class="hover:text-[var(--brand-navy)]">{{ tournament.name }}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)]">{% trans "التسجيل" %}</span>
+  </nav>
+
+  <h1 class="section-title text-2xl">{% trans "التسجيل في البطولة" %}</h1>
+  <p class="auth-sub mb-5">{% if tournament.registration_type == 'team' %}{% trans "أنت الكابتن — اختار أفراد فريقك من تابعيك" %}{% else %}{% trans "سجّل نفسك أو أحد أبنائك في الفئة المناسبة" %}{% endif %}</p>
+
+  <form method="post" class="space-y-5">
+    {% csrf_token %}
+
+    <fieldset class="card p-4">
+      <legend class="font-black text-[var(--brand-navy)]">{% trans "الفئة" %}</legend>
+      <div class="grid gap-2 mt-2" role="radiogroup">
+        {% for cat in categories %}
+        <label class="flex items-center gap-4 p-3.5 rounded-2xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)] transition-colors">
+          <input type="radio" name="category" value="{{ cat.pk }}" required class="accent-[var(--brand-navy)] w-5 h-5" {% if forloop.first %}checked{% endif %}>
+          <span class="min-w-0">
+            <span class="flex flex-wrap items-center gap-2">
+              <b class="text-[var(--brand-navy)]">{{ cat.name_ar }}</b>
+              <span class="badge badge-navy">{{ cat.get_gender_display }}</span>
+            </span>
+            <span class="block text-[11px] text-slate-500">{% blocktrans with a=cat.age_min b=cat.age_max %}من {{ a }} إلى {{ b }} سنة{% endblocktrans %}</span>
+          </span>
+          <span class="ms-auto shrink-0 text-sm font-black text-[var(--brand-navy)]">{% if cat.effective_fee == 0 %}{% trans "مجاني" %}{% else %}{{ cat.effective_fee }} {% trans "ج" %}{% endif %}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    {% if tournament.registration_type == 'individual' %}
+    <fieldset class="card p-4">
+      <legend class="font-black text-[var(--brand-navy)]">{% trans "اللاعب" %}</legend>
+      <div class="grid gap-2 mt-2" role="radiogroup">
+        <label class="flex items-center gap-3 p-3.5 rounded-2xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)]">
+          <input type="radio" name="player" value="self" checked class="accent-[var(--brand-navy)] w-5 h-5">
+          <span>
+            <b class="block text-sm text-[var(--brand-navy)]">{{ request.user }}</b>
+            <span class="text-[10px] font-bold text-slate-500">{% trans "أنا — اللاعب بنفسي" %}</span>
+          </span>
+        </label>
+        {% for dep in dependents %}
+        <label class="flex items-center gap-3 p-3.5 rounded-2xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)]">
+          <input type="radio" name="player" value="dep:{{ dep.pk }}" class="accent-[var(--brand-navy)] w-5 h-5">
+          <span>
+            <b class="block text-sm text-[var(--brand-navy)]">{{ dep.full_name_ar }}</b>
+            <span class="text-[10px] font-bold text-slate-500">{{ dep.get_relation_display }} · {{ dep.age }} {% trans "سنة" %}</span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+      {% if not dependents %}<a href="{% url 'accounts:dependent_add' %}" class="section-link text-xs mt-2 inline-block">{% trans "+ أضف ابنك للتسجيل عنه" %}</a>{% endif %}
+    </fieldset>
+
+    {% else %}
+    <fieldset class="card p-4">
+      <legend class="font-black text-[var(--brand-navy)]">{% trans "بيانات الفريق" %}</legend>
+      <div class="grid gap-3 mt-2">
+        <div>
+          <label class="label" for="team_name">{% trans "اسم الفريق" %}</label>
+          <input class="input" id="team_name" name="team_name" required placeholder="{% trans 'مثال: نجوم الحوراني' %}">
+        </div>
+        <div>
+          <label class="label" for="coach_name">{% trans "المدرب (اختياري)" %}</label>
+          <input class="input" id="coach_name" name="coach_name" placeholder="{% trans 'اسم المدرب أو الكبتن المسؤول' %}">
+        </div>
+        <div>
+          <span class="label">{% trans "اللاعبون (أنت الكابتن + تابعيك)" %}</span>
+          <p class="help-text mb-1">{% trans "أنت كابتن الفريق بشكل تلقائي. أضف من تابعيك (حتى الحد الأقصى للقائمة):" %} {{ tournament.squad_size }}</p>
+          <div class="grid sm:grid-cols-2 gap-2">
+            {% for dep in dependents %}
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border has-[:checked]:border-[var(--brand-gold)] border-slate-200 cursor-pointer">
+              <input type="checkbox" name="members" value="{{ dep.pk }}" class="accent-[var(--brand-navy)] w-5 h-5">
+              <span class="text-xs font-bold">{{ dep.full_name_ar }} <span class="text-slate-400">({{ dep.age }}{% trans "سنة" %})</span></span>
+            </label>
+            {% empty %}
+            <p class="text-xs text-slate-500 col-span-2">{% trans "لا يوجد تابعين — أضفهم من «أبنائي» للمشاركة معهم." %}</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    {% endif %}
+
+    <div class="rounded-2xl px-4 py-3 text-[12px] leading-7" style="background:#eef6ff; color:#0c4a6e; border:1px solid #bfdbfe;">
+      {% trans "بالضغط على تأكيد، تُنشئ طلب المشاركة وتلتزم بلائحة البطولة. لو في رسوم، صفحة الدفع هتظهرلك فورًا — التسجيل غير مؤكد لحد الدفع." %}
+    </div>
+
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "تأكيد التسجيل" %}</button>
+  </form>
+</div>
+{% endblock %}

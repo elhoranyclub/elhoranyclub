@@ -1,0 +1,47 @@
+/* ==========================================================
+   Forms & Accounts — مركز شباب الحوراني
+   ========================================================== */
+.label { display:block; font-size:.8rem; font-weight:800; color:var(--brand-navy); margin-bottom:.3rem; }
+.input {
+  width:100%; min-height:46px; padding:.6rem .8rem; border-radius:var(--radius-sm);
+  border:1.5px solid var(--border); background:#fbfcfe; font:inherit; font-size:.95rem;
+  transition:border-color .15s, box-shadow .15s; color:var(--text);
+}
+.input:focus { outline:none; border-color:var(--brand-navy); box-shadow:0 0 0 3px rgba(14,42,71,.15); background:#fff; }
+.input-error { border-color:#dc2626 !important; background:#fef6f6; }
+.help-text { font-size:.72rem; color:var(--muted); margin-top:.25rem; }
+.error-list { margin:.3rem 0 0; padding:0; list-style:none; color:#b42318; font-size:.78rem; font-weight:700; }
+.auth-shell { max-width:26rem; margin:0 auto; padding:1.5rem 1rem 2.5rem; }
+.auth-card { padding:1.5rem; }
+.auth-title { font-size:1.35rem; font-weight:900; color:var(--brand-navy); }
+.auth-sub { font-size:.85rem; color:var(--muted); margin-top:.25rem; }
+.form-grid { display:grid; gap:.9rem; }
+.form-grid-2 { display:grid; grid-template-columns:1fr; gap:.9rem; }
+@media (min-width:640px) { .form-grid-2 { grid-template-columns:1fr 1fr; } }
+.photo-avatar { width:84px; height:84px; border-radius:1.2rem; object-fit:cover; border:2px solid var(--border); background:#eef2f7; }
+
+/* ---------- Digital membership card ---------- */
+.mcard {
+  --c-navy:#0e2a47; --c-deep:#081c30; --c-gold:#d4af37;
+  position:relative; overflow:hidden; border-radius:1.4rem; color:#fff;
+  background: radial-gradient(700px 350px at 120% -20%, rgba(212,175,55,.4), transparent 55%),
+              radial-gradient(500px 300px at -10% 120%, rgba(20,107,58,.45), transparent 55%),
+              linear-gradient(160deg, var(--c-deep) 0%, var(--c-navy) 60%, #17405f 100%);
+  border:1.5px solid rgba(212,175,55,.55); box-shadow: var(--shadow-lg);
+}
+.mcard::after {
+  content:""; position:absolute; inset:0; opacity:.35; pointer-events:none;
+  background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,.04) 0 2px, transparent 2px 14px);
+}
+.mcard-inner { position:relative; padding:1.15rem 1.15rem .95rem; }
+.mcard-number { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing:.14em; font-size:1.02rem; color:var(--c-gold); font-weight:700; }
+.mcard-photo { width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--c-gold);background:#17405f; }
+.mcard-qr { background:#fff; padding:.55rem; border-radius:.9rem; display:inline-flex; }
+.mcard-label { font-size:.62rem; letter-spacing:.18em; text-transform:uppercase; color:#9db4c6; font-weight:800; }
+
+@media print {
+  body * { visibility:hidden !important; }
+  .mcard, .mcard * { visibility:visible !important; }
+  .mcard { position:fixed; inset:0; margin:auto; box-shadow:none; }
+  .no-print { display:none !important; }
+}

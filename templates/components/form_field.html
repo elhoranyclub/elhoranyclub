@@ -1,0 +1,7 @@
+{% load i18n %}
+<div>
+  <label class="label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+  {{ field }}
+  {% for error in field.errors %}<ul class="error-list"><li>{{ error }}</li></ul>{% endfor %}
+  {% if field.help_text %}<p class="help-text">{{ field.help_text }}</p>{% endif %}
+</div>

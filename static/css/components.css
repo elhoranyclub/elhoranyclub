@@ -1,0 +1,33 @@
+/* ==========================================================
+   News article prose + misc — مركز شباب الحوراني
+   ========================================================== */
+.prose-news h2, .prose-news h3, .prose-news h4 { color: var(--brand-navy); font-weight: 900; line-height: 1.5; margin: 1.1em 0 .4em; }
+.prose-news h2 { font-size: 1.3rem; } .prose-news h3 { font-size: 1.15rem; } .prose-news h4 { font-size: 1rem; }
+.prose-news p { margin: .5em 0; }
+.prose-news ul, .prose-news ol { padding-inline-start: 1.4rem; margin: .5em 0; }
+.prose-news ul { list-style: disc; } .prose-news ol { list-style: decimal; }
+.prose-news li { margin: .25em 0; }
+.prose-news a { color: var(--brand-green); font-weight: 800; text-decoration: underline; }
+.prose-news blockquote { border-inline-start: 4px solid var(--brand-gold); padding-inline-start: .8rem; color: var(--muted); font-style: italic; margin: .8em 0; }
+.prose-news code, .prose-news pre { background: #eef0f3; border-radius: 6px; padding: .1em .35em; font-size: .85em; }
+.prose-news hr { margin: 1.2em 0; border-color: var(--border); }
+
+/* Calendar */
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+.cal-day { aspect-ratio:1; border-radius:.7rem; border:1px solid transparent; display:flex; flex-direction:column; align-items:center; padding:.3rem .1rem; font-size:.8rem; font-weight:800; color:var(--text); text-decoration:none; background:#fff; min-height:44px; }
+.cal-day.other { color:#b6bfc9; background:transparent; }
+.cal-day.today { border-color:var(--brand-gold); box-shadow:0 0 0 1px var(--brand-gold); }
+.cal-day.selected { background:var(--brand-navy); color:#fff; }
+.cal-dot { width:.35rem;height:.35rem;border-radius:99px;background:var(--brand-green); margin-top:2px; }
+.cal-day.selected .cal-dot { background: var(--brand-gold); }
+
+/* FAQ accordion */
+.faq-answer { display:none; padding:.25rem .2rem .6rem; color:var(--muted); font-size:.9rem; line-height:1.9; }
+details[open] .faq-answer { display:block; }
+details[open] summary .faq-chevron { transform: rotate(45deg); }
+summary { cursor:pointer; list-style:none; min-height:44px; display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+summary::-webkit-details-marker { display:none; }
+.faq-chevron { transition: transform .2s; flex-shrink:0; }
+
+/* Map embed */
+.map-frame { width:100%; height:220px; border:0; border-radius: var(--radius); }

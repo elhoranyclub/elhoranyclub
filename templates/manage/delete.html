@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ title }} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-10">
+  <div class="card p-6 text-center">
+    <div class="empty-state-icon !bg-red-50 !text-red-400 mx-auto"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1.5 14a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 6"/></svg></div>
+    <h1 class="auth-title !text-lg mt-3">{{ title }}</h1>
+    <p class="text-sm text-slate-500 mt-1 break-words">«{{ obj }}»</p>
+    <p class="text-xs text-red-500 font-bold mt-2">{% trans "العملية دي غير قابلة للتراجع — لو السجل مرتبط ببيانات تانية مش هيتمسح." %}</p>
+    <form method="post" class="flex items-center justify-center gap-2 mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn flex-1 sm:flex-none" style="background:#dc2626; color:#fff;">{% trans "احذف نهائيًا" %}</button>
+      <a href="{{ list_url }}" class="btn btn-ghost flex-1 sm:flex-none">{% trans "رجوع" %}</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

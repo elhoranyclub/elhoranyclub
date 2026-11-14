@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تجديد الاشتراك — الخطوة ١" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="section-title text-2xl">{% trans "تجديد الاشتراك" %}</h1>
+  {% include "components/stepper.html" with steps=steps current=step %}
+
+  <form method="post" class="space-y-5">
+    {% csrf_token %}
+
+    <!-- المستفيد -->
+    <fieldset class="card p-4">
+      <legend class="font-black text-[var(--brand-navy)]">{% trans "لمن الاشتراك؟" %}</legend>
+      <div class="grid sm:grid-cols-2 gap-2 mt-1" role="radiogroup">
+        <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)] transition-colors min-h-[44px]">
+          <input type="radio" name="beneficiary" value="self" checked class="accent-[var(--brand-navy)] w-5 h-5">
+          <span>
+            <span class="block font-extrabold text-sm">{{ request.user }}</span>
+            <span class="text-[10px] font-bold text-slate-500">{% trans "اشتراكي الشخصي" %}</span>
+          </span>
+        </label>
+        {% for dep in dependents %}
+        <label class="flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)] transition-colors min-h-[44px]">
+          <input type="radio" name="beneficiary" value="{{ dep.id }}" class="accent-[var(--brand-navy)] w-5 h-5">
+          <span>
+            <span class="block font-extrabold text-sm">{{ dep.full_name_ar }}</span>
+            <span class="text-[10px] font-bold text-slate-500">{{ dep.get_relation_display }} · {{ dep.membership_number }}</span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+      {% if not dependents %}
+      <a href="{% url 'accounts:dependent_add' %}" class="section-link text-xs mt-2 inline-flex items-center gap-1">{% trans "+ أضف تابع لتجديده" %}
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform:scaleX(-1);" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      {% endif %}
+    </fieldset>
+
+    <!-- نوع الاشتراك -->
+    <fieldset class="card p-4">
+      <legend class="font-black text-[var(--brand-navy)]">{% trans "نوع الاشتراك" %}</legend>
+      <div class="grid gap-2 mt-1" role="radiogroup">
+        {% for t in types %}
+        <label class="flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)] transition-colors">
+          <input type="radio" name="membership_type" value="{{ t.pk }}" {% if forloop.first %}checked{% endif %} class="accent-[var(--brand-navy)] w-5 h-5">
+          <span class="min-w-0">
+            <span class="block font-extrabold text-[var(--brand-navy)]">{{ t.name_ar }}</span>
+            {% if t.description %}<span class="block text-xs text-slate-500 leading-6 mt-0.5">{{ t.description }}</span>{% endif %}
+            {% if t.min_age or t.max_age %}<span class="badge badge-navy mt-1">{% if t.min_age %}+{{ t.min_age }}{% endif %}{% if t.max_age %} – {{ t.max_age }}{% endif %} {% trans "سنة" %}</span>{% endif %}
+          </span>
+          <span class="ms-auto text-end shrink-0">
+            <span class="block text-2xl font-black text-[var(--brand-navy)]">{{ t.price }}<small class="text-xs font-bold text-slate-400"> {% trans "ج" %}</small></span>
+            <span class="text-[10px] font-bold text-slate-500">{{ t.duration_months }} {% trans "شهر" %}</span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "التالي — الكوبون والسعر" %}</button>
+  </form>
+</div>
+{% endblock %}

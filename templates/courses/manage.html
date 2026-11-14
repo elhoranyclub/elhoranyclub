@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الدورات (إدارة)" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "تسجيل الحضور والدورات" %}</h1>
+  <p class="auth-sub mb-4">{% trans "افتح أي دورة لتسجيل الحضور، أو من «دوراتي» للعضو" %}</p>
+
+  {% if courses %}
+  <ul class="space-y-2">
+    {% for c in courses %}
+    <li class="card p-4 flex items-center gap-3">
+      <div class="min-w-0">
+        <p class="font-extrabold text-[var(--brand-navy)]">{{ c.name }}</p>
+        <p class="text-[11px] font-bold text-slate-500">{{ c.schedule }} · {{ c.confirmed_count }}/{{ c.capacity }}</p>
+      </div>
+      <a href="{% url 'courses:attendance' c.slug %}" class="btn btn-navy btn-sm ms-auto shrink-0">{% trans "الحضور" %}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state"><p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد دورات جارية" %}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

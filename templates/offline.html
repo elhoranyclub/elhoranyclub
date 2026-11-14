@@ -1,0 +1,27 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% trans "غير متصل" %} — {{ site_name }}</title>
+  <meta name="theme-color" content="#0e2a47">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="font-cairo hero min-h-screen flex items-center justify-center text-center">
+  <div class="px-6">
+    <img src="{% static 'img/logo.svg' %}" alt="{{ site_name }}" class="w-20 h-20 mx-auto mb-6">
+    <span class="inline-flex w-16 h-16 rounded-2xl items-center justify-center mb-4" style="background:rgba(212,175,55,.15); color:var(--brand-gold);">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l22 22"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.8a15 15 0 0 1 5.6-3.3M5.8 5.8a15 15 0 0 1 12.4 0"/><path d="M12 20h.01"/></svg>
+    </span>
+    <h1 class="text-2xl font-black text-white">{% trans "لا يوجد إنترنت" %}</h1>
+    <p class="text-[#bcd0e0] text-sm font-semibold mt-2 leading-7">{% trans "تحقق من الاتصال ثم حاول مرة أخرى. الأخبار والصفحات اللي زرتها قبل كده متاحة أوفلاين." %}</p>
+    <button class="btn btn-gold btn-lg mt-6" onclick="window.location.reload()">{% trans "حاول مرة أخرى" %}</button>
+  </div>
+</body>
+</html>

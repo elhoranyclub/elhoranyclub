@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "حجوزاتي في الرحلات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "حجوزاتي في الرحلات" %}</h1>
+  <p class="auth-sub mb-4">{% trans "كل رحلاتك وحالة كل حجز" %}</p>
+
+  {% if bookings %}
+  <ul class="space-y-3">
+    {% for b in bookings %}
+    <li class="card p-4">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <a href="{{ b.trip.get_absolute_url }}" class="font-extrabold text-[var(--brand-navy)] leading-6 line-clamp-2">{{ b.trip.name }}</a>
+          <p class="text-[11px] font-bold text-slate-500 mt-0.5">{{ b.trip.trip_date|date:"Y-m-d" }} · {{ b.passengers_count }} {% trans "ركاب" %}</p>
+          <p class="text-[10px] font-bold text-slate-400" dir="ltr">{{ b.reference }}</p>
+        </div>
+        <span class="badge shrink-0 {% if b.status == 'confirmed' %}badge-green{% elif b.status == 'pending' %}badge-gold{% elif b.status == 'waitlist' %}badge-gold{% else %}badge-red{% endif %}">{{ b.get_status_display }}</span>
+      </div>
+      <ul class="mt-2 text-[11px] text-slate-500">
+        {% for p in b.passengers.all %}
+        <li>• {{ p.full_name }}{% if p.age %} ({{ p.age }}){% endif %} — {{ p.get_relation_display }}</li>
+        {% endfor %}
+      </ul>
+      <div class="mt-3 flex items-center justify-between gap-2 border-t border-slate-100 pt-2">
+        <span class="text-xs text-slate-500">{{ b.total_amount }} {% trans "ج" %}</span>
+        {% if b.status == 'pending' %}
+        <a href="{% url 'trips:book' b.trip.slug %}" class="section-link text-xs">{% trans "إتمام الدفع" %}</a>
+        {% elif b.status == 'confirmed' %}
+        <form method="post" action="{% url 'trips:cancel' b.pk %}" onsubmit="return confirm('{% trans 'إلغاء حجز الرحلة؟ يُطبق حسب سياسة الإلغاء (72 ساعة قبل الموعد).' %}');">
+          {% csrf_token %}
+          <button type="submit" class="text-[11px] font-bold" style="color:#b42318;">{% trans "إلغاء الحجز" %}</button>
+        </form>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1.2 1.5l4.9 4.9-2.3 2.3-2.6-.4a.8.8 0 0 0-.9 1.2L4.5 18l2.1 1.6 1.7 2.4a.8.8 0 0 0 1.5-.6l-.4-2.6 2.3-2.3 4.9 4.9a1 1 0 0 0 1.2-2.8z"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لسه ما حجزتش في أي رحلة" %}</p>
+    <a href="{% url 'trips:list' %}" class="btn btn-gold mt-3">{% trans "تصفح الرحلات" %}</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

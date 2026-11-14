@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "البطولات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+    <div>
+      <h1 class="section-title text-2xl">{% trans "بطولات المركز" %}</h1>
+      <p class="auth-sub">{% trans "من البراعم للكبار — دوري وجوائز وبطولات على مدار العام" %}</p>
+    </div>
+    <a href="{% url 'tournaments:live' %}" class="btn btn-navy">
+      <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
+      {% trans "النتائج المباشرة" %}
+    </a>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 pb-2 mb-4" role="tablist">
+    <a href="?tab=registration" role="tab" aria-selected="{% if tab == 'registration' %}true{% else %}false{% endif %}" class="badge shrink-0 {% if tab == 'registration' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2 text-xs">{% trans "التسجيل مفتوح" %}</a>
+    <a href="?tab=ongoing" role="tab" aria-selected="{% if tab == 'ongoing' %}true{% else %}false{% endif %}" class="badge shrink-0 {% if tab == 'ongoing' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2 text-xs">{% trans "جارية" %}</a>
+    <a href="?tab=finished" role="tab" aria-selected="{% if tab == 'finished' %}true{% else %}false{% endif %}" class="badge shrink-0 {% if tab == 'finished' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2 text-xs">{% trans "منتهية" %}</a>
+  </div>
+
+  {% if tournaments %}
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for t in tournaments %}
+    <a href="{{ t.get_absolute_url }}" class="card card-hover overflow-hidden block">
+      {% if t.cover %}
+        <img src="{{ t.cover.url }}" alt="{{ t.name }}" loading="lazy" class="w-full h-36 object-cover">
+      {% else %}
+        <div class="w-full h-36 flex flex-col items-center justify-center gap-1" style="background:linear-gradient(140deg,var(--brand-navy),var(--brand-navy-light));">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg>
+          <span class="text-[10px] font-black tracking-widest" style="color:var(--brand-gold);">{{ t.sport.name_ar }}</span>
+        </div>
+      {% endif %}
+      <div class="p-4">
+        <div class="flex items-center gap-2">
+          <span class="badge badge-navy">{{ t.sport.name_ar }}</span>
+          {% if t.entry_fee == 0 %}<span class="badge badge-green">{% trans "مجاني" %}</span>{% else %}<span class="badge badge-gold">{{ t.entry_fee }} {% trans "ج" %}</span>{% endif %}
+          {% if t.registration_type == 'team' %}<span class="badge badge-gray">{% trans "فرق" %}</span>{% else %}<span class="badge badge-gray">{% trans "فردي" %}</span>{% endif %}
+        </div>
+        <h2 class="font-extrabold text-[var(--brand-navy)] leading-6 mt-2 min-h-[3rem] line-clamp-2">{{ t.name }}</h2>
+        <div class="mt-2 text-[11px] font-bold text-slate-500 space-y-1">
+          {% if t.start_date %}<p>{% trans "تبدأ:" %} {{ t.start_date|date:"Y-m-d" }}</p>{% endif %}
+          {% if t.registration_end %}<p>{% trans "آخر موعد للتسجيل:" %} {{ t.registration_end|date:"Y-m-d" }}</p>{% endif %}
+        </div>
+        {% if t.status == 'registration' %}
+        <p class="text-[10px] font-bold mt-2 {% if t.seats_left < 8 %}text-red-500{% else %}text-slate-400{% endif %}">{% blocktrans count left=t.seats_left %}{{ left }} مقعدًا متبقيًا{% plural %}{{ left }} مقعدًا متبقيًا{% endblocktrans %}</p>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد بطولات حاليًا" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "ترقبوا الإعلان عن البطولات القادمة على مدار العام." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}{{ site_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site_name }} — {{ site_tagline }}. اشتراكات، بطولات، دورات، رحلات وأخبار المركز في مكان واحد.{% endblock %}">
+  <meta name="theme-color" content="{{ site_settings.primary_color|default:'#0e2a47' }}">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+  <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+  <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="{{ site_name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="{% if LANGUAGE_CODE == 'ar' %}ar_EG{% else %}en_US{% endif %}">
+  <meta property="og:title" content="{% block og_title %}{{ site_name }}{% endblock %}">
+  <meta property="og:description" content="{{ site_tagline }}">
+  {% block og_image %}<meta property="og:image" content="{% static 'img/logo.svg' %}">{% endblock %}
+
+  <!-- Fonts: Cairo (عربي) + fallback stack -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (compiled & purged at build time: assets/tailwind/tailwind.src.css → static/css/tailwind.css) -->
+  <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/overrides.css' %}">
+  <link rel="stylesheet" href="{% static 'css/print.css' %}">
+  <!-- Identity tokens injected from DB (SiteSettings) — no redeploy needed -->
+  <style>
+    :root {
+      --brand-navy: {{ site_settings.primary_color|default:'#0e2a47' }};
+      --brand-gold: {{ site_settings.gold_color|default:'#d4af37' }};
+      --brand-green: {{ site_settings.green_color|default:'#146b3a' }};
+    }
+    [x-cloak] { display: none !important; }
+  </style>
+
+  <!-- HTMX + Alpine (light, deferred) -->
+  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" defer></script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="font-cairo has-bottom-nav antialiased flex flex-col min-h-screen" style="background: var(--bg); color: var(--text);">
+  <a class="skip-link" href="#main">{% trans "تخطي إلى المحتوى" %}</a>
+
+  <!-- Offline indicator (appears only when the network is actually down) -->
+  <div id="offline-bar" hidden role="alert" style="background: var(--brand-gold); color:#241b05;" class="text-[11px] font-extrabold text-center py-1.5 px-3">
+    {% trans "لا يوجد إنترنت — ستعمل بعض الصفحات المزارة سابقًا فقط لحين عودة الاتصال" %}
+  </div>
+
+  {% if site_settings.announcement_enabled and site_settings.announcement_text_ar %}
+    <div class="bg-[var(--brand-gold)] text-[#241b05] text-xs font-extrabold flex items-center" role="status" aria-live="polite">
+      <span class="flex items-center gap-1 ps-3 py-1.5 shrink-0 border-e border-black/10">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 11l18-5v12L3 13v-2zm0 0v4a2 2 0 0 0 2 2h1"/></svg>
+        {% trans "عاجل" %}
+      </span>
+      <div class="ticker py-1.5">
+        <span class="ticker-inner">{% if LANGUAGE_CODE == 'ar' %}{{ site_settings.announcement_text_ar }}{% else %}{{ site_settings.announcement_text_en }}{% endif %}</span>
+      </div>
+    </div>
+  {% endif %}
+
+  {% include "components/navbar.html" %}
+
+  <main id="main" class="flex-1 min-w-0">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "components/footer.html" %}
+  {% include "components/pwa_install.html" %}
+  {% include "components/bottom_nav.html" %}
+  {% include "components/menu_sheet.html" %}
+  {% include "components/messages.html" %}
+
+  <script src="{% static 'js/app.js' %}" defer></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register("/sw.js", { scope: '/' }).catch(function () {});
+      });
+    }
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

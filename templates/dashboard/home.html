@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "لوحة التحكم" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-6">
+  <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+    <div>
+      <h1 class="auth-title flex items-center gap-2">
+        <span class="inline-flex w-9 h-9 rounded-xl items-center justify-center" style="background:var(--brand-navy); color:var(--brand-gold);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M8 9h8M8 13h5"/></svg></span>
+        {% trans "لوحة تحكم المركز" %}
+      </h1>
+      <p class="auth-sub">{% trans "نظرة سريعة على الأداء وطوابير العمل" %}</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="{% url 'dashboard:export_members' %}" class="btn btn-ghost btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        {% trans "الأعضاء (CSV)" %}
+      </a>
+      <a href="{% url 'dashboard:export_payments' %}" class="btn btn-navy btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        {% trans "المدفوعات (CSV)" %}
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== بطاقات الإحصائيات ===== -->
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+    {% for s in stats %}
+    <div class="card p-4">
+      <p class="text-[10px] font-bold text-slate-400">{{ s.label }}</p>
+      <p class="text-2xl sm:text-3xl font-black mt-1 {% if s.tone == 'green' %}text-[var(--brand-green)]{% elif s.tone == 'gold' %}text-amber-600{% elif s.tone == 'red' %}text-red-600{% else %}text-[var(--brand-navy)]{% endif %}">{{ s.value }}</p>
+      <p class="text-[10px] text-slate-400 mt-1">{{ s.hint }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- ===== شاشات الإدارة السريعة ===== -->
+  <section class="card p-4 sm:p-5 mt-4">
+    <h2 class="font-black text-[var(--brand-navy)] mb-3">{% trans "شاشات الإدارة" %}</h2>
+    {% for group_title, items in manage_groups %}
+    <div class="mb-3 last:mb-0">
+      <p class="text-[10px] font-black text-slate-400 mb-1.5">{{ group_title }}</p>
+      <div class="flex gap-2 flex-wrap">
+        {% for item in items %}
+        <a href="{% url 'core:manage_list' app_label=item.app model_name=item.model %}" class="inline-flex items-center gap-1.5 border border-[var(--border)] rounded-xl px-2.5 py-2 text-xs font-extrabold text-[var(--brand-navy)] hover:border-[var(--brand-gold)] hover:bg-[var(--brand-gold-soft)] transition-colors">
+          <span aria-hidden="true">{{ item.emoji }}</span> {{ item.label }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <!-- ===== إيرادات الشهر حسب المصدر ===== -->
+  <section class="card p-5 mt-4">
+    <h2 class="font-black text-[var(--brand-navy)] mb-3">{% trans "إيرادات هذا الشهر حسب المصدر" %}</h2>
+    {% if revenue_by_kind %}
+    <div class="space-y-2.5">
+      {% for row in revenue_by_kind %}
+      <div>
+        <div class="flex items-center justify-between text-xs font-bold mb-1">
+          <span class="text-slate-600">{{ row.label }} <span class="text-slate-400">({{ row.count }})</span></span>
+          <span class="text-[var(--brand-navy)]">{{ row.total }} {% trans "ج" %}</span>
+        </div>
+        <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full" style="width: {{ row.percent }}%; background: linear-gradient(90deg, var(--brand-green), #1d8a4e);"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-sm text-slate-400">{% trans "لا توجد مدفوعات مؤكدة هذا الشهر بعد." %}</p>
+    {% endif %}
+  </section>
+
+  <div class="grid md:grid-cols-2 gap-4 mt-4">
+    <!-- ===== طوابير المراجعة ===== -->
+    <section class="card p-5">
+      <h2 class="font-black text-[var(--brand-navy)] mb-3 flex items-center justify-between">{% trans "طوابير المراجعة" %}
+        <a href="{% url 'payments:staff_review' %}" class="section-link text-xs">{% trans "فتح مراجعة المدفوعات ←" %}</a>
+      </h2>
+      <ul class="text-sm divide-y divide-slate-100">
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "إيصالات محافظ" %}</span><span class="badge {% if queues.proofs_pending %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.proofs_pending }}</span></li>
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "مدفوعات قيد المعالجة" %}</span><span class="badge {% if queues.payments_pending %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.payments_pending }}</span></li>
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "اشتراكات جديدة" %}</span><span class="badge {% if queues.membership_pending %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.membership_pending }}</span></li>
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "تسجيلات بطولات" %}</span><span class="badge {% if queues.tournament_regs %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.tournament_regs }}</span></li>
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "رسائل تواصل" %}</span><span class="badge {% if queues.messages %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.messages }}</span></li>
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "قوائم انتظار (أنشطة/رحلات/دورات)" %}</span><span class="badge {% if queues.event_waitlists or queues.trip_waitlists or queues.course_pendings %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.event_waitlists }} + {{ queues.trip_waitlists }} + {{ queues.course_pendings }}</span></li>
+        <li class="py-2 flex items-center justify-between"><a class="text-slate-600 hover:underline" href="{% url 'core:registry_list' %}?unlinked=1">{% trans "دفتر — بدون ربط (محتاج يسجل)" %}</a><span class="badge {% if queues.unlinked_registry %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.unlinked_registry }}</span></li>
+        <li class="py-2 flex items-center justify-between"><span class="text-slate-600">{% trans "متأخرون عليهم غرامة (بعد سنة)" %}</span><span class="badge {% if queues.late_fines %}badge-gold{% else %}badge-gray{% endif %}">{{ queues.late_fines }}</span></li>
+      </ul>
+      <a href="{% url 'core:manage_index' %}" class="btn btn-navy btn-sm btn-block mt-3">{% trans "كل القوائم الإدارية ←" %}</a>
+    </section>
+
+    <!-- ===== آخر المدفوعات ===== -->
+    <section class="card p-5">
+      <h2 class="font-black text-[var(--brand-navy)] mb-3">{% trans "آخر المدفوعات المؤكدة" %}</h2>
+      {% if recent_payments %}
+      <ul class="text-xs divide-y divide-slate-100">
+        {% for p in recent_payments %}
+        <li class="py-2 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full shrink-0 bg-[var(--brand-green)]" aria-hidden="true"></span>
+          <span class="min-w-0"><b class="block">{{ p.member }}</b><span class="text-slate-400">{{ p.created_at|date:"m/d h:i" }} · {{ p.get_kind_display }}</span></span>
+          <span class="ms-auto font-black text-[var(--brand-navy)] shrink-0">{{ p.amount }} ج</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-sm text-slate-400">{% trans "لا توجد مدفوعات مؤكدة بعد" %}</p>
+      {% endif %}
+    </section>
+  </div>
+
+  <!-- ===== سجل التدقيق ===== -->
+  <section class="card p-5 mt-4">
+    <h2 class="font-black text-[var(--brand-navy)] mb-3">{% trans "سجل التدقيق الأخير" %}</h2>
+    {% if audit_entries %}
+    <ul class="text-xs divide-y divide-slate-100 max-h-64 overflow-y-auto">
+      {% for a in audit_entries %}
+      <li class="py-1.5 flex items-center gap-2">
+        <code class="badge badge-navy font-mono text-[10px] shrink-0" dir="ltr">{{ a.action }}</code>
+        <span class="min-w-0 text-slate-500 truncate">{{ a.target }}{% if a.detail %} — {{ a.detail }}{% endif %}</span>
+        <span class="ms-auto text-[10px] text-slate-400 shrink-0" dir="ltr">{{ a.created_at|date:"m-d H:i" }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm text-slate-400">{% trans "لا توجد أحداث تدقيق بعد" %}</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

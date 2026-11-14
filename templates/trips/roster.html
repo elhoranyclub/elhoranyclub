@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "قائمة ركاب" %} {{ trip.name }} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <div class="no-print flex items-center justify-between gap-2 mb-4">
+    <div>
+      <h1 class="auth-title">{% trans "قائمة ركاب الرحلة" %}</h1>
+      <p class="auth-sub">{{ trip.name }} — {{ trip.trip_date|date:"Y-m-d" }}</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="{% url 'trips:roster_csv' trip.slug %}" class="btn btn-navy btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        CSV
+      </a>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="window.print()">{% trans "طباعة" %}</button>
+    </div>
+  </div>
+
+  <div class="receipt-sheet card overflow-hidden">
+    <div class="px-5 py-3 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2" style="background:#f8fafc;">
+      <div>
+        <p class="font-black text-[var(--brand-navy)]">{{ trip.name }}</p>
+        <p class="text-[11px] text-slate-500">{{ trip.trip_date|date:"Y/m/d" }} · {{ trip.meeting_time|time:"H:i" }} · {{ trip.meeting_point }}</p>
+      </div>
+      <div class="text-end">
+        <p class="text-xs font-bold text-slate-400">{% trans "إجمالي الركاب" %}</p>
+        <p class="text-2xl font-black text-[var(--brand-navy)]">{{ passengers|length }}</p>
+      </div>
+    </div>
+
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="text-right text-slate-400 border-b border-slate-200">
+          <th class="p-2 w-10">#</th>
+          <th class="p-2">{% trans "الاسم" %}</th>
+          <th class="p-2">{% trans "الصلة" %}</th>
+          <th class="p-2 w-14">{% trans "السن" %}</th>
+          <th class="p-2">{% trans "ملاحظات" %}</th>
+          <th class="p-2">{% trans "الحاجز / المرجع" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in passengers %}
+        <tr class="border-b border-slate-100 {% cycle '' 'bg-slate-50' %}">
+          <td class="p-2 font-bold text-slate-400">{{ forloop.counter }}</td>
+          <td class="p-2 font-extrabold">{{ p.full_name }}</td>
+          <td class="p-2">{{ p.get_relation_display }}</td>
+          <td class="p-2">{{ p.age|default:"—" }}</td>
+          <td class="p-2">{{ p.medical_notes|default:"—" }}</td>
+          <td class="p-2">
+            <span class="block font-bold">{{ p.booking.booked_by.get_full_name|default:p.booking.booked_by.phone }}</span>
+            <span class="text-[10px] text-slate-400" dir="ltr">{{ p.booking.reference }}</span>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="p-6 text-center text-slate-400">{% trans "لا يوجد ركاب بعد" %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p class="text-[10px] text-slate-400 text-center py-2 border-t border-slate-100">{% trans "قائمة رسمية معتمدة — يُعتد بها يوم الرحلة مع بطاقة الحاجز." %}</p>
+  </div>
+
+  <div class="no-print mt-4 flex justify-end">
+    <a href="{% url 'trips:attendance' trip.slug %}" class="btn btn-gold">{% trans "تسجيل الحضور يوم الرحلة" %}</a>
+  </div>
+</div>
+{% endblock %}

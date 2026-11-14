@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "حجز" %} {{ trip.name }} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{{ trip.get_absolute_url }}" class="hover:text-[var(--brand-navy)]">{{ trip.name }}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)]">{% trans "الحجز" %}</span>
+  </nav>
+
+  <h1 class="section-title text-2xl">{% trans "حجز الرحلة" %}</h1>
+  <p class="auth-sub mb-5">{{ trip.trip_date|date:"l، Y/m/d" }} — {{ trip.meeting_time|time:"H:i" }} — {{ trip.meeting_point }}</p>
+
+  <form method="post" class="card p-5 form-grid">
+    {% csrf_token %}
+
+    <!-- الحاجز + التابعين -->
+    <fieldset>
+      <legend class="label">{% trans "الركاب الأعضاء" %}</legend>
+      <div class="grid gap-2 mt-1">
+        <label class="flex items-center gap-3 p-3 rounded-2xl border has-[:checked]:border-[var(--brand-gold)] border-slate-200 cursor-pointer">
+          <input type="checkbox" name="include_self" class="accent-[var(--brand-navy)] w-5 h-5" checked>
+          <span><b class="block text-sm">{{ request.user }}</b><span class="text-[10px] font-bold text-slate-500">{% trans "أنا" %} · {{ trip.member_price }} {% trans "ج" %}</span></span>
+        </label>
+        {% for target in targets|slice:"1:" %}
+        <label class="flex items-center gap-3 p-3 rounded-2xl border has-[:checked]:border-[var(--brand-gold)] border-slate-200 cursor-pointer">
+          <input type="checkbox" name="dependents" value="{{ target.0|slice:'4:' }}" class="accent-[var(--brand-navy)] w-5 h-5">
+          <span><b class="block text-sm">{{ target.1 }}</b><span class="text-[10px] font-bold text-slate-500">{% if target.3 %}{{ target.3 }} {% trans "سنة" %} · {% endif %}{{ trip.member_price }} {% trans "ج" %}</span></span>
+        </label>
+        {% endfor %}
+        {% if not dependents %}<p class="text-[11px] text-slate-400 px-1">{% trans "أضف تابعيك من «حسابي ← أبنائي» للحجز عنهم." %}</p>{% endif %}
+      </div>
+    </fieldset>
+
+    <!-- مرافقين -->
+    <fieldset>
+      <legend class="label">{% trans "مرافقين (غير أعضاء)" %} — {{ trip.guest_price }} {% trans "ج للفرد" %}</legend>
+      <div class="grid gap-2 mt-1">
+        {% for i in "123" %}
+        <div class="grid grid-cols-4 gap-2">
+          <input type="text" name="guest_{{ forloop.counter }}" class="input col-span-3" placeholder="{% trans 'اسم المرافق' %}" aria-label="{% trans 'اسم المرافق' %}">
+          <input type="number" name="guest_age_{{ forloop.counter }}" class="input" placeholder="{% trans 'السن' %}" min="1" max="110" inputmode="numeric" aria-label="{% trans 'سن المرافق' %}">
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <!-- موافقة ولي الأمر -->
+    <fieldset class="rounded-2xl p-4" style="background:#fffbeb; border:1px solid #fde68a;">
+      <legend class="label" style="color:#57430d;">{% trans "موافقة ولي الأمر (للركاب أقل من 18 سنة — إجباري)" %}</legend>
+      <p class="text-[11px] leading-6 text-amber-900">{{ consent_text }}</p>
+      <label class="label mt-3" for="signature_name" style="color:#57430d;">{% trans "التوقيع بالاسم كاملًا" %}</label>
+      <input type="text" class="input" id="signature_name" name="signature_name" placeholder="{% trans 'اكتب اسمك كاملًا' %}" dir="auto" autocomplete="name">
+      <p class="help-text">{% trans "سيُسجّل اسمك ووقت الموافقة وIP كإقرار إلكتروني ملزم." %}</p>
+    </fieldset>
+
+    <!-- ملاحظات -->
+    <div>
+      <label class="label" for="note">{% trans "ملاحظات للحافلة (حساسية، مقعد، إلخ)" %}</label>
+      <textarea class="input" id="note" name="note" rows="2" placeholder="{% trans 'أي ملاحظات تساعد المشرفين' %}"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "تأكيد الحجز والانتقال للدفع" %}</button>
+  </form>
+</div>
+{% endblock %}

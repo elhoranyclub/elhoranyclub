@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تسجيلاتي" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "حجوزاتي في الأنشطة" %}</h1>
+  <p class="auth-sub mb-4">{% trans "كل الأنشطة اللي سجلت فيها وحالتها" %}</p>
+
+  {% if registrations %}
+  <ul class="space-y-2">
+    {% for reg in registrations %}
+    <li class="card p-4 flex items-center gap-4">
+      <div class="w-14 shrink-0 text-center rounded-xl py-1" style="background:var(--brand-navy); color:#fff;">
+        <span class="block text-xl font-black leading-none">{{ reg.event.start_at|date:"d" }}</span>
+        <span class="block text-[10px] font-extrabold" style="color:var(--brand-gold);">{{ reg.event.start_at|date:"M" }}</span>
+      </div>
+      <div class="min-w-0">
+        <a href="{{ reg.event.get_absolute_url }}" class="font-extrabold text-[var(--brand-navy)] leading-6 line-clamp-1">{{ reg.event.title }}</a>
+        <p class="text-[11px] text-slate-500">{{ reg.event.start_at|date:"Y-m-d h:i A" }}</p>
+      </div>
+      <div class="ms-auto flex items-center gap-2 shrink-0">
+        {% if reg.status == 'pending' %}
+        <a href="{% url 'events:detail' reg.event.slug %}" class="btn btn-gold btn-sm">{% trans "أكمل الدفع" %}</a>
+        {% endif %}
+        <span class="badge {% if reg.status == 'confirmed' %}badge-green{% elif reg.status == 'waitlist' %}badge-gold{% elif reg.status == 'pending' %}badge-gold{% else %}badge-gray{% endif %}">{{ reg.get_status_display }}</span>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد حجوزات بعد" %}</p>
+    <a href="{% url 'events:list' %}" class="btn btn-gold mt-3">{% trans "تصفح الأنشطة" %}</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

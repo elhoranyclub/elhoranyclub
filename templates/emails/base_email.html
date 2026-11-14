@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>{{ site_name }}</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f5f7; font-family:'Cairo','Segoe UI',Tahoma,Arial,sans-serif; -webkit-font-smoothing:antialiased;">
+
+<!-- Preview / preheader -->
+<div style="display:none; overflow:hidden; line-height:1px; max-height:0px; max-width:0px; opacity:0; mso-hide:all; color:#f4f5f7;">
+  {% block preheader %}{{ site_name }} — {{ site_tagline }}{% endblock %}
+</div>
+
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f4f5f7;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px; max-width:100%; background-color:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 30px rgba(14,42,71,0.10);">
+
+        <!-- ============ Header (brand) ============ -->
+        <tr>
+          <td align="center" style="background-color:{{ brand_navy }}; padding:26px 24px 20px; border-bottom:4px solid {{ brand_gold }};">
+            <img src="{{ logo_src }}" alt="{{ site_name }}" width="84" height="84" style="display:block; width:84px; height:84px; border:0; outline:none; text-decoration:none;" />
+            <div style="margin-top:12px; color:#ffffff; font-size:19px; font-weight:800; letter-spacing:0.2px;">{{ site_name }}</div>
+            {% if site_tagline %}<div style="margin-top:4px; color:#d4af37; font-size:11px; font-weight:700;">{{ site_tagline }}</div>{% endif %}
+          </td>
+        </tr>
+
+        <!-- ============ Body content ============ -->
+        <tr>
+          <td style="padding:28px 26px 26px; color:#1c2733; font-size:14px; line-height:1.9;">
+            {% block content %}{% endblock %}
+          </td>
+        </tr>
+
+        <!-- ============ Footer ============ -->
+        <tr>
+          <td style="background-color:#081c30; padding:18px 24px; text-align:center;">
+            <div style="color:#ffffff; font-size:12px; font-weight:800;">{{ site_name }}</div>
+            {% if site_address %}<div style="margin-top:6px; color:#a9bfd4; font-size:11px; line-height:1.8;">{{ site_address }}</div>{% endif %}
+            <div style="margin-top:6px; color:#a9bfd4; font-size:11px;">
+              {% if site_phone %}<a href="tel:{{ site_phone }}" style="color:#d4af37; text-decoration:none; font-weight:700;" dir="ltr">{{ site_phone }}</a>{% endif %}
+              {% if site_hours %}{% if site_phone %} &nbsp;·&nbsp; {% endif %}{{ site_hours }}{% endif %}
+            </div>
+            <div style="margin-top:10px; color:#6f8ba3; font-size:10px;">© {% now "Y" %} مهندس/ صالح محمد صالح — جميع الحقوق محفوظة</div>
+            {% block footer_note %}{% endblock %}
+          </td>
+        </tr>
+
+      </table>
+
+      <!-- small print under the card -->
+      <div style="margin-top:12px; color:#8a97a6; font-size:10px; text-align:center;">
+        {% block disclaimer %}لو ماطلبتش الرسالة دي، تجاهلها تمامًا.{% endblock %}
+      </div>
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

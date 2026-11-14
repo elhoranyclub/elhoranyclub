@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "سجل الأعضاء (الدفتر)" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <!-- Header card -->
+  <div class="card p-4 sm:p-5 mb-4">
+    <div class="flex items-center justify-between gap-2 flex-wrap">
+      <div class="min-w-0">
+        <div class="flex items-center gap-2">
+          <a href="{% url 'core:manage_index' %}" class="btn btn-ghost btn-sm !px-2" aria-label="{% trans 'رجوع' %}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
+          </a>
+          <h1 class="auth-title !text-lg sm:!text-xl">{% trans "سجل الأعضاء (الدفتر)" %}</h1>
+        </div>
+        <p class="text-xs text-slate-500 font-bold mt-1">
+          {% blocktrans with t=counts.total ga=counts.ga linked=counts.linked unlinked=counts.unlinked %}الإجمالي {{ t }} · اللجنة العمومية {{ ga }} · مربوط {{ linked }} · بدون حساب {{ unlinked }}{% endblocktrans %}
+        </p>
+      </div>
+      <a href="?{% if q %}q={{ q }}&{% endif %}export=csv" class="btn btn-gold btn-sm">⬇ {% trans "تصدير CSV" %}</a>
+    </div>
+
+    <p class="text-[11px] text-[var(--brand-navy)] bg-[var(--brand-gold-soft)] border border-[var(--brand-gold)] rounded-lg px-3 py-2 mt-3 font-bold">💡 {% trans "الأعضاء المسجلون بالموقع بيكتبوا بياناتهم بنفسهم — من هنا نربط أي عضو بالسطر بتاعه في الدفتر عشان يأخد رقم عضويته القديم وعلامة الجمعية العمومية والاشتراك المدفوع." %}</p>
+
+    <!-- Filters -->
+    <form method="get" class="flex gap-2 mt-3 flex-wrap items-center" role="search">
+      <input type="search" name="q" value="{{ q }}" class="input flex-1 min-w-[180px]" placeholder="{% trans 'ابحث بالاسم أو الرقم القومي أو رقم العضوية…' %}" aria-label="{% trans 'ابحث' %}">
+      <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 px-2 py-2 rounded-lg border border-slate-200"><input type="checkbox" name="ga" value="1" {% if ga_only %}checked{% endif %} onchange="this.form.submit()" class="accent-[var(--brand-navy)] w-4 h-4"> {% trans "اللجنة العمومية فقط" %}</label>
+      <label class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 px-2 py-2 rounded-lg border border-slate-200"><input type="checkbox" name="unlinked" value="1" {% if unlinked_only %}checked{% endif %} onchange="this.form.submit()" class="accent-[var(--brand-navy)] w-4 h-4"> {% trans "بدون حساب (غير مربوط)" %}</label>
+      <button type="submit" class="btn btn-navy btn-sm">{% trans "بحث" %}</button>
+      {% if q or ga_only or unlinked_only %}<a href="{% url 'core:registry_list' %}" class="btn btn-ghost btn-sm">{% trans "مسح" %}</a>{% endif %}
+    </form>
+  </div>
+
+  <!-- Table -->
+  <div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs min-w-[40rem]">
+        <thead class="bg-slate-50 text-slate-500">
+          <tr>
+            <th class="text-start font-black p-3 whitespace-nowrap">{% trans "رقم العضوية" %}</th>
+            <th class="text-start font-black p-3 whitespace-nowrap">{% trans "الاسم" %}</th>
+            <th class="text-start font-black p-3 whitespace-nowrap">{% trans "الرقم القومي" %}</th>
+            <th class="text-start font-black p-3 whitespace-nowrap">{% trans "الجمعية العمومية" %}</th>
+            <th class="text-start font-black p-3 whitespace-nowrap">{% trans "مدفوع حتى" %}</th>
+            <th class="p-3 text-end">{% trans "إجراءات" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in page_obj %}
+          <tr class="border-t border-slate-100 hover:bg-slate-50/60 align-middle">
+            <td class="p-3 font-mono font-black whitespace-nowrap" dir="ltr">{{ r.membership_number }}</td>
+            <td class="p-3 max-w-[14rem] truncate" title="{{ r.full_name_ar }}">{{ r.full_name_ar }}{% if r.note %}<span class="block text-[10px] text-slate-400 truncate max-w-[13rem]">{{ r.note }}</span>{% endif %}</td>
+            <td class="p-3 font-mono text-[11px] tracking-wider whitespace-nowrap" dir="ltr">{{ r.national_id|default:"—" }}</td>
+            <td class="p-3">{% if r.is_general_assembly %}<span class="badge badge-gold whitespace-nowrap">{% trans "نعم" %}{% if r.assembly_position %} · {{ r.assembly_position }}{% endif %}</span>{% else %}<span class="text-slate-400">—</span>{% endif %}</td>
+            <td class="p-3 whitespace-nowrap">{% if r.paid_until %}{{ r.paid_until|date:"Y-m-d" }}{% else %}<span class="text-red-500 font-bold">{% trans "غير مدفوع" %}</span>{% endif %}</td>
+            <td class="p-3 whitespace-nowrap text-end">
+              {% if r.linked_profile %}
+                <span class="text-[11px] font-bold text-[var(--brand-green)]">✓ {{ r.linked_profile.user.phone|default:"مربوط" }}</span>
+              {% else %}
+                <a href="{% url 'core:registry_link' pk=r.pk %}" class="btn btn-navy btn-sm !min-h-8">{% trans "ربط" %}</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6" class="p-6 text-center text-slate-400">{% trans "مفيش سجلات مطابقة — استورد الدفتر من manage.py import_members" %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.paginator.num_pages > 1 %}
+  <nav class="flex items-center justify-center gap-2 mt-4" aria-label="{% trans 'الترقيم' %}">
+    {% if page_obj.has_previous %}<a class="btn btn-ghost btn-sm" href="?{% if q %}q={{ q }}&{% endif %}{% if ga_only %}ga=1&{% endif %}{% if unlinked_only %}unlinked=1&{% endif %}page={{ page_obj.previous_page_number }}">‹ {% trans "السابق" %}</a>{% endif %}
+    <span class="text-sm font-extrabold text-[var(--brand-navy)] px-3">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a class="btn btn-ghost btn-sm" href="?{% if q %}q={{ q }}&{% endif %}{% if ga_only %}ga=1&{% endif %}{% if unlinked_only %}unlinked=1&{% endif %}page={{ page_obj.next_page_number }}">{% trans "التالي" %} ›</a>{% endif %}
+  </nav>
+  {% endif %}
+
+</div>
+{% endblock %}

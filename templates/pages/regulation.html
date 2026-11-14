@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "لائحة المركز" %} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="section-title text-2xl">{% trans "لائحة المركز" %}</h1>
+  <p class="auth-sub mb-6">{% trans "القواعد المعمول بيها داخل المركز — والالتزام بيها مسؤوليتنا جميعًا" %}</p>
+
+  <div class="card p-5 leading-8 text-[15px]">
+    <h2 class="font-black text-[var(--brand-navy)]">{% trans "1) العضوية والاشتراك" %}</h2>
+    <ul class="list-disc ps-5"><li>{% trans "العضوية شخصية ولا تُستخدم إلا بمعرفة العضو أو من ينوب عنه." %}</li><li>{% trans "تُجدَّد العضوية سنويًا، وفترة السماح بعد الانتهاء 7 أيام فقط." %}</li><li>{% trans "يلتزم العضو بتحديث بياناته (خصوصًا الطبية) فور تغيرها." %}</li></ul>
+
+    <h2 class="font-black text-[var(--brand-navy)] mt-4">{% trans "2) النظام والسلامة" %}</h2>
+    <ul class="list-disc ps-5"><li>{% trans "الالتزام بمواعيد الملاعب والصالات حسب الجدول المعلن." %}</li><li>{% trans "يُمنع التدخين والشيشة والأطعمة داخل أرضيات اللعب تمامًا." %}</li><li>{% trans "الحفاظ على الممتلكات والأجهزة؛ أي تلف عمدي يُحمَّل المخالف كلفته." %}</li><li>{% trans "اللاعب تحت 18 سنة يوقّع ولي أمره على إقرار المشاركة والسكن للرحلات." %}</li></ul>
+
+    <h2 class="font-black text-[var(--brand-navy)] mt-4">{% trans "3) إلغاء وحجز الأنشطة" %}</h2>
+    <ul class="list-disc ps-5"><li>{% trans "إلغاء حجز النشاط مجاني حتى 24 ساعة قبل الموعد — بعدها يُخصم 50٪ من الرسوم." %}</li><li>{% trans "البطولات والدورات: لا استرداد بعد بدء الأسبوع الأول من النشاط." %}</li><li>{% trans "الرحلات: عربون الحجز غير مسترد — الاسترداد الكامل قبل 72 ساعة من التحرك." %}</li></ul>
+
+    <h2 class="font-black text-[var(--brand-navy)] mt-4">{% trans "4) اللائحة الكاملة" %}</h2>
+    <p class="text-slate-500">{% trans "الملف الكامل لـ «لائحة المركز» (PDF) سيكون متاحًا للتحميل هنا قريبًا — إلى ذلك الحين، توجه للاستقبال لنسخة مطبوعة." %}</p>
+  </div>
+</div>
+{% endblock %}

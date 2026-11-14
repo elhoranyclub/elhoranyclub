@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% if query %}{% blocktrans %}نتائج البحث عن: {{ query }}{% endblocktrans %}{% else %}{% trans "ابحث في المركز" %}{% endif %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="section-title text-2xl">{% trans "ابحث في المركز" %}</h1>
+
+  <!-- فورم البحث -->
+  <form method="get" action="{% url 'core:search' %}" class="flex gap-2 mt-3" role="search">
+    <label class="sr-only" for="q">{% trans "اكتب ما تبحث عنه" %}</label>
+    <input id="q" type="search" name="q" value="{{ query }}" placeholder="{% trans 'ابحث في الأخبار، الأنشطة، البطولات، الدورات، الرحلات…' %}" class="input flex-1" autofocus>
+    <button type="submit" class="btn btn-navy" aria-label="{% trans 'ابحث' %}">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    </button>
+  </form>
+
+  {% if query %}
+    {% if total %}
+      <p class="text-xs font-bold text-slate-500 mt-3">{% blocktrans count total=total %}لقينا {{ total }} نتيجة{% plural %}لقينا {{ total }} نتيجة{% endblocktrans %}</p>
+      <div class="space-y-4 mt-2">
+        {% for title, items in groups %}
+        <section>
+          <h2 class="font-black text-[var(--brand-navy)] text-sm flex items-center gap-2 mb-1.5"><span class="badge badge-navy">{{ items|length }}</span>{{ title }}</h2>
+          <ul class="card divide-y divide-slate-100">
+            {% for item in items %}
+            <li>
+              <a href="{{ item.url }}" class="flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+                <span class="min-w-0 font-bold text-sm text-[var(--brand-navy)] truncate">{{ item.title }}</span>
+                <span class="text-[10px] font-bold text-slate-400 shrink-0">{{ item.meta }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card empty-state mt-3">
+        <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد نتائج مطابقة" %}</p>
+        <p class="text-sm text-slate-500 mt-1">{% trans "جرّب كلمة أقصر أو كلمة من الرياضة أو البطولة المطلوبة." %}</p>
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="text-sm text-slate-400 mt-4">{% trans "اكتب كلمتين على الأقل — مثلاً: «كاراتيه» أو «السخنة» أو «الربيع»." %}</p>
+  {% endif %}
+</div>
+{% endblock %}

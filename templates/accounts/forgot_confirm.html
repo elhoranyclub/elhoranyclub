@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "تأكيد إرسال التعليمات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="text-center mb-5">
+    <span class="inline-flex w-16 h-16 rounded-2xl items-center justify-center" style="background:var(--brand-gold-soft); color:var(--brand-gold-dark);">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+    </span>
+    <h1 class="auth-title mt-3">{% trans "فين هنبعت التعليمات؟" %}</h1>
+    <p class="auth-sub">{% trans "هيتبعت رمز التحقق على البريد الإلكتروني المسجل في حسابك" %}</p>
+  </div>
+
+  <div class="card auth-card form-grid text-center">
+    <div class="rounded-2xl border border-dashed border-[var(--brand-gold)] bg-[var(--brand-gold-soft)] py-4 px-3">
+      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{% trans "البريد الإلكتروني المسجل" %}</p>
+      {% if masked_email %}
+      <p class="text-lg font-black text-[var(--brand-navy)] tracking-widest" dir="ltr">{{ masked_email }}</p>
+      {% elif show_hint and account_state == "missing" %}
+      <p class="text-sm font-bold text-red-700">{% trans "مفيش حساب مسجّل بهذا الرقم على الموقع" %}</p>
+      <p class="text-xs text-slate-500 mt-1">{% trans "عشان كده مبينفعش نبعتلك رمز — سجّل من جديد أو جرّب رقم تاني." %}</p>
+      {% elif show_hint and account_state == "no_email" %}
+      <p class="text-sm font-bold text-amber-700">{% trans "الحساب موجود بس من غير إيميل مسجّل" %}</p>
+      <p class="text-xs text-slate-500 mt-1">{% trans "كلمة السر الجديدة مش هتوصل — تواصل مع الاستقبال يحدّثوا الإيميل." %}</p>
+      {% else %}
+      <p class="text-sm font-bold text-slate-500">{% trans "لو الرقم مسجل عندنا، هيوصلك رمز على بريدك" %}</p>
+      {% endif %}
+    </div>
+
+    <p class="text-xs text-slate-500 leading-6">{% trans "الكود صالح لمدة ١٠ دقائق ولمرة واحدة فقط — لو مش بريدك، متضغطش." %}</p>
+
+    <form method="post" class="form-grid">
+      {% csrf_token %}
+      {% if show_hint and account_state == "missing" %}
+      <a href="{% url 'accounts:register' %}" class="btn btn-gold btn-block btn-lg">{% trans "إنشاء حساب جديد" %}</a>
+      {% else %}
+      <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "ابعت الرمز الآن" %}</button>
+      {% endif %}
+    </form>
+
+    <a href="{% url 'accounts:forgot' %}" class="text-sm font-bold text-[var(--brand-green)] hover:underline">{% trans "رجوع" %}</a>
+  </div>
+</div>
+{% endblock %}

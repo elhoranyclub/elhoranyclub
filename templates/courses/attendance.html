@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n dict_filters %}
+{% block title %}{% trans "تسجيل الحضور" %} — {{ course.name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between gap-3 mb-1">
+    <div>
+      <h1 class="auth-title">{% trans "تسجيل الحضور" %}</h1>
+      <p class="auth-sub">{{ course.name }}</p>
+    </div>
+    <a href="{% url 'courses:manage' %}" class="btn btn-ghost btn-sm">{% trans "كل الدورات" %}</a>
+  </div>
+
+  <form method="get" class="flex gap-2 mb-4">
+    <label class="sr-only" for="date">{% trans "تاريخ الجلسة" %}</label>
+    <input class="input" type="date" id="date" name="date" value="{{ session_date|date:'Y-m-d' }}" onchange="this.form.submit()">
+  </form>
+
+  <form method="post" class="card divide-y divide-slate-100">
+    {% csrf_token %}
+    <div class="px-4 py-2 text-[10px] font-bold text-slate-400 flex items-center justify-between">
+      <span>{% trans "اللاعب" %}</span>
+      <span>{% trans "حاضر" %}</span>
+    </div>
+    {% for e in enrollments %}
+    <label class="flex items-center justify-between gap-3 px-4 py-3 cursor-pointer hover:bg-slate-50">
+      <span class="min-w-0">
+        <span class="block font-extrabold text-sm text-[var(--brand-navy)] truncate">{{ e.beneficiary_name }}</span>
+        <span class="text-[10px] text-slate-400">{{ e.reference }}</span>
+      </span>
+      {% with att=existing|dict_get:e.pk %}
+      <input type="checkbox" name="present_{{ e.pk }}" {% if att and att.present %}checked{% endif %} class="accent-[var(--brand-green)] w-6 h-6" aria-label="{% trans 'حاضر' %}">
+      {% endwith %}
+    </label>
+    {% empty %}
+    <p class="text-sm text-slate-400 px-4 py-6 text-center">{% trans "لا يوجد مشتركون مؤكدون بعد." %}</p>
+    {% endfor %}
+    {% if enrollments %}
+    <div class="p-4 sticky bottom-0 bg-white/90 backdrop-blur border-t border-slate-100">
+      <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "حفظ الحضور" %}</button>
+    </div>
+    {% endif %}
+  </form>
+
+  <!-- إنهاء الدورة للمشاركين -->
+  {% if enrollments %}
+  <div class="card p-4 mt-4">
+    <p class="label">{% trans "إنهاء الدورة (يصدر شهادة إتمام PDF تلقائيًا)" %}</p>
+    <ul class="divide-y divide-slate-100">
+      {% for e in enrollments %}
+      {% if e.status == 'confirmed' %}
+      <li class="py-2 flex items-center justify-between gap-2">
+        <span class="text-sm font-bold truncate">{{ e.beneficiary_name }}</span>
+        <form method="post" action="{% url 'courses:mark_complete' e.pk %}" onsubmit="return confirm('{% trans 'إنهاء الدورة وإصدار شهادة؟' %}');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-navy btn-sm">{% trans "إنهاء + شهادة" %}</button>
+        </form>
+      </li>
+      {% elif e.status == 'completed' %}
+      <li class="py-2 flex items-center justify-between gap-2 opacity-70">
+        <span class="text-sm font-bold truncate">{{ e.beneficiary_name }}</span>
+        <span class="badge badge-navy">{% trans "شهادة صادرة" %}</span>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

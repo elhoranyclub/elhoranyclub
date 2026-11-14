@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ article.title }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_image %}{% if article.cover %}<meta property="og:image" content="{{ article.cover.url }}">{% else %}{{ block.super }}{% endif %}{% endblock %}
+
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "{{ article.title|escapejs }}",
+  "datePublished": "{{ article.published_at|date:'c' }}",
+  "dateModified": "{{ article.updated_at|date:'c' }}",
+  "author": {"@type": "Organization", "name": "{{ site_name|escapejs }}"},
+  "publisher": {"@type": "Organization", "name": "{{ site_name|escapejs }}"}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <!-- Breadcrumb -->
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{% url 'news:list' %}" class="hover:text-[var(--brand-navy)]">{% trans "الأخبار" %}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)] line-clamp-1">{{ article.title }}</span>
+  </nav>
+
+  <article class="card overflow-hidden">
+    {% if article.cover %}
+      <img src="{{ article.cover.url }}" alt="{{ article.title }}" class="w-full h-52 sm:h-64 object-cover" fetchpriority="high">
+    {% endif %}
+    <div class="p-5">
+      <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold text-slate-500">
+        {% if article.category %}<span class="badge badge-navy">{{ article.category.name_ar }}</span>{% endif %}
+        <time datetime="{{ article.published_at|date:'c' }}">{{ article.published_at|date:"Y / m / d" }}</time>
+        {% if article.author %}<span>· {{ article.author.get_full_name|default:article.author.phone }}</span>{% endif %}
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-[var(--brand-navy)] leading-[1.4] mt-3">{{ article.title }}</h1>
+      {% if article.summary %}<p class="mt-2 text-slate-600 font-semibold leading-7 border-s-4 ps-3" style="border-color: var(--brand-gold);">{{ article.summary }}</p>{% endif %}
+
+      <div class="prose-news mt-5 leading-8 text-[15px]">{{ article.content|safe }}</div>
+
+      {% if article.images.all %}
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-5">
+        {% for img in article.images.all %}
+          <img src="{{ img.image.url }}" alt="{{ img.caption }}" loading="lazy" class="rounded-xl w-full h-28 sm:h-32 object-cover">
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if article.tags.all %}
+      <div class="flex flex-wrap gap-2 mt-5">
+        {% for tag in article.tags.all %}<span class="badge badge-gray">#{{ tag.name }}</span>{% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- مشاركة -->
+      <div class="flex flex-wrap items-center gap-2 mt-6 pt-4 border-t border-slate-100">
+        <span class="text-xs font-extrabold text-slate-500">{% trans "شارك الخبر:" %}</span>
+        <a class="btn btn-sm" style="background:#25D366; color:#06301a;" target="_blank" rel="noopener"
+           href="https://wa.me/?text={{ article.title|urlencode }}%20{{ request.build_absolute_uri }}">WhatsApp</a>
+        <a class="btn btn-sm" style="background:#1877F2; color:#fff;" target="_blank" rel="noopener"
+           href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}">Facebook</a>
+      </div>
+    </div>
+  </article>
+
+  {% if related %}
+  <section class="mt-8">
+    <h2 class="section-title text-lg mb-3">{% trans "أخبار ذات صلة" %}</h2>
+    <div class="h-scroll no-scrollbar -mx-4 px-4 pb-1">
+      {% for item in related %}{% include "components/news_card.html" with article=item %}{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

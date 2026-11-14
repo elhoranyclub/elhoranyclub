@@ -1,0 +1,12 @@
+{% extends "emails/base_email.html" %}
+{% block preheader %}{{ subject }}{% endblock %}
+{% block content %}
+{% if title %}<div style="font-size:18px; font-weight:800; color:{{ brand_navy }}; margin-bottom:10px;">{{ title }}</div>{% endif %}
+<div style="color:#334155; font-size:14px; line-height:2; white-space:pre-line;">{{ body }}</div>
+{% if action_url %}
+<div style="margin-top:20px; text-align:center;">
+  <a href="{{ action_url }}" style="display:inline-block; background-color:{{ brand_gold }}; color:#241b05; text-decoration:none; font-weight:900; font-size:14px; padding:13px 28px; border-radius:12px;">{{ action_label|default:"اضغط هنا للتفاصيل" }}</a>
+</div>
+{% endif %}
+{% endblock %}
+{% block disclaimer %}وصلتك الرسالة دي من {{ site_name }}.{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "ربط سجل الدفتر" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+  <div class="flex items-center gap-2 mb-3">
+    <a href="{% url 'core:registry_list' %}" class="btn btn-ghost btn-sm !px-2" aria-label="{% trans 'رجوع للدفتر' %}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 19l-7-7 7-7"/></svg>
+    </a>
+    <h1 class="auth-title !text-lg sm:!text-xl">{% trans "ربط سجل الدفتر بحساب مسجل" %}</h1>
+  </div>
+
+  <!-- Registry row summary -->
+  <section class="card p-4 sm:p-5">
+    <h2 class="font-black text-[var(--brand-navy)] mb-2">{% trans "سطر الدفتر" %}</h2>
+    <dl class="grid sm:grid-cols-2 gap-y-2 gap-x-4 text-sm">
+      <div class="flex justify-between gap-3 py-1 sm:py-1.5 border-b border-slate-100"><dt class="text-slate-500">{% trans "رقم العضوية" %}</dt><dd class="font-mono font-black" dir="ltr">{{ entry.membership_number }}</dd></div>
+      <div class="flex justify-between gap-3 py-1 sm:py-1.5 border-b border-slate-100"><dt class="text-slate-500">{% trans "الاسم" %}</dt><dd class="font-bold">{{ entry.full_name_ar }}</dd></div>
+      <div class="flex justify-between gap-3 py-1 sm:py-1.5 border-b border-slate-100"><dt class="text-slate-500">{% trans "الرقم القومي" %}</dt><dd class="font-mono tracking-wider" dir="ltr">{{ entry.national_id|default:"—" }}</dd></div>
+      <div class="flex justify-between gap-3 py-1 sm:py-1.5 border-b border-slate-100"><dt class="text-slate-500">{% trans "اللجنة العمومية" %}</dt><dd class="font-bold">{% if entry.is_general_assembly %}<span class="badge badge-gold">{% trans "نعم" %}{% if entry.assembly_position %} · {{ entry.assembly_position }}{% endif %}</span>{% else %}—{% endif %}</dd></div>
+      <div class="flex justify-between gap-3 py-1 sm:py-1.5 border-b border-slate-100"><dt class="text-slate-500">{% trans "مدفوع حتى" %}</dt><dd class="font-bold">{% if entry.paid_until %}{{ entry.paid_until|date:"Y-m-d" }}{% else %}<span class="text-red-500">{% trans "غير مدفوع" %}</span>{% endif %}</dd></div>
+      {% if entry.last_payment_amount %}<div class="flex justify-between gap-3 py-1 sm:py-1.5 border-b border-slate-100"><dt class="text-slate-500">{% trans "آخر مبلغ" %}</dt><dd class="font-bold">{{ entry.last_payment_amount }} {% trans "ج" %}</dd></div>{% endif %}
+    </dl>
+    {% if entry.note %}<p class="text-xs text-slate-500 mt-2"><b>{% trans "ملاحظة:" %}</b> {{ entry.note }}</p>{% endif %}
+  </section>
+
+  {% if entry.linked_profile %}
+  <!-- Already linked -->
+  <section class="card p-4 mt-4 text-center" style="border-color: var(--brand-green);">
+    <span class="badge badge-green px-4 py-2 text-sm">✓ {% trans "مربوط بالفعل" %}</span>
+    <p class="font-extrabold text-[var(--brand-navy)] mt-3">{{ entry.linked_profile.full_name_ar }}</p>
+    <p class="text-xs text-slate-500 mt-1" dir="ltr">{{ entry.linked_profile.user.phone|default:"بدون موبايل" }}</p>
+    <p class="text-[11px] text-slate-400 mt-1">{% trans "العضو بالكارت/الحساب ده بقى بنفس رقم الدفتر وعلامة اللجنة العمومية." %}</p>
+    <form method="post" class="mt-4" onsubmit="return confirm('{% trans 'فك الربط؟ العضو يرجع بياخده كما هو، وسطر الدفتر يبقى حرًا لربط حساب تاني.' %}')">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="unlink">
+      <button type="submit" class="btn btn-ghost text-red-600">{% trans "فك الربط" %}</button>
+    </form>
+  </section>
+  {% else %}
+  <!-- Pick a profile -->
+  <section class="card p-4 sm:p-5 mt-4">
+    <h2 class="font-black text-[var(--brand-navy)]">{% trans "البحث عن حساب العضو" %}</h2>
+    <p class="text-[11px] text-slate-500 mt-1">{% trans "دور على الأعضاء اللي سجلوا بنفسهم على الموقع بالموبايل أو الاسم — وبعدين دوس «ربط بهذا الحساب». هيتم نسخ: رقم الدفتر، الرقم القومي، علامة الجمعية العمومية ومنصبها، وهيتعمل اشتراك «مدفوع» لسطر الدفتر لو مكتوب في الدفتر «مدفوع حتى»." %}</p>
+    <form method="get" class="flex gap-2 mt-3" role="search">
+      <input type="search" name="q" value="{{ q }}" autofocus class="input flex-1" placeholder="{% trans 'موبايل أو اسم أو رقم قومي…' %}" aria-label="{% trans 'دور' %}">
+      <button type="submit" class="btn btn-navy">{% trans "بحث" %}</button>
+    </form>
+  </section>
+
+  {% if q %}
+  <section class="card overflow-hidden mt-3">
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs min-w-[36rem]">
+        <thead class="bg-slate-50 text-slate-500">
+          <tr>
+            <th class="text-start font-black p-3">{% trans "الاسم" %}</th>
+            <th class="text-start font-black p-3">{% trans "الموبايل" %}</th>
+            <th class="text-start font-black p-3">{% trans "رقم العضوية الحالي" %}</th>
+            <th class="text-start font-black p-3">{% trans "عضو منذ" %}</th>
+            <th class="p-3 text-end">{% trans "ربط" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in candidates %}
+          <tr class="border-t border-slate-100 hover:bg-slate-50/60 align-middle">
+            <td class="p-3 font-bold">{{ p.full_name_ar }}{% if p.is_general_assembly %}<span class="badge badge-gold !text-[10px] py-0.5 ms-1 align-middle">{% trans "لجنة عمومية" %}</span>{% endif %}</td>
+            <td class="p-3 font-mono whitespace-nowrap" dir="ltr">{{ p.user.phone }}</td>
+            <td class="p-3 font-mono whitespace-nowrap" dir="ltr">{{ p.membership_number }}</td>
+            <td class="p-3 whitespace-nowrap">{{ p.joined_at|date:"Y-m-d" }}</td>
+            <td class="p-3 text-end whitespace-nowrap">
+              <form method="post" onsubmit="return confirm('{% trans 'ربط سطر الدفتر بهذا الحساب؟ هيتغير رقم العضوية بتاعه لرقم الدفتر.' %}')">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="link">
+                <input type="hidden" name="profile_id" value="{{ p.pk }}">
+                <input type="hidden" name="q" value="{{ q }}">
+                <button type="submit" class="btn btn-gold btn-sm !min-h-8">{% trans "ربط بهذا الحساب" %}</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="p-6 text-center text-slate-400">{% trans "مفيش حسابات مطابقة — العضو لسه مبيسجلش؟ خليه يسجل وبعدين ارجع هنا" %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+  {% endif %}
+
+</div>
+{% endblock %}

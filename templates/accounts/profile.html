@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "حسابي" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6 space-y-4">
+
+  <!-- ===== Membership summary card ===== -->
+  <section class="mcard">
+    <div class="mcard-inner">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <img src="{% static 'img/logo.svg' %}" alt="" class="h-8 w-8">
+          <span class="text-[11px] font-extrabold tracking-widest" style="color:#9db4c6;">{{ site_name }}</span>
+        </div>
+        <span class="mcard-label">{% trans "كارت عضوية" %}</span>
+      </div>
+      <div class="mt-4 flex items-center gap-4">
+        {% if profile.photo %}
+          <img src="{{ profile.photo.url }}" alt="{{ profile.full_name_ar }}" class="mcard-photo">
+        {% else %}
+          <span class="mcard-photo flex items-center justify-center text-2xl font-black" style="color:#d4af37;">{{ profile.full_name_ar.0|default:"ح" }}</span>
+        {% endif %}
+        <div class="min-w-0">
+          <p class="text-xl font-black leading-snug truncate">{{ profile.full_name_ar }}</p>
+          <p class="mcard-number mt-0.5" dir="ltr">{{ profile.membership_number }}</p>
+          <p class="text-[10px] font-bold" style="color:#8ba6bb;">{% trans "عضو منذ" %} {{ profile.joined_at|date:"Y/m" }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-2 gap-2">
+    <a href="{% url 'accounts:card' %}" class="btn btn-gold">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14h1M14 20h1M18 18h3v3"/></svg>
+      {% trans "كارت الـ QR" %}
+    </a>
+    <a href="{% url 'accounts:profile_edit' %}" class="btn btn-navy">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L11 15l-4 1 1-4 8.5-8.5z"/></svg>
+      {% trans "تعديل بياناتي" %}
+    </a>
+  </div>
+
+  <!-- ===== Subscription status (Phase 3) ===== -->
+  <section class="card p-4 flex items-center gap-3">
+    <span class="quick-tile-icon shrink-0" style="width:2.75rem;height:2.75rem;border-radius:.8rem;{% if membership and membership.is_current %} background:var(--brand-green-soft); color:var(--brand-green);{% elif membership and membership.status == 'pending_review' %} background:var(--brand-gold-soft); color:var(--brand-gold-dark);{% else %} background:#eef2f7; color:#7a8ca0;{% endif %}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M8 10h4M8 14h6"/></svg>
+    </span>
+    <div class="min-w-0">
+      <p class="font-extrabold text-[var(--brand-navy)] text-sm">
+        {% if membership and membership.is_current %}{% trans "اشتراكك نشط" %} — {{ membership.days_left }} {% trans "يومًا متبقيًا" %}
+        {% elif membership and membership.status == 'pending_review' %}{% trans "طلب تجديد قيد المراجعة" %}
+        {% elif membership %}{% trans "اشتراكك منتهي منذ" %} {{ membership.end_date|date:"Y-m-d" }}
+        {% else %}{% trans "لا يوجد اشتراك حالي" %}{% endif %}
+      </p>
+      <p class="text-xs text-slate-500">
+        {% if membership %}{{ membership.membership_type.name_ar }} · {% trans "حتى" %} {{ membership.end_date|date:"Y-m-d" }}{% else %}{% trans "اشترك عشان تفتح كل مميزات المركز" %}{% endif %}
+      </p>
+    </div>
+    <a href="{% url 'memberships:my' %}" class="ms-auto section-link text-xs shrink-0">{% trans "التفاصيل ←" %}</a>
+  </section>
+
+  <!-- ===== My details ===== -->
+  <section class="card p-4">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-black text-[var(--brand-navy)]">{% trans "بياناتي" %}</h2>
+      <a href="{% url 'accounts:profile_edit' %}" class="section-link text-xs">{% trans "تعديل" %}</a>
+    </div>
+    <dl class="text-sm divide-y divide-slate-100">
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "الموبايل" %}</dt><dd dir="ltr" class="font-bold">{{ request.user.phone }}</dd></div>
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "تاريخ الميلاد" %}</dt><dd class="font-bold">{{ profile.birth_date|default:"—"|date:"Y-m-d" }}{% if profile.age %} <span class="text-slate-400">({% blocktrans count age=profile.age %}{{ age }} سنة{% plural %}{{ age }} سنة{% endblocktrans %})</span>{% endif %}</dd></div>
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "النوع" %}</dt><dd class="font-bold">{{ profile.get_gender_display|default:"—" }}</dd></div>
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "المحافظة / العنوان" %}</dt><dd class="font-bold text-end">{{ profile.governorate }}{% if profile.address %} — {{ profile.address }}{% endif %}</dd></div>
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "الرقم القومي" %}</dt><dd dir="ltr" class="font-bold tracking-widest">{{ profile.national_id_masked }}</dd></div>
+      {% if profile.is_general_assembly %}<div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "اللجنة العمومية" %}</dt><dd class="font-bold"><span class="badge badge-gold">{% trans "نعم — عضو" %}{% if profile.assembly_position %} · {{ profile.assembly_position }}{% endif %}</span></dd></div>{% endif %}
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "جهة الطوارئ" %}</dt><dd class="font-bold">{{ profile.emergency_contact_name|default:"—" }}{% if profile.emergency_contact_phone %} <span dir="ltr" class="text-slate-400">{{ profile.emergency_contact_phone }}</span>{% endif %}</dd></div>
+      <div class="py-2 flex justify-between gap-3"><dt class="text-slate-500">{% trans "مقاس الزي" %}</dt><dd class="font-bold">{{ profile.get_shirt_size_display|default:"—" }}</dd></div>
+    </dl>
+    {% if profile.health_notes %}
+      <p class="mt-2 text-xs leading-6 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 text-amber-900"><b>{% trans "ملاحظات صحية:" %}</b> {{ profile.health_notes }}</p>
+    {% endif %}
+  </section>
+
+  <!-- ===== Dependents ===== -->
+  <section class="card p-4">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="font-black text-[var(--brand-navy)]">{% trans "أبنائي التابعين" %} <span class="badge badge-navy">{{ dependents|length }}</span></h2>
+      <a href="{% url 'accounts:dependent_add' %}" class="btn btn-navy btn-sm">{% trans "+ إضافة" %}</a>
+    </div>
+    {% if dependents %}
+      <ul class="divide-y divide-slate-100">
+        {% for d in dependents|slice:":3" %}
+        <li class="py-2 flex items-center gap-3">
+          {% if d.photo %}<img src="{{ d.photo.url }}" alt="" class="w-10 h-10 rounded-xl object-cover">{% else %}<span class="w-10 h-10 rounded-xl flex items-center justify-center font-black" style="background:var(--brand-gold-soft); color:var(--brand-gold-dark);">{{ d.full_name_ar.0 }}</span>{% endif %}
+          <span class="min-w-0"><span class="block font-bold text-sm truncate">{{ d.full_name_ar }}</span><span class="text-[11px] text-slate-500">{{ d.get_relation_display }} · {% blocktrans count age=d.age %}{{ age }} سنة{% plural %}{{ age }} سنة{% endblocktrans %}</span></span>
+          <span class="ms-auto mcard-number text-[11px]" dir="ltr">{{ d.membership_number }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'accounts:dependents' %}" class="section-link text-xs inline-flex items-center gap-1 mt-1">{% trans "إدارة كل التابعين" %}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:scaleX(-1);" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    {% else %}
+      <p class="text-sm text-slate-500 leading-7">{% trans "أضف أبناءك (تحت 18 سنة) عشان تقدر تسجلهم في البطولات والدورات وتدفع عنهم." %}</p>
+      <a href="{% url 'accounts:dependent_add' %}" class="btn btn-gold btn-sm mt-2">{% trans "إضافة أول تابع" %}</a>
+    {% endif %}
+  </section>
+
+  <!-- ===== Account actions ===== -->
+  <section class="card divide-y divide-slate-100">
+    {% if request.user.is_staff %}
+    <a href="{% url 'dashboard:home' %}" class="flex items-center gap-3 px-4 py-3 font-extrabold text-[var(--brand-navy)] hover:bg-[var(--brand-gold-soft)] transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M8 9h8M8 13h5"/></svg>
+      <span class="font-bold text-sm">{% trans "لوحة التحكم" %}</span>
+      <span class="badge badge-navy ms-auto text-[10px]">{% trans "إدارة" %}</span>
+    </a>
+    {% endif %}
+    <a href="{% url 'events:my_registrations' %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+      <span class="font-bold text-sm">{% trans "حجوزاتي في الأنشطة" %}</span>
+    </a>
+    <a href="{% url 'payments:my' %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="12" rx="2.5"/><circle cx="12" cy="13" r="3"/></svg>
+      <span class="font-bold text-sm">{% trans "مدفوعاتي وفواتي" %}</span>
+    </a>
+    <a href="{% url 'pages:learn_more' %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l6 3.5-6 3.5z"/></svg>
+      <span class="font-bold text-sm">{% trans "اعرف الموقع أكتر" %}</span>
+      <span class="ms-auto text-[11px] font-bold text-slate-400">{% trans "فيديو ٩ دقائق" %}</span>
+    </a>
+    <a href="{% url 'pages:guide' %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M8 7h7M8 11h5"/></svg>
+      <span class="font-bold text-sm">{% trans "الدليل التفاعلي" %}</span>
+      <span class="ms-auto text-[11px] font-bold text-slate-400">{% trans "خطوة بخطوة" %}</span>
+    </a>
+    <a href="{% url 'notifications:preferences' %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      <span class="font-bold text-sm">{% trans "تفضيلات الإشعارات" %}</span>
+    </a>
+    <a href="{% url 'accounts:password_change' %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      <span class="font-bold text-sm">{% trans "تغيير كلمة السر" %}</span>
+    </a>
+    <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-4 py-3 text-red-700 hover:bg-red-50 transition-colors">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+      <span class="font-bold text-sm">{% trans "تسجيل الخروج" %}</span>
+    </a>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "emails/base_email.txt" %}
+{% block content %}{{ title }}
+==========
+
+{{ body }}
+{% if action_url %}
+التفاصيل: {{ action_url }}
+{% endif %}
+
+{{ site_name }} — {{ site_url }}{% endblock %}
+{% block disclaimer %}وصلتك الرسالة دي من {{ site_name }}.{% endblock %}

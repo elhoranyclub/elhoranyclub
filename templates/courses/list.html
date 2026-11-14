@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الدورات التدريبية" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="section-title text-2xl">{% trans "الدورات التدريبية" %}</h1>
+  <p class="auth-sub mb-4">{% trans "من البراعم للكبار — مع أحدث الأدوات ومدربين معتمدين" %}</p>
+
+  <!-- فلاتر -->
+  <form method="get" class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+    <select name="sport" class="input" aria-label="{% trans 'الرياضة' %}">
+      <option value="">{% trans "كل الرياضات" %}</option>
+      {% for s in sports %}<option value="{{ s.pk }}" {% if s.pk|stringformat:'i' == current_sport %}selected{% endif %}>{{ s.name_ar }}</option>{% endfor %}
+    </select>
+    <select name="level" class="input" aria-label="{% trans 'المستوى' %}">
+      <option value="">{% trans "كل المستويات" %}</option>
+      <option value="beginner" {% if current_level == 'beginner' %}selected{% endif %}>{% trans "مبتدئ" %}</option>
+      <option value="intermediate" {% if current_level == 'intermediate' %}selected{% endif %}>{% trans "متوسط" %}</option>
+      <option value="advanced" {% if current_level == 'advanced' %}selected{% endif %}>{% trans "متقدم" %}</option>
+    </select>
+    <select name="gender" class="input" aria-label="{% trans 'النوع' %}">
+      <option value="">{% trans "الجميع" %}</option>
+      <option value="M" {% if current_gender == 'M' %}selected{% endif %}>{% trans "بنين" %}</option>
+      <option value="F" {% if current_gender == 'F' %}selected{% endif %}>{% trans "بنات" %}</option>
+    </select>
+    <button type="submit" class="btn btn-navy">{% trans "بحث" %}</button>
+  </form>
+
+  {% if courses %}
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for c in courses %}
+    <a href="{{ c.get_absolute_url }}" class="card card-hover overflow-hidden block">
+      {% if c.cover %}
+        <img src="{{ c.cover.url }}" alt="{{ c.name }}" loading="lazy" class="w-full h-36 object-cover">
+      {% else %}
+        <div class="w-full h-36 flex flex-col items-center justify-center gap-1" style="background:linear-gradient(140deg,var(--brand-navy),var(--brand-navy-light));">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/><path d="M12 4v16M4 12h16"/></svg>
+          <span class="text-[10px] font-black tracking-widest" style="color:var(--brand-gold);">{{ c.sport.name_ar }}</span>
+        </div>
+      {% endif %}
+      <div class="p-4">
+        <div class="flex items-center gap-2">
+          <span class="badge badge-navy">{{ c.sport.name_ar }}</span>
+          <span class="badge badge-gray">{{ c.get_level_display }}</span>
+          {% if c.status == 'open' %}<span class="badge badge-green">{% trans "التسجيل مفتوح" %}</span>{% endif %}
+        </div>
+        <h2 class="font-extrabold text-[var(--brand-navy)] leading-6 mt-2 min-h-[3rem] line-clamp-2">{{ c.name }}</h2>
+        <p class="text-[11px] font-bold text-slate-500 mt-1">{{ c.schedule }}</p>
+        <div class="flex items-center justify-between mt-2">
+          <span class="text-xs font-bold text-slate-400">{% blocktrans with a=c.age_min b=c.age_max %}من {{ a }} إلى {{ b }} سنة{% endblocktrans %}</span>
+          <span class="text-sm font-black text-[var(--brand-navy)]">{% if c.price == 0 %}{% trans "مجاني" %}{% else %}{{ c.price }} {% trans "ج" %} / {{ c.get_price_type_display }}{% endif %}</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد دورات مطابقة" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "جرب فلترًا مختلفًا أو الغي البحث لتشوف كل الدورات." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

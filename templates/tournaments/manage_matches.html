@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "إدارة المباريات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "إدارة المباريات" %}</h1>
+  <p class="auth-sub mb-4">{% trans "أدخل أو عدّل نتائج المباريات — الترتيب يتحدث تلقائيًا." %}{% if tournament %} — {{ tournament.name }}{% endif %}</p>
+
+  {% if matches %}
+  <ul class="space-y-2">
+    {% for m in matches %}
+    <li class="card p-3 flex flex-wrap items-center gap-3">
+      <div class="text-center w-14 shrink-0 text-[10px] font-bold text-slate-400">
+        {% if m.scheduled_at %}{{ m.scheduled_at|date:"m/d" }}<br>{{ m.scheduled_at|date:"h:i A" }}{% else %}{% trans "لم يحدد" %}{% endif %}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="text-[10px] font-bold text-slate-400">{{ m.category.name_ar }} · {{ m.round_name }}</p>
+        <p class="font-bold text-sm truncate">{{ m.team_a_name }} × {{ m.team_b_name }}</p>
+      </div>
+      <form method="post" action="{% url 'tournaments:enter_result' m.id %}" class="flex items-center gap-2 shrink-0">
+        {% csrf_token %}
+        <input type="number" name="score_a" min="0" value="{{ m.score_a }}" required inputmode="numeric" aria-label="{{ m.team_a_name }}" class="input w-14 text-center font-black">
+        <span class="font-black text-slate-400">:</span>
+        <input type="number" name="score_b" min="0" value="{{ m.score_b }}" required inputmode="numeric" aria-label="{{ m.team_b_name }}" class="input w-14 text-center font-black">
+        <button type="submit" class="btn btn-navy btn-sm">{% trans "حفظ" %}</button>
+      </form>
+      <span class="badge {% if m.status == 'finished' %}badge-green{% elif m.status == 'live' %}badge-red{% else %}badge-gray{% endif %} w-full sm:w-auto text-center justify-center">{{ m.get_status_display }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state">
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد مباريات" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "ولّد جدول المباريات بالأمر: manage.py generate_fixtures <slug>" %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

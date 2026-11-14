@@ -1,0 +1,18 @@
+{% load i18n %}
+{% comment %}Django messages rendered as toasts (Alpine dismiss + auto-hide via app.js).{% endcomment %}
+{% if messages %}
+<div class="fixed left-1/2 -translate-x-1/2 z-[60] w-[min(92vw,26rem)] flex flex-col gap-2" style="bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + .8rem);" aria-live="polite">
+  {% for message in messages %}
+    {% with tag=message.tags %}
+    <div data-toast role="alert" x-data="{ show: true }" x-show="show" x-transition.opacity
+         class="flex items-start gap-2 px-4 py-3 rounded-xl shadow-lg text-sm font-bold text-white
+                {% if 'success' in tag %}bg-[#146b3a]{% elif 'error' in tag %}bg-[#b42318]{% elif 'warning' in tag %}bg-[#b8932f] text-[#241b05]{% else %}bg-[#0e2a47]{% endif %}">
+      <span class="leading-snug">{{ message }}</span>
+      <button class="ms-auto opacity-80 hover:opacity-100" @click="show = false" aria-label="{% trans 'إغلاق' %}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    {% endwith %}
+  {% endfor %}
+</div>
+{% endif %}

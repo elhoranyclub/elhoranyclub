@@ -1,0 +1,164 @@
+{
+  "guest": {
+    "label": "زائر",
+    "duration": 176,
+    "chapters": [
+      {
+        "seconds": 0,
+        "time": "0:00",
+        "title": "مقدمة"
+      },
+      {
+        "seconds": 19,
+        "time": "0:18",
+        "title": "الموقع معمول ليه؟"
+      },
+      {
+        "seconds": 43,
+        "time": "0:43",
+        "title": "معمول للموبايل الأول"
+      },
+      {
+        "seconds": 73,
+        "time": "1:12",
+        "title": "ينزل على موبايلك زي التطبيق"
+      },
+      {
+        "seconds": 98,
+        "time": "1:37",
+        "title": "من غير حساب — أي حد يقدر يعمل ده"
+      },
+      {
+        "seconds": 126,
+        "time": "2:06",
+        "title": "الأسعار والحسابات"
+      },
+      {
+        "seconds": 151,
+        "time": "2:30",
+        "title": "خلاصة الزائر في سطر"
+      }
+    ],
+    "video": "guide-guest.mp4",
+    "poster": "guide-guest-poster.jpg"
+  },
+  "member": {
+    "label": "عضو",
+    "duration": 185,
+    "chapters": [
+      {
+        "seconds": 0,
+        "time": "0:00",
+        "title": "مقدمة"
+      },
+      {
+        "seconds": 19,
+        "time": "0:19",
+        "title": "تسجيل الدخول والحساب"
+      },
+      {
+        "seconds": 44,
+        "time": "0:44",
+        "title": "كارت العضوية بالكود"
+      },
+      {
+        "seconds": 71,
+        "time": "1:10",
+        "title": "تجديد الاشتراك في ٣ خطوات"
+      },
+      {
+        "seconds": 106,
+        "time": "1:45",
+        "title": "الحجز والتسجيل"
+      },
+      {
+        "seconds": 136,
+        "time": "2:15",
+        "title": "خدماتي والملف الشخصي"
+      },
+      {
+        "seconds": 165,
+        "time": "2:45",
+        "title": "خلاصة العضو في سطر"
+      }
+    ],
+    "video": "guide-member.mp4",
+    "poster": "guide-member-poster.jpg"
+  },
+  "dataentry": {
+    "label": "مدخل بيانات",
+    "duration": 158,
+    "chapters": [
+      {
+        "seconds": 0,
+        "time": "0:00",
+        "title": "مقدمة"
+      },
+      {
+        "seconds": 18,
+        "time": "0:17",
+        "title": "إزاي بيشتغل؟"
+      },
+      {
+        "seconds": 49,
+        "time": "0:48",
+        "title": "قسم المحتوى والنشر"
+      },
+      {
+        "seconds": 82,
+        "time": "1:21",
+        "title": "قسم الاشتراكات والإيصالات"
+      },
+      {
+        "seconds": 106,
+        "time": "1:45",
+        "title": "اللي ما تقدرش تعمله"
+      },
+      {
+        "seconds": 138,
+        "time": "2:18",
+        "title": "خلاصة شغلك في سطر"
+      }
+    ],
+    "video": "guide-dataentry.mp4",
+    "poster": "guide-dataentry-poster.jpg"
+  },
+  "admin": {
+    "label": "الإدارة",
+    "duration": 180,
+    "chapters": [
+      {
+        "seconds": 0,
+        "time": "0:00",
+        "title": "مقدمة"
+      },
+      {
+        "seconds": 11,
+        "time": "0:10",
+        "title": "لوحة التحكم — نظرة سريعة"
+      },
+      {
+        "seconds": 48,
+        "time": "0:47",
+        "title": "أدمن عادي وسوبر أدمن"
+      },
+      {
+        "seconds": 81,
+        "time": "1:20",
+        "title": "مسار المراجعة المالية: من الإيصال للتفعيل"
+      },
+      {
+        "seconds": 108,
+        "time": "1:47",
+        "title": "قبل ما الموقع يتفتح للناس"
+      },
+      {
+        "seconds": 153,
+        "time": "2:32",
+        "title": "خلاصة الإدارة في سطر"
+      }
+    ],
+    "video": "guide-admin.mp4",
+    "poster": "guide-admin-poster.jpg"
+  }
+}

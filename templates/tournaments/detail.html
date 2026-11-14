@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load i18n dict_filters %}
+{% block title %}{{ tournament.name }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block og_title %}{{ tournament.name }}{% endblock %}
+{% block og_image %}{% if tournament.cover %}<meta property="og:image" content="{{ tournament.cover.url }}">{% endif %}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-6">
+
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{% url 'tournaments:list' %}" class="hover:text-[var(--brand-navy)]">{% trans "البطولات" %}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)] line-clamp-1">{{ tournament.name }}</span>
+  </nav>
+
+  <article class="card overflow-hidden">
+    {% if tournament.cover %}
+      <img src="{{ tournament.cover.url }}" alt="{{ tournament.name }}" class="w-full h-48 sm:h-56 object-cover" fetchpriority="high">
+    {% else %}
+    <div class="h-36 flex flex-col items-center justify-center" style="background:linear-gradient(140deg,var(--brand-navy),var(--brand-navy-light));">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg>
+    </div>
+    {% endif %}
+
+    <div class="p-5">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="badge badge-navy">{{ tournament.sport.name_ar }}</span>
+        <span class="badge badge-gray">{% if tournament.registration_type == 'team' %}{% trans "فرق" %}{% else %}{% trans "فردي" %}{% endif %}</span>
+        <span class="badge badge-gray">{{ tournament.get_format_display }}</span>
+        {% if tournament.status == 'registration' %}<span class="badge badge-green">{% trans "التسجيل مفتوح" %}</span>
+        {% elif tournament.status == 'ongoing' %}<span class="badge badge-gold">{% trans "جارية" %}</span>
+        {% elif tournament.status == 'finished' %}<span class="badge badge-gray">{% trans "منتهية" %}</span>{% endif %}
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-[var(--brand-navy)] leading-snug mt-3">{{ tournament.name }}</h1>
+
+      <dl class="grid sm:grid-cols-2 gap-2 text-xs mt-4">
+        {% if tournament.registration_start or tournament.registration_end %}
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "فترة التسجيل" %}</dt><dd class="font-extrabold">{{ tournament.registration_start|date:"Y-m-d"|default:"—" }} ← {{ tournament.registration_end|date:"Y-m-d"|default:"—" }}</dd></div>
+        {% endif %}
+        {% if tournament.start_date %}
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "موعد البطولة" %}</dt><dd class="font-extrabold">{{ tournament.start_date|date:"Y-m-d" }} ← {{ tournament.end_date|date:"Y-m-d"|default:"—" }}</dd></div>
+        {% endif %}
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "رسوم التسجيل" %}</dt><dd class="font-extrabold">{% if tournament.entry_fee == 0 %}{% trans "مجاني" %}{% else %}{{ tournament.entry_fee }} {% trans "ج" %}{% endif %}</dd></div>
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "المقاعد" %}</dt><dd class="font-extrabold">{{ tournament.confirmed_count }} / {{ tournament.max_teams }}</dd></div>
+      </dl>
+
+      {% if tournament.description %}
+      <div class="prose-news mt-4 leading-8 text-[15px]"><p>{{ tournament.description|linebreaksbr }}</p></div>
+      {% endif %}
+
+      {% if tournament.prizes or tournament.sponsors %}
+      <div class="flex flex-wrap gap-2 mt-3 text-[11px] font-bold">
+        {% if tournament.prizes %}<span class="badge badge-gold">🏆 {{ tournament.prizes }}</span>{% endif %}
+        {% if tournament.sponsors %}<span class="badge badge-gray">{% trans "برعاية:" %} {{ tournament.sponsors }}</span>{% endif %}
+      </div>
+      {% endif %}
+
+      {% if tournament.rules_pdf %}
+      <a href="{{ tournament.rules_pdf.url }}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm mt-3">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M9 13h6M9 17h6M9 9h2"/></svg>
+        {% trans "لائحة البطولة (PDF)" %}
+      </a>
+      {% endif %}
+
+      <!-- Registration CTA / my status -->
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        {% if my_registration %}
+          {% if my_registration.status == 'accepted' %}
+            <p class="badge badge-green text-sm px-4 py-2 w-full justify-center">{% trans "✓ تسجيلك مقبول — نتمنى لك بطولة موفقة!" %}</p>
+            <p class="text-center text-[11px] font-bold text-slate-400 mt-2" dir="ltr">{{ my_registration.reference }}</p>
+          {% elif my_registration.status == 'pending' %}
+            <p class="badge badge-gold text-sm px-4 py-2 w-full justify-center">{% trans "تسجيلك قيد المراجعة" %}</p>
+          {% elif my_registration.status == 'rejected' %}
+            <p class="badge badge-red text-sm px-4 py-2 w-full justify-center">{% trans "عذرًا — تم رفض التسجيل" %}{% if my_registration.reviewer_note %}: {{ my_registration.reviewer_note }}{% endif %}</p>
+          {% endif %}
+        {% elif tournament.is_registration_open %}
+          <a href="{% url 'tournaments:register' tournament.slug %}" class="btn btn-gold btn-block btn-lg">{% trans "سجّل الآن — احجز مكانك" %}</a>
+        {% elif tournament.status == 'finished' %}
+          <p class="text-center text-sm font-bold text-slate-400">{% trans "انتهت البطولة — شاهد النتائج من التبويبات" %}</p>
+        {% else %}
+          <p class="text-center text-sm font-bold text-slate-400">{% trans "التسجيل مغلق حاليًا" %}</p>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== Tabs ===== -->
+  <div class="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 py-3" role="tablist" aria-label="{% trans 'أقسام البطولة' %}">
+    <a href="?tab=overview" role="tab" class="badge shrink-0 {% if tab == 'overview' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2">{% trans "الفئات" %}</a>
+    <a href="?tab=fixtures" role="tab" class="badge shrink-0 {% if tab == 'fixtures' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2">{% trans "المباريات" %}</a>
+    <a href="?tab=standings" role="tab" class="badge shrink-0 {% if tab == 'standings' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2">{% trans "الترتيب" %}</a>
+    <a href="?tab=scorers" role="tab" class="badge shrink-0 {% if tab == 'scorers' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2">{% trans "الهدافين" %}</a>
+  </div>
+
+  {% if tab == 'overview' %}
+  <div class="grid sm:grid-cols-2 gap-3">
+    {% for cat in categories %}
+    <div class="card p-4">
+      <div class="flex items-center justify-between gap-2">
+        <p class="font-extrabold text-[var(--brand-navy)]">{{ cat.name_ar }}</p>
+        <span class="badge badge-navy">{{ cat.get_gender_display }}</span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">{% blocktrans with a=cat.age_min b=cat.age_max %}من {{ a }} حتى {{ b }} سنة{% endblocktrans %}</p>
+      <p class="text-[11px] font-bold text-slate-400 mt-1">{% if cat.entry_fee == None %}{{ tournament.entry_fee }}{% else %}{{ cat.entry_fee }}{% endif %} {% trans "ج" %}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% elif tab == 'fixtures' %}
+  {% if matches %}
+  <ol class="space-y-2">
+    {% for m in matches %}
+    <li class="card p-3 flex items-center gap-3">
+      <div class="text-center w-14 shrink-0">
+        {% if m.scheduled_at %}<p class="text-[10px] font-bold text-slate-400 leading-tight">{{ m.scheduled_at|date:"m/d" }}<br>{{ m.scheduled_at|date:"h:i A" }}</p>{% else %}<p class="text-[10px] font-bold text-slate-400">{% trans "لم يحدد" %}</p>{% endif %}
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="text-[10px] font-bold text-slate-400">{{ m.round_name }}{% if m.group_name %} · {{ m.group_name }}{% endif %} · {{ m.category.name_ar }}</p>
+        <p class="font-extrabold text-sm leading-6 truncate">{{ m.team_a_name }} <span class="text-slate-400 font-black">×</span> {{ m.team_b_name }}</p>
+        {% if m.venue %}<p class="text-[10px] text-slate-400">{{ m.venue }}</p>{% endif %}
+      </div>
+      <span class="shrink-0 text-end">
+        {% if m.status == 'finished' %}
+          <span class="mcard-number text-lg">{{ m.score_a }} - {{ m.score_b }}</span>
+        {% elif m.status == 'live' %}
+          <span class="badge badge-red">● {% trans "مباشر" %}</span>
+        {% else %}
+          <span class="badge badge-gray">{% trans "قادمة" %}</span>
+        {% endif %}
+      </span>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <div class="card empty-state"><p class="text-sm font-bold text-slate-500">{% trans "لم تُولّد المباريات بعد — ستظهر بعد إغلاق التسجيل وتوليد الجدول." %}</p></div>
+  {% endif %}
+
+  {% elif tab == 'standings' %}
+  {% for cat in categories %}
+    {% with rows=standings|dict_get:cat.id %}
+    {% if rows %}
+    <h3 class="font-black text-[var(--brand-navy)] mt-2 mb-1 text-sm">{{ cat.name_ar }}</h3>
+    <div class="card overflow-x-auto mb-3">
+      <table class="w-full text-xs text-center min-w-[560px]">
+        <thead class="bg-slate-50 text-slate-500">
+          <tr><th class="p-2 text-start">{% trans "الفريق" %}</th><th class="p-2">{% trans "لعب" %}</th><th class="p-2">{% trans "ف" %}</th><th class="p-2">{% trans "ت" %}</th><th class="p-2">{% trans "خ" %}</th><th class="p-2">{% trans "له" %}</th><th class="p-2">{% trans "عليه" %}</th><th class="p-2">{% trans "فرق" %}</th><th class="p-2">{% trans "نقاط" %}</th></tr>
+        </thead>
+        <tbody>
+          {% for s in rows %}
+          <tr class="border-t border-slate-100 {% if forloop.counter <= 2 %}font-black text-[var(--brand-navy)]{% endif %}">
+            <td class="p-2 text-start">{{ s.team.name }}</td><td class="p-2">{{ s.played }}</td><td class="p-2">{{ s.won }}</td><td class="p-2">{{ s.drawn }}</td><td class="p-2">{{ s.lost }}</td><td class="p-2">{{ s.goals_for }}</td><td class="p-2">{{ s.goals_against }}</td><td class="p-2">{{ s.goal_difference }}</td><td class="p-2"><span class="inline-flex w-7 h-7 items-center justify-center rounded-full bg-[var(--brand-navy)] text-[var(--brand-gold)]">{{ s.points }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+    {% endwith %}
+  {% endfor %}
+
+  {% elif tab == 'scorers' %}
+  {% for cat in categories %}
+    {% with rows=scorers|dict_get:cat.id %}
+    {% if rows %}
+    <h3 class="font-black text-[var(--brand-navy)] mt-2 mb-1 text-sm">{{ cat.name_ar }}</h3>
+    <ol class="card divide-y divide-slate-100 mb-3">
+      {% for row in rows %}
+      <li class="flex items-center gap-3 px-4 py-2.5">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black" style="background:var(--brand-gold-soft); color:var(--brand-gold-dark);">{{ forloop.counter }}</span>
+        <span class="text-sm font-bold">{{ row.name }}</span>
+        <span class="ms-auto mcard-number text-sm">{{ row.goals }} {% trans "هدف" %}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+    {% endwith %}
+  {% endfor %}
+  <p class="help-text">{% trans "الهدافون يظهرون بعد إدخال نتائج المباريات من إدارة البطولة." %}</p>
+  {% endif %}
+</div>
+{% endblock %}

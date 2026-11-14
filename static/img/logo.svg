@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 112" role="img" aria-label="مركز شباب الحوراني">
+  <path d="M50 2 L94 16 V52 C94 82 76 103 50 110 C24 103 6 82 6 52 V16 Z" fill="#0e2a47" stroke="#d4af37" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M50 10 L86 22.5 V52 C86 77.5 70.5 96 50 102.5 C29.5 96 14 77.5 14 52 V22.5 Z" fill="none" stroke="#146b3a" stroke-width="2.4" opacity="0.9"/>
+  <circle cx="50" cy="58" r="17" fill="#f4f5f7" stroke="#0e2a47" stroke-width="2"/>
+  <path d="M50 46 L63.4 55.7 L58.3 70.4 H41.7 L36.6 55.7 Z" fill="#0e2a47"/>
+  <path d="M50 46 V33 M63.4 55.7 L76 47 M58.3 70.4 L67.4 81.5 M41.7 70.4 L32.6 81.5 M36.6 55.7 L24 47" stroke="#0e2a47" stroke-width="2" stroke-linecap="round"/>
+  <path d="M50 14 l2.35 4.75 5.25.76 -3.8 3.7 .9 5.24 L50 30.5 45.3 33 l.9-5.24 -3.8-3.7 5.25-.76 Z" fill="#d4af37"/>
+</svg>

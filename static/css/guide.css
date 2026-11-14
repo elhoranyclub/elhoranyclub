@@ -1,0 +1,68 @@
+/* الدليل التفاعلي — مركز شباب الحوراني */
+.g-wrap{max-width:1100px;margin:0 auto;padding:18px 16px 70px}
+
+.g-head{background:linear-gradient(135deg,#0b1b30,#123055);color:#fff;border-radius:18px;padding:22px 24px;margin-bottom:16px}
+.g-head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.g-head h1{font-size:26px;font-weight:800;margin-top:4px}
+.g-role{display:inline-block;background:rgba(227,178,60,.16);border:1px solid rgba(227,178,60,.45);color:#f3d78a;
+  padding:3px 14px;border-radius:999px;font-size:13px;font-weight:700}
+.g-intro{color:#c3d5ea;font-size:15px;margin-top:10px;line-height:1.75}
+
+.g-tabs{display:flex;gap:6px;overflow-x:auto;background:#0e2038;border-radius:14px;padding:5px;margin-bottom:14px;
+  position:sticky;top:64px;z-index:30;box-shadow:0 4px 14px rgba(10,25,45,.18)}
+.g-tabs button{flex:0 0 auto;border:0;background:transparent;color:#c3d5ea;font-family:inherit;font-size:15px;
+  font-weight:700;padding:10px 16px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.g-tabs button:hover{color:#fff;background:rgba(255,255,255,.06)}
+.g-tabs button.active{background:rgba(227,178,60,.16);color:#f3d78a}
+
+.g-search{margin-bottom:16px}
+.g-search input{width:100%;max-width:460px;padding:11px 16px;border-radius:12px;border:1px solid #cdd9e8;
+  font-family:inherit;font-size:15px;background:#fff}
+
+.g-sec{display:none}
+.g-sec.active{display:block}
+.g-sec-title{font-size:23px;color:var(--brand-navy);font-weight:800;margin:22px 0 6px}
+.g-sec-intro{color:#4a5b72;font-size:16px;margin-bottom:14px;line-height:1.8}
+.g-card-wrap{background:#fff;border:1px solid #e2e9f3;border-radius:16px;padding:20px 22px;box-shadow:0 2px 10px rgba(15,35,60,.05)}
+
+.g-subtitle{font-size:18px;color:var(--brand-navy);font-weight:800;margin:20px 0 10px;padding-bottom:8px;
+  border-bottom:2px solid rgba(227,178,60,.35)}
+.g-card-wrap > .g-subtitle:first-child{margin-top:0}
+
+.g-bullets{list-style:none}
+.g-bullets li{position:relative;padding-right:24px;margin-bottom:8px;color:#26374d;line-height:1.85;font-size:16px}
+.g-bullets li::before{content:"";position:absolute;right:4px;top:11px;width:9px;height:9px;border-radius:3px;background:var(--brand-gold)}
+
+.g-steps{list-style:none;counter-reset:s}
+.g-steps li{counter-increment:s;position:relative;padding-right:42px;margin-bottom:11px;color:#26374d;line-height:1.85;font-size:16px}
+.g-steps li::before{content:counter(s);position:absolute;right:0;top:2px;width:29px;height:29px;border-radius:50%;
+  background:var(--brand-navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+
+.g-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.g-card{background:linear-gradient(160deg,rgba(15,42,71,.04),rgba(15,42,71,.01));border:1px solid #e2e9f3;
+  border-radius:14px;padding:16px 18px}
+.g-card h3{font-size:17px;color:var(--brand-navy);font-weight:800;margin-bottom:6px}
+.g-card p{font-size:15px;color:#3c4d63;line-height:1.8}
+
+.g-tablewrap{overflow-x:auto}
+.g-table{width:100%;border-collapse:collapse;min-width:480px}
+.g-table th,.g-table td{padding:10px 13px;border-bottom:1px solid #e6ecf5;text-align:right;font-size:15.5px}
+.g-table th{background:#0e2038;color:#fff;font-weight:700}
+.g-table tbody tr:nth-child(even){background:#f8fafd}
+
+.g-shot{margin:14px 0;text-align:center}
+.g-shot img{border-radius:12px;border:1px solid #dbe4f0;box-shadow:0 6px 18px rgba(15,35,60,.12);width:100%;height:auto}
+.g-shot figcaption{font-size:13px;color:#66788f;margin-top:6px}
+
+.g-note{background:#fff5e6;border:1px solid #f3d9ae;color:#8a5a12;padding:12px 15px;border-radius:12px;margin-top:12px;font-size:15px}
+.g-note.info{background:#eef6ff;border-color:#bcd9f5;color:#1c4f7c}
+
+.g-foot{margin-top:26px;text-align:center}
+.g-foot-note{font-size:12px;color:#8b9cb2;margin-top:12px}
+
+@media (max-width:640px){
+  .g-head h1{font-size:21px}
+  .g-card-wrap{padding:16px 14px}
+  .g-tabs{top:58px}
+  .g-bullets li,.g-steps li{font-size:15px}
+}

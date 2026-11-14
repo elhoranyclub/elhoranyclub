@@ -1,0 +1,36 @@
+{% load i18n %}
+{% if live_matches or today_finished %}
+  {% for m in live_matches %}
+  <div class="card p-5 text-center border-2" style="border-color:#ef4444;">
+    <div class="flex items-center justify-center gap-2">
+      <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span></span>
+      <span class="badge badge-red">{% trans "مباشر — الآن" %}</span>
+      <span class="text-[10px] font-bold text-slate-400">{{ m.tournament.name }}</span>
+    </div>
+    <div class="mt-4 flex items-center justify-center gap-4">
+      <span class="font-black text-lg sm:text-2xl text-[var(--brand-navy)] max-w-[35%]">{{ m.team_a_name }}</span>
+      <span class="mcard-number text-4xl sm:text-5xl">{{ m.score_a|default:0 }}<span class="text-slate-300">:</span>{{ m.score_b|default:0 }}</span>
+      <span class="font-black text-lg sm:text-2xl text-[var(--brand-navy)] max-w-[35%]">{{ m.team_b_name }}</span>
+    </div>
+    <p class="text-[10px] font-bold text-slate-400 mt-3">{{ m.venue|default:"المركز" }}</p>
+  </div>
+  {% endfor %}
+
+  {% if today_finished %}
+  <h2 class="text-xs font-black text-slate-400 tracking-widest mt-5 mb-2">{% trans "نتائج اليوم" %}</h2>
+  <div class="grid sm:grid-cols-2 gap-2">
+    {% for m in today_finished %}
+    <div class="card p-3 flex items-center justify-between gap-2">
+      <p class="text-xs font-bold text-slate-500 min-w-0"><span class="block">{{ m.tournament.name|truncatechars:26 }}</span><span class="text-[10px]">{{ m.category.name_ar }}</span></p>
+      <p class="font-black text-[var(--brand-navy)] text-sm text-center shrink-0">{{ m.team_a_name }} <span class="text-slate-400">{{ m.score_a }} - {{ m.score_b }}</span> {{ m.team_b_name }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% else %}
+<div class="card empty-state py-12">
+  <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/></svg></div>
+  <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد مباريات مباشرة الآن" %}</p>
+  <p class="text-sm text-slate-500 mt-1">{% trans "تابع جدول المباريات من صفحة البطولة — وهتظهر النتيجة هنا لحظة بلحظة." %}</p>
+</div>
+{% endif %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "النتائج المباشرة" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between gap-3">
+    <div>
+      <h1 class="section-title text-2xl">{% trans "النتائج المباشرة" %}</h1>
+      <p class="auth-sub">{% trans "يتحدث تلقائيًا كل ١٠ ثوانٍ — بدون تحديث" %}</p>
+    </div>
+    <span class="badge badge-red">● LIVE</span>
+  </div>
+  <div id="live-scoreboard" class="mt-4 space-y-4" hx-get="{% url 'tournaments:live' %}" hx-trigger="every 10s" hx-swap="innerHTML" aria-live="polite">
+    {% include "tournaments/_live_partial.html" %}
+  </div>
+</div>
+{% endblock %}

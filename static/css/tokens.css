@@ -1,0 +1,49 @@
+/* ==========================================================
+   Design Tokens — مركز شباب الحوراني
+   كل الألوان/المسافات/الظلال من هنا — تغيير الهوية من مكان واحد.
+   (القيم تتأثر بالـ <style> المحقون في base.html من إعدادات الموقع)
+   ========================================================== */
+:root {
+  /* Brand palette (navy / gold / green) — defaults, overridable via DB settings */
+  --brand-navy: #0e2a47;
+  --brand-navy-deep: #081c30;
+  --brand-navy-light: #17405f;
+  --brand-gold: #d4af37;
+  --brand-gold-dark: #b8932f;
+  --brand-gold-soft: #f5ead0;
+  --brand-green: #146b3a;
+  --brand-green-soft: #e4f2ea;
+
+  /* Neutrals */
+  --surface: #ffffff;
+  --bg: #f4f5f7;
+  --text: #1c2733;
+  --muted: #64748b;
+  --border: #e2e8f0;
+
+  /* Radii & shadows */
+  --radius-sm: 0.625rem;
+  --radius: 1rem;
+  --radius-lg: 1.5rem;
+  --shadow-sm: 0 1px 3px rgba(8, 28, 48, 0.08);
+  --shadow: 0 8px 24px rgba(8, 28, 48, 0.12);
+  --shadow-lg: 0 16px 48px rgba(8, 28, 48, 0.22);
+
+  /* Layout */
+  --bottom-nav-h: 64px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Focus visibility — accessibility first */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--brand-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

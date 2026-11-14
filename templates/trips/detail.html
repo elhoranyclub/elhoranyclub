@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ trip.name }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block og_title %}{{ trip.name }}{% endblock %}
+{% block og_image %}{% if trip.cover %}<meta property="og:image" content="{{ trip.cover.url }}">{% endif %}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{% url 'trips:list' %}" class="hover:text-[var(--brand-navy)]">{% trans "الرحلات" %}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)] line-clamp-1">{{ trip.name }}</span>
+  </nav>
+
+  <article class="card overflow-hidden">
+    {% if trip.cover %}
+      <img src="{{ trip.cover.url }}" alt="{{ trip.name }}" class="w-full h-52 sm:h-64 object-cover" fetchpriority="high">
+    {% else %}
+    <div class="h-40 flex flex-col items-center justify-center gap-2" style="background:linear-gradient(140deg,#0c4a6e,#155e8a);">
+      <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="1.4" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1.2 1.5l4.9 4.9-2.3 2.3-2.6-.4a.8.8 0 0 0-.9 1.2L4.5 18l2.1 1.6 1.7 2.4a.8.8 0 0 0 1.5-.6l-.4-2.6 2.3-2.3 4.9 4.9a1 1 0 0 0 1.2-2.8z"/></svg>
+    </div>
+    {% endif %}
+
+    <div class="p-5">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="badge badge-navy">{{ trip.trip_date|date:"Y-m-d" }}</span>
+        {% if trip.status == 'open' %}<span class="badge badge-green">{% trans "الحجز مفتوح" %}</span>
+        {% elif trip.status == 'full' %}<span class="badge badge-gold">{% trans "مكتملة" %}</span>
+        {% elif trip.status == 'completed' %}<span class="badge badge-gray">{% trans "انتهت" %}</span>
+        {% endif %}
+        {% if trip.supervisors %}<span class="badge badge-gray">{% trans "المشرفون:" %} {{ trip.supervisors }}</span>{% endif %}
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-[var(--brand-navy)] leading-snug mt-3">{{ trip.name }}</h1>
+
+      <dl class="grid sm:grid-cols-2 gap-2 text-xs mt-4">
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "الوجهة" %}</dt><dd class="font-extrabold">{{ trip.destination }}</dd></div>
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "التجمع" %}</dt><dd class="font-extrabold">{{ trip.meeting_point }} · {{ trip.meeting_time|time:"H:i" }}</dd></div>
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "سعر العضو" %}</dt><dd class="font-extrabold">{{ trip.member_price }} {% trans "ج" %}</dd></div>
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "سعر الضيف" %}</dt><dd class="font-extrabold">{{ trip.guest_price }} {% trans "ج" %}</dd></div>
+      </dl>
+
+      {% if trip.description %}<p class="mt-4 leading-8 text-[15px] whitespace-pre-line">{{ trip.description }}</p>{% endif %}
+
+      {% if trip.rules %}
+      <div class="mt-4 rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 text-[12px] leading-7 text-amber-900">
+        <p class="font-black">{% trans "القواعد والبنود" %}</p>
+        <p class="whitespace-pre-line">{{ trip.rules }}</p>
+      </div>
+      {% endif %}
+
+      <div class="mt-4 flex items-center justify-between text-xs font-bold text-slate-500 border-t border-slate-100 pt-3">
+        <span>{% blocktrans count left=trip.seats_left %}المقاعد المتاحة: {{ left }}{% plural %}المقاعد المتاحة: {{ left }}{% endblocktrans %}</span>
+        <span>{{ trip.seats_taken }} / {{ trip.capacity }}</span>
+      </div>
+
+      <div class="mt-4 pt-4 border-t border-slate-100">
+        {% if my_booking %}
+          {% if my_booking.status == 'confirmed' %}
+            <p class="badge badge-green text-sm px-4 py-2 w-full justify-center">{% trans "✓ حجزك مؤكد — نشوفك يوم الرحلة" %}</p>
+          {% elif my_booking.status == 'pending' %}
+            <p class="badge badge-gold text-sm px-4 py-2 w-full justify-center">{% trans "بانتظار الدفع/المراجعة" %}</p>
+          {% elif my_booking.status == 'waitlist' %}
+            <p class="badge badge-gold text-sm px-4 py-2 w-full justify-center">{% trans "قائمة انتظار — هنبلغك عند توفر مقعد" %}</p>
+          {% endif %}
+          <p class="text-center text-[10px] font-bold text-slate-400 mt-2" dir="ltr">{{ my_booking.reference }}</p>
+        {% elif trip.is_open %}
+          <a href="{% url 'trips:book' trip.slug %}" class="btn btn-gold btn-block btn-lg">{% trans "احجز الآن" %}</a>
+        {% elif trip.status == 'completed' %}
+          <p class="text-center text-sm font-bold text-slate-400">{% trans "انتهت الرحلة — ترقبوا الإعلان عن القادمة" %}</p>
+        {% else %}
+          <p class="text-center text-sm font-bold text-slate-400">{% trans "باب الحجز مغلق" %}</p>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+</div>
+{% endblock %}

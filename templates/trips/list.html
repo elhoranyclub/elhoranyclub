@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الرحلات الترفيهية" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h1 class="section-title text-2xl">{% trans "رحلات المركز" %}</h1>
+  <p class="auth-sub mb-4">{% trans "شواطئ ومعالم وقضاء وقت جميل — كلها بإشراف مدربي وإدارة المركز" %}</p>
+
+  <div class="flex gap-2 mb-4" role="tablist">
+    <a href="?tab=open" role="tab" aria-selected="{% if tab == 'open' %}true{% else %}false{% endif %}" class="badge {% if tab == 'open' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2">{% trans "قيد الحجز" %}</a>
+    <a href="?tab=completed" role="tab" aria-selected="{% if tab == 'completed' %}true{% else %}false{% endif %}" class="badge {% if tab == 'completed' %}badge-green{% else %}badge-gray{% endif %} px-4 py-2">{% trans "رحلات منجزة" %}</a>
+  </div>
+
+  {% if trips %}
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for t in trips %}
+    <a href="{{ t.get_absolute_url }}" class="card card-hover overflow-hidden block">
+      {% if t.cover %}
+        <img src="{{ t.cover.url }}" alt="{{ t.name }}" loading="lazy" class="w-full h-36 object-cover">
+      {% else %}
+        <div class="w-full h-36 flex flex-col items-center justify-center gap-2" style="background:linear-gradient(140deg,#0c4a6e,#155e8a);">
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#7dd3fc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1.2 1.5l4.9 4.9-2.3 2.3-2.6-.4a.8.8 0 0 0-.9 1.2L4.5 18l2.1 1.6 1.7 2.4a.8.8 0 0 0 1.5-.6l-.4-2.6 2.3-2.3 4.9 4.9a1 1 0 0 0 1.2-2.8z"/></svg>
+          <span class="text-[10px] font-black tracking-widest text-sky-300">{{ t.destination }}</span>
+        </div>
+      {% endif %}
+      <div class="p-4">
+        <h2 class="font-extrabold text-[var(--brand-navy)] leading-6 line-clamp-2 min-h-[3rem]">{{ t.name }}</h2>
+        <p class="text-[11px] font-bold text-slate-500 mt-1">{{ t.trip_date|date:"Y/m/d" }}{% if t.return_date %} ← {{ t.return_date|date:"Y/m/d" }}{% endif %}</p>
+        <div class="flex items-center justify-between mt-2">
+          <span class="text-xs font-bold text-slate-400">{% trans "مقاعد متاحة:" %} {{ t.seats_left }}/{{ t.capacity }}</span>
+          <span class="text-sm font-black text-[var(--brand-navy)]">{% if t.member_price == t.guest_price %}{{ t.member_price }}{% else %}{{ t.member_price }} / {{ t.guest_price }}{% endif %} <small class="text-[10px] font-bold text-slate-400">{% trans "ج (عضو/ضيف)" %}</small></span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a1 1 0 0 0-1.2 1.5l4.9 4.9-2.3 2.3-2.6-.4a.8.8 0 0 0-.9 1.2L4.5 18l2.1 1.6 1.7 2.4a.8.8 0 0 0 1.5-.6l-.4-2.6 2.3-2.3 4.9 4.9a1 1 0 0 0 1.2-2.8z"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد رحلات معلنة الآن" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "ترقبوا الإعلان عن الرحلات القادمة بمناسبات الصيف والأعياد." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% load i18n static %}
+{% comment %}Bottom navigation — mobile only (md+ uses top navbar). 5 destinations.{% endcomment %}
+{% with ns=request.resolver_match.namespace url_name=request.resolver_match.url_name %}
+<nav class="bottom-nav md:hidden" aria-label="{% trans 'التنقل السفلي' %}">
+  <a href="{% url 'core:home' %}" class="{% if ns == 'core' %}active{% endif %}" aria-current="{% if ns == 'core' %}page{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+    <span>{% trans "الرئيسية" %}</span>
+  </a>
+  <a href="{% url 'events:list' %}" class="{% if ns == 'events' %}active{% endif %}" aria-current="{% if ns == 'events' %}page{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+    <span>{% trans "الأنشطة" %}</span>
+  </a>
+  <a href="{% url 'accounts:my_services' %}" class="{% if ns == 'accounts' and url_name == 'my_services' %}active{% endif %}" aria-current="{% if ns == 'accounts' and url_name == 'my_services' %}page{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="M5.5 16c.7-1.6 2-2.4 3.5-2.4s2.8.8 3.5 2.4M15 9h4M15 13h4"/></svg>
+    <span>{% trans "خدماتي" %}</span>
+  </a>
+  {% if request.user.is_authenticated and request.user.is_staff %}
+  <a href="{% url 'dashboard:home' %}" class="{% if ns == 'dashboard' %}active{% endif %}" aria-current="{% if ns == 'dashboard' %}page{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M8 9h8M8 13h5"/></svg>
+    <span>{% trans "لوحة التحكم" %}</span>
+  </a>
+  {% else %}
+  <a href="{% url 'news:list' %}" class="{% if ns == 'news' %}active{% endif %}" aria-current="{% if ns == 'news' %}page{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h13a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/><path d="M18 9h2.5v9a2 2 0 0 1-2 2M8 10h5M8 14h5"/></svg>
+    <span>{% trans "الأخبار" %}</span>
+  </a>
+  {% endif %}
+  <a href="{% url 'accounts:profile' %}" class="{% if ns == 'accounts' and url_name == 'profile' %}active{% endif %}" aria-current="{% if ns == 'accounts' and url_name == 'profile' %}page{% endif %}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.2-3.6 4.2-5.5 8-5.5s6.8 1.9 8 5.5"/></svg>
+    <span>{% trans "حسابي" %}</span>
+  </a>
+</nav>
+{% endwith %}

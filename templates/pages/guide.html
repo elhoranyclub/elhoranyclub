@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static i18n guide_tags %}
+{% block title %}{{ title }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/guide.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="g-wrap">
+
+  <header class="g-head">
+    <div class="g-head-row">
+      <div>
+        <span class="g-role">{{ role_label }}</span>
+        <h1>{{ title }}</h1>
+      </div>
+      <a href="{% url 'pages:learn_more' %}" class="btn btn-navy btn-sm">🎬 {% trans "الفيديو" %}</a>
+    </div>
+    <p class="g-intro">{{ intro }}</p>
+    <p class="g-note info">
+      {% trans "الصفحة دي بتعرض محتواك أنت بس — كل دور بياخد دليله. ممنوع تشوف أقسام غير وظيفتك." %}
+    </p>
+  </header>
+
+  {% if sections|length > 1 %}
+  <nav class="g-tabs" id="g-tabs">
+    {% for section in sections %}
+    <button type="button" data-target="{{ section.id }}"{% if forloop.first %} class="active"{% endif %}>{{ section.icon }} {{ section.label }}</button>
+    {% endfor %}
+  </nav>
+  {% endif %}
+
+  <div class="g-search">
+    <input id="g-q" type="search" placeholder="{% trans 'دوّر في الدليل…' %}" aria-label="{% trans 'بحث في الدليل' %}">
+  </div>
+
+  {% for section in sections %}
+  <section class="g-sec{% if forloop.first %} active{% endif %}" id="{{ section.id }}">
+    <h2 class="g-sec-title">{{ section.icon }} {{ section.title }}</h2>
+    {% if section.intro %}<p class="g-sec-intro">{{ section.intro }}</p>{% endif %}
+    <div class="g-card-wrap">
+      {% for block in section.blocks %}
+        {% guide_block block %}
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  <div class="g-foot">
+    <a href="{% url 'pages:learn_more' %}" class="btn btn-gold btn-block">🎬 {% trans "اتفرج على فيديو الدليل" %}</a>
+    <a href="{% static 'guide/offline-'|add:role|add:'.html' %}" download class="btn btn-ghost btn-block mt-2">
+      {% trans "نزّل نسخة أوفلاين من الدليل (للموبايل)" %}
+    </a>
+    <p class="g-foot-note">
+      {% trans "مركز شباب الحوراني — آخر تحديث 2026-11-12" %}
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function () {
+    var tabs = [].slice.call(document.querySelectorAll('#g-tabs button'));
+    var secs = [].slice.call(document.querySelectorAll('.g-sec'));
+    var q = document.getElementById('g-q');
+
+    function show(id) {
+      tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.target === id); });
+      secs.forEach(function (s) { s.classList.toggle('active', s.id === id); });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { show(t.dataset.target); });
+    });
+
+    q.addEventListener('input', function () {
+      var v = q.value.trim();
+      if (!v) {
+        secs.forEach(function (s, i) { s.classList.toggle('active', i === 0); });
+        if (tabs[0]) tabs[0].classList.add('active');
+        return;
+      }
+      var first = null;
+      secs.forEach(function (s) {
+        var hit = s.textContent.indexOf(v) !== -1;
+        s.classList.toggle('active', hit);
+        if (hit && !first) first = s.id;
+      });
+      tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.target === first); });
+      if (first) {
+        var el = document.getElementById(first);
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' });
+      }
+    });
+  })();
+</script>
+{% endblock %}

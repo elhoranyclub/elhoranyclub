@@ -1,0 +1,7 @@
+# Production extras
+-r base.txt
+
+gunicorn>=22.0
+psycopg[binary]>=3.2
+openpyxl>=3.1      # استيراد سجل العضويات من Excel (أمر import_members)
+sentry-sdk>=2.0     # اختياري — شغّال بس لو SENTRY_DSN متظبط

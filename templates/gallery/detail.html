@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ album.title_ar }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-6" x-data="{ lightbox: null }">
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{% url 'gallery:list' %}" class="hover:text-[var(--brand-navy)]">{% trans "المعرض" %}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)]">{{ album.title_ar }}</span>
+  </nav>
+
+  <h1 class="section-title text-2xl">{{ album.title_ar }}</h1>
+  {% if album.description %}<p class="auth-sub mb-4">{{ album.description }}</p>{% endif %}
+
+  {% if album.items.all %}
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+    {% for item in album.items.all %}
+      {% if item.is_video %}
+      <a href="{{ item.youtube_url }}" target="_blank" rel="noopener" class="relative block rounded-xl overflow-hidden group">
+        <img src="{{ item.youtube_thumb }}" alt="{{ item.caption }}" loading="lazy" class="w-full h-36 sm:h-40 object-cover">
+        <span class="absolute inset-0 flex items-center justify-center bg-black/30">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="rgba(255,255,255,.92)" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        </span>
+      </a>
+      {% else %}
+      <button type="button" class="block rounded-xl overflow-hidden focus-visible:outline focus-visible:outline-2" @click="lightbox = '{{ item.image.url }}'" aria-label="{{ item.caption|default:'صورة' }}">
+        <img src="{{ item.image.url }}" alt="{{ item.caption }}" loading="lazy" class="w-full h-36 sm:h-40 object-cover">
+      </button>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Lightbox -->
+  <template x-if="lightbox">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" @click="lightbox = null" @keydown.escape.window="lightbox = null" role="dialog" aria-modal="true">
+      <img :src="lightbox" alt="" class="max-h-[82vh] max-w-full rounded-xl shadow-2xl">
+      <button type="button" class="absolute top-4 end-4 text-white bg-white/10 rounded-full w-11 h-11 flex items-center justify-center" @click="lightbox = null" aria-label="{% trans 'إغلاق' %}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </template>
+  {% else %}
+  <div class="card empty-state">
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "الألبوم فاضي لسه" %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

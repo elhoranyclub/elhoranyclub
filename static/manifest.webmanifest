@@ -1,0 +1,21 @@
+{
+  "name": "مركز شباب الحوراني",
+  "short_name": "الحوراني",
+  "description": "بوابة مركز شباب الحوراني الرقمية: اشتراكات، بطولات، دورات، رحلات وأخبار المركز.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "ar",
+  "dir": "rtl",
+  "theme_color": "#0e2a47",
+  "background_color": "#0e2a47",
+  "icons": [
+    { "src": "/static/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "تجديد الاشتراك", "short_name": "تجديد", "url": "/memberships/renew/", "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "البطولات", "short_name": "بطولات", "url": "/tournaments/", "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الإشعارات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <div class="flex items-center justify-between gap-3 mb-4">
+    <div>
+      <h1 class="auth-title">{% trans "الإشعارات" %}</h1>
+      <p class="auth-sub">{% trans "آخر التحديثات على اشتراكك وأنشطتك" %}</p>
+    </div>
+    {% if notifications %}
+    <form method="post" action="{% url 'notifications:mark_all' %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-ghost btn-sm">{% trans "مقروء الكل" %}</button>
+    </form>
+    {% endif %}
+  </div>
+
+  {% if notifications %}
+  <ul class="space-y-2">
+    {% for n in notifications %}
+    <li class="card p-4 flex items-start gap-3 {% if not n.read %}border-s-4{% endif %}" style="{% if not n.read %}border-inline-start-color: var(--brand-gold);{% endif %}">
+      <span class="w-9 h-9 shrink-0 rounded-xl flex items-center justify-center {% if n.read %}bg-slate-100 text-slate-400{% else %}text-white{% endif %}" style="{% if not n.read %}background:var(--brand-navy);{% endif %}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+      </span>
+      <div class="min-w-0 flex-1">
+        <p class="font-extrabold text-sm text-[var(--brand-navy)] leading-6">{{ n.subject }}</p>
+        <p class="text-xs text-slate-500 leading-6 mt-0.5 whitespace-pre-line">{{ n.body }}</p>
+        <div class="flex items-center justify-between gap-2 mt-2">
+          <span class="text-[10px] font-bold text-slate-400">{{ n.sent_at|date:"Y-m-d h:i A" }}</span>
+          <span class="flex items-center gap-2">
+            {% if n.action_url %}<a href="{{ n.action_url }}" class="section-link text-[11px]">{% trans "فتح ←" %}</a>{% endif %}
+            {% if not n.read %}
+            <form method="post" action="{% url 'notifications:mark_read' n.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="text-[10px] font-bold text-slate-400 hover:text-slate-700">{% trans "مقروء" %}</button>
+            </form>
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لا توجد إشعارات بعد" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "ستظهر هنا تحديثات اشتراكك والرحلات والبطولات أول بأول." %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

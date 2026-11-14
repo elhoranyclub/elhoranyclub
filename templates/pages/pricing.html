@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "أسعار الاشتراكات" %} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="section-title text-2xl">{% trans "أسعار الاشتراكات" %}</h1>
+  <p class="auth-sub mb-6">{% trans "الأسعار بالجنيه المصري — تشمل استخدام كل الملاعب والصالات حسب اللائحة" %}</p>
+
+  <div class="grid sm:grid-cols-2 gap-4">
+    <!-- Individual — متاح الآن -->
+    <div class="card overflow-hidden border-2" style="border-color: var(--brand-gold);">
+      <div class="px-5 py-3 text-center" style="background:var(--brand-navy); color:var(--brand-gold);">
+        <p class="text-xs font-black tracking-widest">{% trans "الاشتراك الفردي" %}</p>
+      </div>
+      <div class="p-6 text-center">
+        <p class="text-5xl font-black text-[var(--brand-navy)]">25<span class="text-lg font-extrabold text-slate-400"> {% trans "ج / سنة" %}</span></p>
+        <ul class="text-sm font-semibold text-slate-600 leading-8 mt-4 text-start list-none space-y-1">
+          <li>✓ {% trans "كل الملاعب والصالات حسب الجدول" %}</li>
+          <li>✓ {% trans "خصم 20٪ لطلاب المدارس بإيصال المدرسة" %}</li>
+          <li>✓ {% trans "كارت عضوية رقمي وQR للدخول السريع" %}</li>
+          <li>✓ {% trans "تسجيل في البطولات والدورات بأسعار مخفضة" %}</li>
+        </ul>
+        <a href="{% url 'memberships:renew' %}" class="btn btn-gold btn-block mt-4">{% trans "سجّل أو جدّد الآن" %}</a>
+      </div>
+    </div>
+
+    <!-- Family — قريبًا -->
+    <div class="card overflow-hidden opacity-90 relative">
+      <span class="absolute top-3 end-3 badge badge-gray">{% trans "قريبًا" %}</span>
+      <div class="px-5 py-3 text-center" style="background:var(--brand-navy-light); color:#fff;">
+        <p class="text-xs font-black tracking-widest">{% trans "اشتراك الأسرة" %}</p>
+      </div>
+      <div class="p-6 text-center">
+        <p class="text-5xl font-black text-slate-400">2,500<span class="text-lg font-extrabold"> {% trans "ج / سنة" %}</span></p>
+        <ul class="text-sm font-semibold text-slate-400 leading-8 mt-4 text-start space-y-1">
+          <li>✓ {% trans "رب + زوج + حتى ٣ أبناء بسعر واحد" %}</li>
+          <li>✓ {% trans "كل مميزات الفردي لكل أفراد الأسرة" %}</li>
+        </ul>
+        <span class="btn btn-ghost btn-block mt-4 cursor-not-allowed" aria-disabled="true">{% trans "بانتظار التوفّر" %}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-4 mt-5 text-sm leading-7 text-slate-600">
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "ملاحظات:" %}</p>
+    <ul class="list-disc ps-5 mt-1">
+      <li>{% trans "الرسوم تُدفع نقديًا في المركز أو أونلاين (قريبًا) وتأكيد الدفع من الاستقبال." %}</li>
+      <li>{% trans "فترة السماح بعد انتهاء الاشتراك: 7 أيام — بعدها تُطبّق غرامة 100 ج أو تجديد كامل." %}</li>
+      <li>{% trans "الاسترداد: حتى 14 يوم من الاشتراك بدون رسوم خدمات — راجع اللائحة." %}</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

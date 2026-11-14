@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "تعديل بياناتي" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <div class="flex items-center gap-3 mb-4">
+    <a href="{% url 'accounts:profile' %}" class="btn btn-ghost btn-sm" aria-label="{% trans 'رجوع' %}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleX(-1);" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div>
+      <h1 class="auth-title">{% trans "تعديل بياناتي" %}</h1>
+      <p class="auth-sub">{% trans "تأكد إن بياناتك مظبوطة — بتظهر في كارت العضوية والسجلات" %}</p>
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="card auth-card form-grid" novalidate>
+    {% csrf_token %}
+
+    <!-- صورة شخصية -->
+    <div class="flex items-center gap-4 pb-3 border-b border-slate-100">
+      {% if form.instance.photo %}
+        <img src="{{ form.instance.photo.url }}" alt="" class="photo-avatar">
+      {% else %}
+        <span class="photo-avatar flex items-center justify-center text-3xl font-black" style="color:var(--brand-navy);">{{ form.instance.full_name_ar.0|default:"؟" }}</span>
+      {% endif %}
+      <div class="min-w-0">
+        <label class="label" for="{{ form.photo.id_for_label }}">{% trans "الصورة الشخصية" %}</label>
+        {{ form.photo }}
+        <p class="help-text">{% trans "JPG/PNG/WebP — حتى ٥ ميجابايت. هترفع على Cloudinary في الإنتاج." %}</p>
+      </div>
+    </div>
+
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.full_name_ar %}
+      {% include "components/form_field.html" with field=form.full_name_en %}
+    </div>
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.birth_date %}
+      {% include "components/form_field.html" with field=form.gender %}
+    </div>
+    {% include "components/form_field.html" with field=form.national_id %}
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.governorate %}
+      {% include "components/form_field.html" with field=form.shirt_size %}
+    </div>
+    {% include "components/form_field.html" with field=form.address %}
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.emergency_contact_name %}
+      {% include "components/form_field.html" with field=form.emergency_contact_phone %}
+    </div>
+    {% include "components/form_field.html" with field=form.health_notes %}
+    {% if form.non_field_errors %}<ul class="error-list">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "حفظ التعديلات" %}</button>
+  </form>
+</div>
+{% endblock %}

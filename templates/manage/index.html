@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "القوائم الإدارية" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-6">
+
+  <div class="flex items-start justify-between gap-3 mb-4 flex-wrap">
+    <div>
+      <h1 class="auth-title">{% trans "القوائم الإدارية" %}</h1>
+      <p class="auth-sub">{% trans "شاشتك المخصصة — فيها كل اللي مطلوب منك بصلاحية واحدة، ومفيش حاجة زيادة" %}</p>
+    </div>
+    <a href="{% url 'dashboard:home' %}" class="btn btn-ghost btn-sm">← {% trans "لوحة التحكم" %}</a>
+  </div>
+
+  <!-- Ledger (الدفتر) quick action — visibly distinct from the model screens -->
+  <a href="{% url 'core:registry_list' %}" class="card card-hover p-3 sm:p-4 mb-4 flex items-center gap-3 border-2 !border-[var(--brand-gold)]">
+    <span class="text-3xl" aria-hidden="true">📒</span>
+    <span class="min-w-0">
+      <span class="block text-sm font-black text-[var(--brand-navy)]">{% trans "سجل الأعضاء (الدفتر)" %}</span>
+      <span class="block text-[11px] text-slate-500 font-bold mt-0.5">{% trans "ربط الأعضاء المسجلين بحسابهم الورقي — رقم الدفتر، الجمعية العمومية، الاشتراك المدفوع" %}</span>
+    </span>
+    <svg class="ms-auto shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="transform:scaleX(-1);"><path d="M9 6l6 6-6 6"/></svg>
+  </a>
+
+  {% if groups %}
+    {% for group_title, items in groups %}
+    <section id="{{ forloop.counter }}" class="mb-5">
+      <h2 class="section-title mb-2 !text-base">{{ group_title }}</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        {% for item in items %}
+        <a href="{% url 'core:manage_list' app_label=item.app model_name=item.model %}" class="card card-hover p-3 flex flex-col items-center gap-1.5 text-center min-h-[5.5rem]">
+          <span class="text-2xl" aria-hidden="true">{{ item.emoji }}</span>
+          <span class="text-xs font-black text-[var(--brand-navy)] leading-5">{{ item.label }}</span>
+          <span class="text-[10px] font-bold text-slate-400 inline-flex gap-1.5 flex-wrap justify-center">
+            {% if item.perms.add %}<span class="text-[10px] text-[var(--brand-green)]">+ {% trans "إضافة" %}</span>{% endif %}
+            {% if item.perms.change %}<span class="text-[10px] text-[var(--brand-navy)]">✎ {% trans "تعديل" %}</span>{% endif %}
+            {% if item.perms.delete %}<span class="text-[10px] text-red-500">✕ {% trans "حذف" %}</span>{% endif %}
+            {% if not item.perms.add and not item.perms.change and not item.perms.delete %}<span class="text-[10px] text-slate-400">{% trans "عرض" %}</span>{% endif %}
+          </span>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "مفيش شاشات متاحة لحسابك" %}</p>
+    <p class="text-sm text-slate-500 mt-1">{% trans "راجع مسؤول المركز لتوسيع صلاحياتك." %}</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

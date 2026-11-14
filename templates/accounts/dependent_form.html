@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "إضافة تابع" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <div class="flex items-center gap-3 mb-4">
+    <a href="{% url 'accounts:dependents' %}" class="btn btn-ghost btn-sm" aria-label="{% trans 'رجوع' %}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleX(-1);" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div>
+      <h1 class="auth-title">{% trans "إضافة تابع" %}</h1>
+      <p class="auth-sub">{% trans "ابنك/بنتك أقل من 18 سنة — كل تابع عنده رقم عضوية خاص" %}</p>
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" class="card auth-card form-grid" novalidate>
+    {% csrf_token %}
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.full_name_ar %}
+      {% include "components/form_field.html" with field=form.full_name_en %}
+    </div>
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.birth_date %}
+      {% include "components/form_field.html" with field=form.gender %}
+    </div>
+    {% include "components/form_field.html" with field=form.relation %}
+    {% include "components/form_field.html" with field=form.national_id %}
+    {% include "components/form_field.html" with field=form.health_notes %}
+    <div>
+      <label class="label" for="{{ form.photo.id_for_label }}">{% trans "صورة التابع (اختياري)" %}</label>
+      {{ form.photo }}
+    </div>
+    {% if form.non_field_errors %}<ul class="error-list">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "حفظ التابع" %}</button>
+  </form>
+</div>
+{% endblock %}

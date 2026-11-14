@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "الدفع النقدي" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-10 text-center">
+  <div class="card p-6">
+    <h1 class="auth-title">{% trans "احجزت طلبك النقدي" %}</h1>
+    <p class="auth-sub">{% trans "روح للاستقبال وقول الكود ده — هيدفعوا ويفعّلوا العضوية فورًا" %}</p>
+
+    <div class="mt-5 rounded-2xl border-2 border-dashed border-[var(--brand-gold)] bg-[var(--brand-gold-soft)] px-4 py-5">
+      <p class="mcard-label">{% trans "اكود طلب الدفع" %}</p>
+      <p class="mcard-number text-3xl mt-2 select-all" dir="ltr">{{ payment.reference }}</p>
+      <p class="text-[11px] font-bold text-slate-500 mt-1">{{ payment.amount }} {% trans "جنيه" %}</p>
+    </div>
+
+    <ol class="text-start text-sm leading-7 mt-5 ps-5 list-decimal marker:font-black">
+      <li>{% trans "احتفظ بالكود أو اسكرين شوت له." %}</li>
+      <li>{% trans "روح الاستقبال وقت ما تحب، حتى في مواعيد متأخرة." %}</li>
+      <li>{% trans "ادفع نقدًا أو بالكارت — الموظف هيفعّل الاشتراك في نفس اللحظة." %}</li>
+    </ol>
+
+    <a href="{% url 'payments:receipt' payment.reference %}" class="btn btn-navy btn-block mt-5">{% trans "معاينة الإيصال (قيد المراجعة)" %}</a>
+    <a href="{% url 'core:home' %}" class="text-sm font-bold text-slate-400 hover:underline mt-2 inline-block">{% trans "العودة للرئيسية" %}</a>
+  </div>
+</div>
+{% endblock %}

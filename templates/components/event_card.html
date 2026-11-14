@@ -1,0 +1,17 @@
+{% load i18n %}
+<a href="{{ event.get_absolute_url }}" class="card card-hover overflow-hidden block w-64 shrink-0">
+  <div class="flex items-center gap-3 p-3 border-b border-slate-100">
+    <div class="w-14 shrink-0 text-center rounded-xl py-1" style="background:var(--brand-navy); color:#fff;">
+      <span class="block text-xl font-black leading-none">{{ event.start_at|date:"d" }}</span>
+      <span class="block text-[10px] font-extrabold tracking-widest" style="color:var(--brand-gold);">{{ event.start_at|date:"N" }}</span>
+    </div>
+    <div class="min-w-0">
+      <h3 class="font-extrabold text-sm text-[var(--brand-navy)] leading-6 line-clamp-2">{{ event.title }}</h3>
+      <p class="text-[11px] text-slate-500 font-bold">{{ event.start_at|date:"h:i A" }}</p>
+    </div>
+  </div>
+  <div class="p-3 flex items-center justify-between gap-2">
+    <span class="text-[10px] text-slate-500 font-bold truncate">{{ event.location }}</span>
+    {% if event.is_free %}<span class="badge badge-green">{% trans "مجاني" %}</span>{% else %}<span class="badge badge-gold">{{ event.price }} {% trans "ج" %}</span>{% endif %}
+  </div>
+</a>

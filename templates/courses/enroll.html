@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "التسجيل في" %} {{ course.name }} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{{ course.get_absolute_url }}" class="hover:text-[var(--brand-navy)]">{{ course.name }}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)]">{% trans "التسجيل" %}</span>
+  </nav>
+
+  <h1 class="section-title text-2xl">{% trans "التسجيل في الدورة" %}</h1>
+  <p class="auth-sub mb-5">{{ course.schedule }}</p>
+
+  <form method="post" class="card p-5 form-grid">
+    {% csrf_token %}
+
+    <!-- المستفيد -->
+    <fieldset>
+      <legend class="label">{% trans "اللاعب / المستفيد" %}</legend>
+      <div class="grid gap-2 mt-1" role="radiogroup">
+        {% for id, name, age in targets %}
+        <label class="flex items-center gap-3 p-3 rounded-2xl border-2 border-slate-200 cursor-pointer has-[:checked]:border-[var(--brand-gold)] has-[:checked]:bg-[var(--brand-gold-soft)] transition-colors">
+          <input type="radio" name="beneficiary" value="{{ id }}" {% if forloop.first %}checked{% endif %} class="accent-[var(--brand-navy)] w-5 h-5">
+          <span>
+            <b class="block text-sm text-[var(--brand-navy)]">{{ name }}</b>
+            {% if age %}<span class="text-[10px] font-bold text-slate-500">{{ age }} {% trans "سنة" %}</span>{% endif %}
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <!-- المجموعة -->
+    {% if course.groups.all %}
+    <div>
+      <label class="label" for="group">{% trans "المجموعة" %}</label>
+      <select class="input" id="group" name="group">
+        <option value="">{% trans "بدون تفضيل — يسكن في أي مجموعة" %}</option>
+        {% for group in course.groups.all %}
+        <option value="{{ group.pk }}">{{ group.name }}{% if group.schedule %} — {{ group.schedule }}{% endif %} ({{ group.confirmed_count }}/{{ group.capacity }})</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+
+    <!-- إقرار صحي -->
+    {% if course.requires_medical %}
+    <label class="flex items-start gap-3 p-4 rounded-2xl" style="background:#fef6f6; border:1px solid #fecaca;">
+      <input type="checkbox" name="health_ack" required class="accent-red-600 w-5 h-5 mt-0.5">
+      <span class="text-xs leading-6 text-red-900"><b>{% trans "إقرار صحي إجباري:" %}</b> {% trans "أقرّ أن اللاعب بصحة جيدة ولا يعاني من أمراض تمنعه من ممارسة الرياضة، وألتزم بإبلاغ المركز فورًا عن أي تغيّر صحي. هذا الإقرار شرط للتسجيل." %}</span>
+    </label>
+    {% else %}
+    <input type="checkbox" name="health_ack" class="hidden" checked>
+    {% endif %}
+
+    <div class="rounded-2xl px-4 py-3 text-[12px]" style="background:#eef6ff; color:#0c4a6e; border:1px solid #bfdbfe;">
+      {% if course.price == 0 %}
+        {% trans "دورة مجانية — التسجيل مباشر بدون رسوم." %}
+      {% else %}
+        {% blocktrans with price=course.price type=course.get_price_type_display %}الرسوم: {{ price }} ج {{ type }} — هتكمل الدفع بعد تأكيد الطلب.{% endblocktrans %}
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "تأكيد التسجيل" %}</button>
+  </form>
+</div>
+{% endblock %}

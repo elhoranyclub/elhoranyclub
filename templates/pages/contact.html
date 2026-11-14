@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تواصل معنا" %} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 py-8 grid lg:grid-cols-5 gap-5">
+
+  <!-- بيانات التواصل -->
+  <div class="lg:col-span-2 space-y-4">
+    <div>
+      <h1 class="section-title text-2xl">{% trans "تواصل معنا" %}</h1>
+      <p class="auth-sub">{% trans "واحنا في خدمتك — تليفون أو واتساب أو الزيارة" %}</p>
+    </div>
+    <ul class="card p-5 space-y-4 text-sm">
+      <li class="flex items-start gap-3">
+        <span class="quick-tile-icon" style="width:2.4rem;height:2.4rem;border-radius:.7rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-17-17A2 2 0 0 1 5 2.7h3a2 2 0 0 1 2 1.7c.13 1 .4 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.9 11.9a16 16 0 0 0 4 4l2.6-1.35a2 2 0 0 1 2.1.45c.9.3 1.85.57 2.8.7A2 2 0 0 1 22 16.9z"/></svg></span>
+        <span><b class="block text-[var(--brand-navy)]">{% trans "الاستقبال" %}</b><a dir="ltr" href="tel:{{ site_settings.phone }}" class="font-bold hover:underline">{{ site_settings.phone }}</a><br><small class="text-slate-500">{{ site_settings.working_hours_ar }}</small></span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="quick-tile-icon" style="width:2.4rem;height:2.4rem;border-radius:.7rem; background:#128C7E; color:#fff;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3 .8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.25-.12-1.47-.72-1.7-.8-.23-.09-.4-.12-.56.12-.17.25-.65.8-.8.97-.15.17-.3.19-.55.06a6.7 6.7 0 0 1-3.3-2.9c-.25-.43.25-.4.72-1.33.08-.17.04-.31-.02-.44-.06-.12-.55-1.3-.75-1.78-.2-.48-.4-.41-.55-.42h-.47a.9.9 0 0 0-.65.3c-.22.25-.86.85-.86 2.07 0 1.22.88 2.4 1 2.56.12.18 1.73 2.65 4.2 3.7 1.57.68 2.2.73 3 0 1-.48 1.7-.93 1.94-1.4.24-.85.24-1.2.17-1.4-.06-.18-.23-.27-.48-.37z"/></svg></span>
+        <span><b class="block text-[var(--brand-navy)]">{% trans "واتساب" %}</b><a href="https://wa.me/{{ site_settings.whatsapp|cut:'+'|cut:' ' }}" target="_blank" rel="noopener" class="font-bold hover:underline" dir="ltr">{{ site_settings.whatsapp }}</a><br><small class="text-slate-500">{% trans "رد خلال ساعات العمل" %}</small></span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="quick-tile-icon" style="width:2.4rem;height:2.4rem;border-radius:.7rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+        <span><b class="block text-[var(--brand-navy)]">{% trans "البريد" %}</b><a href="mailto:{{ site_settings.email }}" class="font-bold hover:underline" dir="ltr">{{ site_settings.email }}</a></span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span class="quick-tile-icon" style="width:2.4rem;height:2.4rem;border-radius:.7rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <span><b class="block text-[var(--brand-navy)]">{% trans "العنوان" %}</b>{{ site_settings.address_ar }}</span>
+      </li>
+    </ul>
+    {% if site_settings.map_embed_url %}
+    <iframe class="map-frame card" src="{{ site_settings.map_embed_url }}" loading="lazy" title="{% trans 'موقع المركز على الخريطة' %}" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    {% endif %}
+  </div>
+
+  <!-- فورم التواصل -->
+  <form method="post" class="lg:col-span-3 card p-5 form-grid" novalidate>
+    {% csrf_token %}
+    <h2 class="font-black text-[var(--brand-navy)] text-lg">{% trans "ابعت لنا" %}</h2>
+    <div class="form-grid-2">
+      {% include "components/form_field.html" with field=form.name %}
+      {% include "components/form_field.html" with field=form.phone %}
+    </div>
+    {% include "components/form_field.html" with field=form.email %}
+    {% include "components/form_field.html" with field=form.subject %}
+    {% include "components/form_field.html" with field=form.message %}
+    {% if form.non_field_errors %}<ul class="error-list">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    <button type="submit" class="btn btn-gold btn-lg">{% trans "إرسال الرسالة" %}</button>
+  </form>
+</div>
+{% endblock %}

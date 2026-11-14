@@ -1,0 +1,18 @@
+{% load i18n %}
+<a href="{{ article.get_absolute_url }}" class="card card-hover overflow-hidden block w-72 shrink-0">
+  {% if article.cover %}
+    <img src="{{ article.cover.url }}" alt="{{ article.title }}" class="w-full h-36 object-cover" loading="lazy">
+  {% else %}
+    <div class="w-full h-36 flex items-center justify-center" style="background:linear-gradient(140deg,var(--brand-navy),var(--brand-navy-light));">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h13a1 1 0 0 1 1 1v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"/><path d="M18 9h2.5v9a2 2 0 0 1-2 2M8 10h5M8 14h5"/></svg>
+    </div>
+  {% endif %}
+  <div class="p-3">
+    <div class="flex items-center gap-2">
+      {% if article.category %}<span class="badge badge-navy">{{ article.category.name_ar }}</span>{% endif %}
+      {% if article.is_featured %}<span class="badge badge-gold">{% trans "مميز" %}</span>{% endif %}
+    </div>
+    <h3 class="font-extrabold text-[var(--brand-navy)] leading-6 mt-2 line-clamp-2 min-h-[3rem]">{{ article.title }}</h3>
+    <p class="text-[11px] text-slate-400 font-bold mt-2">{{ article.published_at|date:"Y / m / d" }}</p>
+  </div>
+</a>

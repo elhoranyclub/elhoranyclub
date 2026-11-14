@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تم استلام طلبك" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-12 text-center">
+  <div class="card p-7">
+    <span class="empty-state-icon" style="background:var(--brand-green-soft); color:var(--brand-green); width:5rem; height:5rem;">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+    </span>
+    <h1 class="auth-title mt-4">{% trans "تم استلام طلبك!" %}</h1>
+    <p class="auth-sub">{% trans "اشتراكك الآن «قيد المراجعة» — هيتفعل فور الدفع في المركز" %}</p>
+
+    <div class="mt-5 rounded-2xl border-2 border-dashed border-[var(--brand-gold)] bg-[var(--brand-gold-soft)] px-4 py-4">
+      <p class="mcard-label">{% trans "كود الطلب — احفظه" %}</p>
+      <p class="mcard-number text-2xl mt-1 select-all" dir="ltr">{{ membership.reference }}</p>
+    </div>
+
+    <dl class="text-sm mt-5 text-start space-y-1.5">
+      <div class="flex justify-between"><dt class="text-slate-500">{% trans "المستفيد" %}</dt><dd class="font-bold">{{ membership.beneficiary_name }}</dd></div>
+      <div class="flex justify-between"><dt class="text-slate-500">{% trans "النوع" %}</dt><dd class="font-bold">{{ membership.membership_type.name_ar }}</dd></div>
+      <div class="flex justify-between"><dt class="text-slate-500">{% trans "المطلوب" %}</dt><dd class="font-black text-[var(--brand-navy)]">{{ membership.total_amount }} {% trans "ج" %}</dd></div>
+    </dl>
+
+    <a href="{% url 'payments:checkout' membership.reference %}" class="btn btn-gold btn-block mt-5">{% trans "أكمل الدفع الآن" %}</a>
+    <a href="{% url 'memberships:my' %}" class="block text-center text-sm font-bold text-slate-400 hover:underline mt-2">{% trans "متابعة حالة طلبي لاحقًا" %}</a>
+  </div>
+</div>
+{% endblock %}

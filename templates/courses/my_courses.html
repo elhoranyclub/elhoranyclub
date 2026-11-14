@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "دوراتي" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "دوراتي" %}</h1>
+  <p class="auth-sub mb-4">{% trans "متابعة الحضور والشهادات لكل دوراتك" %}</p>
+
+  {% if enrollments %}
+  <ul class="space-y-3">
+    {% for e in enrollments %}
+    <li class="card p-4">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <a href="{{ e.course.get_absolute_url }}" class="font-extrabold text-[var(--brand-navy)] leading-6 line-clamp-2">{{ e.course.name }}</a>
+          <p class="text-[11px] font-bold text-slate-500 mt-0.5">{% if e.for_dependent %}{{ e.for_dependent.full_name_ar }} · {% endif %}{{ e.course.schedule }}</p>
+          <p class="text-[10px] font-bold text-slate-400" dir="ltr">{{ e.reference }}</p>
+        </div>
+        <span class="badge shrink-0 {% if e.status == 'confirmed' %}badge-green{% elif e.status == 'waitlist' %}badge-gold{% elif e.status == 'completed' %}badge-navy{% else %}badge-gray{% endif %}">{{ e.get_status_display }}</span>
+      </div>
+
+      <div class="mt-3 flex items-center gap-4 text-center text-[11px] font-bold text-slate-500">
+        <span>{% trans "جلسات:" %} {{ e.stats.total }}</span>
+        <span>{% trans "حضور:" %} {{ e.stats.present }}</span>
+        <span class="ms-auto text-base font-black text-[var(--brand-navy)]">{{ e.stats.percent }}٪</span>
+      </div>
+      <div class="h-1.5 rounded-full bg-slate-200 overflow-hidden mt-1"><div class="h-full" style="width:{{ e.stats.percent }}%; background:linear-gradient(90deg, var(--brand-green), #1d8a4e);"></div></div>
+
+      <div class="mt-3 flex flex-wrap items-center gap-2">
+        {% if e.certificate %}
+          <a href="{% url 'courses:certificate_pdf' e.certificate.pk %}" class="btn btn-gold btn-sm">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            {% trans "تحميل الشهادة" %}
+          </a>
+        {% endif %}
+        {% if e.status == 'completed' and not e.evaluation %}
+          <form method="post" action="{% url 'courses:evaluate' e.pk %}" class="flex items-center gap-1">
+            {% csrf_token %}
+            <label class="sr-only" for="rating-{{ e.pk }}">{% trans "التقييم" %}</label>
+            <select id="rating-{{ e.pk }}" name="rating" class="input input-sm w-16" aria-label="{% trans 'التقييم بالنجوم' %}">
+              <option value="5">5 ★</option><option value="4">4 ★</option><option value="3">3 ★</option><option value="2">2 ★</option><option value="1">1 ★</option>
+            </select>
+            <input type="text" name="note" class="input input-sm" placeholder="{% trans 'ملاحظة للمدرب' %}" aria-label="{% trans 'ملاحظتك' %}">
+            <button type="submit" class="btn btn-ghost btn-sm">{% trans "قيّم" %}</button>
+          </form>
+        {% elif e.evaluation %}
+          <span class="badge badge-green">{% trans "قيّمت ✓" %}</span>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state">
+    <div class="empty-state-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+    <p class="font-extrabold text-[var(--brand-navy)]">{% trans "لسه ما سجلتش في أي دورة" %}</p>
+    <a href="{% url 'courses:list' %}" class="btn btn-gold mt-3">{% trans "تصفح الدورات" %}</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

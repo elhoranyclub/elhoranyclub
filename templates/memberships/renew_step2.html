@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "تجديد الاشتراك — الخطوة ٢" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="section-title text-2xl">{% trans "السعر والكوبون" %}</h1>
+  {% include "components/stepper.html" with steps=steps current=step %}
+
+  <div class="grid gap-4">
+    <!-- الملخص -->
+    <div class="card p-5">
+      <p class="text-xs font-bold text-slate-500">{% trans "المستفيد" %}</p>
+      <p class="font-extrabold text-[var(--brand-navy)]">{% if for_dependent %}{{ for_dependent.full_name_ar }} · {{ for_dependent.membership_number }}{% else %}{{ request.user }}{% endif %}</p>
+      <p class="text-xs font-bold text-slate-500 mt-2">{% trans "نوع الاشتراك" %}</p>
+      <p class="font-extrabold text-[var(--brand-navy)]">{{ mtype.name_ar }} — {{ mtype.duration_months }} {% trans "شهر" %}</p>
+    </div>
+
+    <!-- كوبون -->
+    <form method="post" class="card p-5">
+      {% csrf_token %}
+      <label class="label" for="coupon_code">{% trans "كود الخصم (إن وجد)" %}</label>
+      <div class="flex gap-2">
+        <input class="input flex-1" id="coupon_code" name="coupon_code" value="{{ coupon_code }}" placeholder="{% trans 'مثال: STUDENT20' %}" dir="ltr" autocomplete="off" inputmode="text">
+        <button type="submit" name="action" value="apply_coupon" class="btn btn-navy">{% trans "تطبيق" %}</button>
+        {% if coupon_code %}<button type="submit" name="action" value="remove_coupon" class="btn btn-ghost" aria-label="{% trans 'إزالة الكوبون' %}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>{% endif %}
+      </div>
+      {% if coupon_message %}
+        <p class="text-xs font-bold mt-2 {% if coupon_message.0 == 'error' %}text-red-600{% elif coupon_message.0 == 'success' %}text-[var(--brand-green)]{% else %}text-slate-500{% endif %}">{{ coupon_message.1 }}</p>
+      {% endif %}
+      <p class="help-text mt-1">{% trans "جرّب: STUDENT20 (خصم 20٪) — عرض الطلاب بمناسبة العام الدراسي" %}</p>
+    </form>
+
+    <!-- السعر -->
+    <div class="card p-5">
+      <h2 class="font-black text-[var(--brand-navy)] mb-2">{% trans "ملخص السعر" %}</h2>
+      <dl class="text-sm">
+        <div class="flex justify-between py-1.5"><dt class="text-slate-500">{% trans "السعر الأساسي" %}</dt><dd class="font-bold">{{ quote.base }} {% trans "ج" %}</dd></div>
+        <div class="flex justify-between py-1.5"><dt class="text-slate-500">{% trans "الخصم" %}</dt><dd class="font-bold text-[var(--brand-green)]">− {{ quote.discount }} {% trans "ج" %}</dd></div>
+        {% if quote.fine and quote.fine > 0 %}<div class="flex justify-between py-1.5"><dt class="text-[#b8932f] font-bold">{% trans "غرامة التأخير (بعد سنة من آخر دفع)" %}</dt><dd class="font-black text-[#b8932f]">+ {{ quote.fine }} {% trans "ج" %}</dd></div>{% endif %}
+        <div class="flex justify-between py-2.5 mt-1 border-t border-slate-200"><dt class="font-black">{% trans "الإجمالي" %}</dt><dd class="text-xl font-black text-[var(--brand-navy)]">{{ quote.total }} {% trans "ج" %}</dd></div>
+      </dl>
+      <p class="help-text">{% trans "الدفع: نقدي في المركز أو أونلاين/محفظة فور تفعيل بوابة الدفع — هتوصلك تعليمات الدفع بالتفصيل بعد التأكيد." %}</p>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="continue">
+      <button type="submit" class="btn btn-gold btn-block btn-lg">{% trans "التالي — التأكيد" %}</button>
+    </form>
+    <a href="{% url 'memberships:renew' %}" class="text-center text-sm font-bold text-slate-400 hover:underline">{% trans "رجوع لتعديل المستفيد أو النوع" %}</a>
+  </div>
+</div>
+{% endblock %}

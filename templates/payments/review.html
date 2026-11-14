@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "مراجعة المدفوعات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <h1 class="auth-title">{% trans "مراجعة المدفوعات" %}</h1>
+  <p class="auth-sub mb-1">{% trans "للموظفين — إيصالات المحافظ والمدفوعات النقدية المعلقة" %}</p>
+  <p class="text-[11px] font-bold text-slate-400 mb-4">{% trans "التأكيد يفعّل الاشتراك فورًا ويصدر فاتورة" %}</p>
+
+  <!-- إيصالات المحافظ -->
+  <h2 class="section-title text-base mb-2">{% trans "إيصالات محافظ بانتظار المراجعة" %} <span class="badge badge-gold">{{ proofs|length }}</span></h2>
+  {% if proofs %}
+  <ul class="space-y-3">
+    {% for proof in proofs %}
+    <li class="card p-4">
+      <div class="flex gap-4">
+        <a href="{% url 'payments:proof_file' proof.pk %}" target="_blank" class="shrink-0">
+          <img src="{% url 'payments:proof_file' proof.pk %}" alt="{% trans 'إيصال' %}" class="w-24 h-24 object-cover rounded-xl border border-slate-200" loading="lazy">
+        </a>
+        <div class="min-w-0 text-sm">
+          <p class="font-extrabold text-[var(--brand-navy)]">{{ proof.payment.member }}</p>
+          <p class="text-[11px] font-bold text-slate-500">{% if proof.payment.membership %}{{ proof.payment.membership.membership_type.name_ar }}{% endif %} · <span dir="ltr">{{ proof.payment.reference }}</span></p>
+          <p class="mt-1">{% trans "المحوّل:" %} <b>{{ proof.amount_claimed }} ج</b> {% if proof.operation_number %}· {% trans "العملية:" %} <span dir="ltr" class="font-mono">{{ proof.operation_number }}</span>{% endif %}</p>
+          <p class="text-[10px] text-slate-400">{{ proof.created_at|date:"Y-m-d h:i A" }}</p>
+        </div>
+      </div>
+      <form method="post" action="{% url 'payments:staff_review_proof' proof.pk 'confirm' %}" class="flex gap-2 mt-3">
+        {% csrf_token %}
+        <input type="text" name="note" class="input flex-1" placeholder="{% trans 'ملاحظة (اختياري)' %}" aria-label="{% trans 'ملاحظة' %}">
+        <button type="submit" class="btn btn-green btn-sm">{% trans "✓ تأكيد" %}</button>
+      </form>
+      <form method="post" action="{% url 'payments:staff_review_proof' proof.pk 'reject' %}" class="flex gap-2 mt-2" onsubmit="return confirm('{% trans 'تأكيد الرفض؟' %}');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost btn-sm" style="color:#b42318;">{% trans "رفض الإيصال" %}</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state py-6"><p class="text-sm font-bold text-slate-500">{% trans "لا توجد إيصالات بانتظار المراجعة" %}</p></div>
+  {% endif %}
+
+  <!-- مدفوعات نقدية -->
+  <h2 class="section-title text-base mt-6 mb-2">{% trans "مدفوعات نقدية بانتظار التأكيد" %} <span class="badge badge-gold">{{ cash_payments|length }}</span></h2>
+  {% if cash_payments %}
+  <ul class="space-y-2">
+    {% for p in cash_payments %}
+    <li class="card p-4 flex items-center gap-3">
+      <div class="min-w-0 text-sm">
+        <p class="font-extrabold text-[var(--brand-navy)]">{{ p.member }}</p>
+        <p class="text-[11px] font-bold text-slate-500">{% if p.membership %}{{ p.membership.membership_type.name_ar }}{% endif %} · <span dir="ltr">{{ p.reference }}</span> · {{ p.amount }} ج</p>
+        <p class="text-[10px] text-slate-400">{{ p.created_at|date:"Y-m-d h:i A" }}</p>
+      </div>
+      <form method="post" action="{% url 'payments:staff_confirm_cash' p.reference %}" class="ms-auto">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-gold btn-sm whitespace-nowrap">{% trans "أكد الاستلام والدفع" %}</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="card empty-state py-6"><p class="text-sm font-bold text-slate-500">{% trans "لا توجد مدفوعات نقدية بانتظار التأكيد" %}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

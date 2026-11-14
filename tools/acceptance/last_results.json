@@ -1,0 +1,506 @@
+[
+  {
+    "group": "عام (زائر)",
+    "name": "الصفحة الرئيسية (/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة الأخبار (/news/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة الأنشطة (/events/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة البطولات (/tournaments/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "النتائج المباشرة (/tournaments/live/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة الدورات (/courses/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة الرحلات (/trips/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "المعرض (/gallery/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "من نحن (/pages/about/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "المرافق (/pages/facilities/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "الأسعار (/pages/pricing/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "لائحة المركز (/pages/regulation/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "الأسئلة الشائعة (/pages/faq/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تواصل معنا (/pages/contact/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تفاصيل خبر (/news/%D9%81%D8%B1%D9%8A%D9%82-%D8%A7%D9%84%D8%B3%D8%A8%D8%A7%D8%AD%D8%A9-%D9%8A%D8%AD%D8%B5%D8%AF-3-%D8%B0%D9%87%D8%A8%D9%8A%D8%A7%D8%AA-%D9%81%D9%8A-%D8%A8%D8%B7%D9%88%D9%84%D8%A9-%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تفاصيل نشاط (/events/%D8%A8%D8%B7%D9%88%D9%84%D8%A9-%D8%A7%D9%84%D8%B1%D8%A8%D9%8A%D8%B9-%D9%84%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85-%D8%A7%D9%84%D8%AE%D9%85%D8%A7%D8%B3%D9%8A%D8%A9/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تفاصيل دورة (/courses/%D8%AA%D9%86%D8%B3-%D8%B7%D8%A7%D9%88%D9%84%D8%A9-%D8%AF%D9%88%D8%B1%D9%8A-%D8%A7%D9%84%D8%A3%D8%A8%D8%B7%D8%A7%D9%84-%D9%84%D9%84%D9%87%D9%88%D8%A7%D8%A9/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تفاصيل رحلة (/trips/%D8%B1%D8%AD%D9%84%D8%A9-%D8%A7%D9%84%D8%B9%D9%8A%D9%86-%D8%A7%D9%84%D8%B3%D8%AE%D9%86%D8%A9-%D9%84%D9%84%D8%A8%D8%B1%D8%A7%D8%B9%D9%85/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تفاصيل بطولة (/tournaments/%D8%A8%D8%B7%D9%88%D9%84%D8%A9-%D8%A7%D9%84%D8%B1%D8%A8%D9%8A%D8%B9-%D9%84%D9%83%D8%B1%D8%A9-%D8%A7%D9%84%D9%82%D8%AF%D9%85-%D8%A7%D9%84%D8%AE%D9%85%D8%A7%D8%B3%D9%8A%D8%A9-%D8%AA%D8%AD%D8%AA-14-%D8%B3%D9%86%D8%A9/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "البحث بيرجّع نتائج",
+    "ok": true,
+    "note": "مفيش كلمة «نتيجة»"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "نموذج التواصل بيبعت رسالة",
+    "ok": true,
+    "note": ""
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "الدليل التفاعلي للزائر (بدون أقسام إدارية)",
+    "ok": true,
+    "note": "tabs: 🏁 البداية | 👀 الزائر"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "تسجيل الدخول (/accounts/login/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "إنشاء حساب (/accounts/register/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة بدون إنترنت (/offline/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة اعرف الموقع أكتر (/pages/learn-more/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "خريطة الموقع (/sitemap.xml)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "robots.txt (/robots.txt)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "PWA manifest (/manifest.webmanifest)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "النسخة الإنجليزية (/en/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "API الأخبار (JSON) (/api/news/?format=json)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة 404 بتترجم",
+    "ok": true,
+    "note": "status 404"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "صفحة الدليل (زائر) فيها فيديو الزائر",
+    "ok": true,
+    "note": "7 فصل · /guide/video/guest/"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "الفيديو بيدعم Range (تنقّل داخل الفيديو)",
+    "ok": true,
+    "note": "status 206"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "القوائم الإدارية محمية من غير تسجيل",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "لوحة التحكم محمية من غير تسجيل",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عام (زائر)",
+    "name": "لوحة Django محمية من غير تسجيل",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "تسجيل الدخول",
+    "ok": true,
+    "note": "landing: /pages/learn-more/?welcome=1&next=/"
+  },
+  {
+    "group": "عضو",
+    "name": "الملف الشخصي (/accounts/profile/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "كارت العضوية QR (/accounts/card/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "الأبناء التابعين (/accounts/dependents/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "خدماتي (/accounts/my-services/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "اشتراكاتي (/memberships/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "المدفوعات (/payments/my/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "الإشعارات (/notifications/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "تفضيلات الإشعارات (/notifications/preferences/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "دوراتي (/courses/my/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "حجوزاتي في الأنشطة (/events/my/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "رحلاتي (/trips/my-bookings/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "تسجيلاتي في البطولات (/tournaments/my-registrations/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "تغيير كلمة السر (/accounts/password-change/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "تعديل الملف (/accounts/profile/edit/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "عضو",
+    "name": "كارت العضوية فيه كود QR",
+    "ok": true,
+    "note": ""
+  },
+  {
+    "group": "عضو",
+    "name": "صفحة الدليل تعرض فيديو العضو",
+    "ok": true,
+    "note": "7 فصل · /guide/video/member/"
+  },
+  {
+    "group": "عضو",
+    "name": "الدليل التفاعلي للعضو (قسم العضو بس)",
+    "ok": true,
+    "note": "role=عضو"
+  },
+  {
+    "group": "عضو",
+    "name": "تجديد — الخطوة ١ فيها اختيار المستفيد والنوع",
+    "ok": true,
+    "note": ""
+  },
+  {
+    "group": "عضو",
+    "name": "تجديد — الخطوة ٢ (السعر والكوبون)",
+    "ok": true,
+    "note": "/memberships/renew/2/"
+  },
+  {
+    "group": "عضو",
+    "name": "تجديد — الخطوة ٣ (التأكيد/الدفع)",
+    "ok": true,
+    "note": "/memberships/renew/3/"
+  },
+  {
+    "group": "عضو",
+    "name": "صفحة تسجيل في دورة",
+    "ok": true,
+    "note": "/courses/%D8%AA%D9%86%D8%B3-%D8%B7%D8%A7%D9%88%D9%84%D8%A9-%D8%AF%D9%88%D8%B1%D9%8A-%D8%A7%D9%84%D8%A3%D8%A8%D8%B7%D8%A7%D9%84-%D9%84%D9%84%D9%87%D9%88%D8%A7%D8%A9/enroll/"
+  },
+  {
+    "group": "عضو",
+    "name": "صفحة الإشعارات فيها بنود",
+    "ok": true,
+    "note": "1739 حرف"
+  },
+  {
+    "group": "عضو",
+    "name": "تسجيل الخروج",
+    "ok": true,
+    "note": ""
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "تسجيل الدخول",
+    "ok": true,
+    "note": "/pages/learn-more/?welcome=1&next=/"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "القوائم الإدارية (/manage/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "إدارة الأخبار (/manage/news/newsarticle/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "تسجيلات الأنشطة (/manage/events/eventregistration/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "إدارة الدورات (/manage/courses/course/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "إدارة الرحلات (/manage/trips/trip/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "إدارة البطولات (/manage/tournaments/tournament/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "إدارة الاشتراكات (/manage/memberships/membership/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "لوحة التحكم (staff) (/dashboard/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "شاشة إضافة خبر موجودة",
+    "ok": true,
+    "note": ""
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "مفيش دخول للوحة Django (السوبر أدمن بس)",
+    "ok": true,
+    "note": "ظهر فورم الدخول"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "صفحة الدليل تعرض فيديو مدخل البيانات",
+    "ok": true,
+    "note": "/guide/video/dataentry/"
+  },
+  {
+    "group": "مدخل البيانات",
+    "name": "الدليل التفاعلي لمدخل البيانات (بلا أقسام الإدارة)",
+    "ok": true,
+    "note": "role=مدخل بيانات"
+  },
+  {
+    "group": "الإدارة",
+    "name": "تسجيل الدخول",
+    "ok": true,
+    "note": "/pages/learn-more/?welcome=1&next=/"
+  },
+  {
+    "group": "الإدارة",
+    "name": "لوحة التحكم (/dashboard/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "الإدارة",
+    "name": "القوائم الإدارية (كامل) (/manage/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "الإدارة",
+    "name": "لوحة Django (/admin/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "الإدارة",
+    "name": "مراجعة المدفوعات (/payments/staff/)",
+    "ok": true,
+    "note": "status 200"
+  },
+  {
+    "group": "الإدارة",
+    "name": "تصدير الأعضاء CSV (/dashboard/export/members.csv)",
+    "ok": true,
+    "note": "status 200 · text/csv; charset=utf-8"
+  },
+  {
+    "group": "الإدارة",
+    "name": "تصدير المدفوعات CSV (/dashboard/export/payments.csv)",
+    "ok": true,
+    "note": "status 200 · text/csv; charset=utf-8"
+  },
+  {
+    "group": "الإدارة",
+    "name": "إعدادات الموقع متاحة من /admin/",
+    "ok": true,
+    "note": ""
+  },
+  {
+    "group": "الإدارة",
+    "name": "صفحة الدليل تعرض فيديو الإدارة",
+    "ok": true,
+    "note": "/guide/video/admin/"
+  },
+  {
+    "group": "الإدارة",
+    "name": "الدليل التفاعلي للإدارة (كل الأقسام)",
+    "ok": true,
+    "note": "7 تبويب"
+  }
+]

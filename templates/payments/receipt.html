@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "الإيصال" %} {{ payment.reference }} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto px-4 py-8">
+  <!-- ===== Printable sheet ===== -->
+  <div class="receipt-sheet card overflow-hidden">
+    <div class="px-5 py-4 text-center" style="background:var(--brand-navy);">
+      <img src="{% static 'img/logo.svg' %}" alt="" class="w-12 h-12 mx-auto">
+      <p class="text-white font-black text-lg mt-1">{{ site_name }}</p>
+      <p class="text-[10px] font-bold" style="color:var(--brand-gold);">{% trans "إيصال دفع — Payment Receipt" %}</p>
+    </div>
+
+    <div class="p-5">
+      <div class="flex items-center justify-between">
+        <span class="badge {% if payment.status == 'paid' %}badge-green{% else %}badge-gold{% endif %} text-xs px-3 py-1.5">
+          {% if payment.status == 'paid' %}{% trans "✓ مدفوع" %}{% else %}{{ payment.get_status_display }}{% endif %}
+        </span>
+        <div class="text-end">
+          <p class="text-[10px] font-bold text-slate-400">{% trans "رقم الفاتورة" %}</p>
+          <p class="font-mono font-bold text-sm" dir="ltr">{% if invoice %}{{ invoice.number }}{% else %}—{% endif %}</p>
+        </div>
+      </div>
+
+      <dl class="text-sm mt-4 divide-y divide-slate-100">
+        <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "كود الطلب" %}</dt><dd class="font-mono font-bold" dir="ltr">{{ payment.reference }}</dd></div>
+        <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "العضو" %}</dt><dd class="font-bold">{{ payment.member }}</dd></div>
+        <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "البيان" %}</dt><dd class="font-bold text-end">{% if payment.membership %}{{ payment.membership.membership_type.name_ar }}{% else %}{{ payment.get_kind_display }}{% endif %}</dd></div>
+        <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "طريقة الدفع" %}</dt><dd class="font-bold">{{ payment.get_method_display }}</dd></div>
+        <div class="py-2 flex justify-between gap-4"><dt class="text-slate-500">{% trans "التاريخ" %}</dt><dd class="font-bold">{{ payment.paid_at|default:payment.created_at|date:"Y-m-d h:i A" }}</dd></div>
+        <div class="py-3 flex justify-between gap-4"><dt class="font-black">{% trans "الإجمالي" %}</dt><dd class="text-xl font-black text-[var(--brand-navy)]">{{ payment.amount }} {% trans "ج" %}</dd></div>
+      </dl>
+      <p class="text-[10px] text-slate-400 text-center border-t border-slate-100 pt-3">{% trans "إيصال صادر عن المركز ويُعتد به في السجلات المالية." %}</p>
+    </div>
+  </div>
+
+  <!-- ===== Actions ===== -->
+  <div class="no-print flex flex-wrap justify-center gap-2 mt-4">
+    <button type="button" class="btn btn-navy" onclick="window.print()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+      {% trans "طباعة" %}
+    </button>
+    <a class="btn btn-gold" href="{% url 'payments:invoice_pdf' payment.reference %}">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      {% trans "تحميل PDF" %}
+    </a>
+    <a href="{% url 'payments:my' %}" class="btn btn-ghost">{% trans "مدفوعاتي" %}</a>
+    <a href="{% url 'core:home' %}" class="btn btn-ghost">{% trans "الرئيسية" %}</a>
+  </div>
+</div>
+{% endblock %}

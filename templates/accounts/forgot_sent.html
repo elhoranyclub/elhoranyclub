@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "تم إرسال التعليمات" %} — {{ site_name }}{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="text-center mb-5">
+    {% if show_hint and account_state == "missing" %}
+    <span class="inline-flex w-16 h-16 rounded-2xl items-center justify-center" style="background:#fdecec; color:#dc2626;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5m0 3h.01"/></svg>
+    </span>
+    <h1 class="auth-title mt-3">{% trans "مفيش حساب بهذا الرقم" %}</h1>
+    <p class="auth-sub">{% trans "الرقم اللي كتبته مش مسجّل على الموقع — عشان كده مبعتناش إيميل." %}</p>
+    {% elif show_hint and account_state == "no_email" %}
+    <span class="inline-flex w-16 h-16 rounded-2xl items-center justify-center" style="background:#fff4e5; color:#b45309;">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+    </span>
+    <h1 class="auth-title mt-3">{% trans "الحساب موجود بس من غير إيميل" %}</h1>
+    <p class="auth-sub">{% trans "مش هنقدر نبعتلك الكود على الإيميل — تواصل مع الاستقبال عشان يحدّثوا الإيميل المسجّل، أو سجّل من جديد." %}</p>
+    {% else %}
+    <span class="inline-flex w-16 h-16 rounded-2xl items-center justify-center" style="background:var(--brand-green-soft); color:var(--brand-green);">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+    </span>
+    <h1 class="auth-title mt-3">{% trans "تم إرسال التعليمات ✉️" %}</h1>
+    {% if masked_email %}
+    <p class="auth-sub">{% blocktrans with email=masked_email %}بعتنا رمز التحقق على <b dir="ltr">{{ email }}</b> — راجع بريدك الوارد وأيضًا Spam{% endblocktrans %}</p>
+    {% else %}
+    <p class="auth-sub">{% trans "لو الرقم مسجل عندنا، هيكون وصلك رمز على بريدك الإلكتروني — راجع بريدك الوارد وأيضًا Spam" %}</p>
+    {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="card auth-card form-grid text-center">
+    {% if show_hint and account_state == "missing" %}
+    <p class="text-xs text-slate-500 leading-6">
+      {% trans "لو عضو جديد — يسجّل من صفحة «إنشاء حساب» وياخد كود تحقق على الإيميل. لو مسجّل برقم تاني — جرّب الرقم ده." %}
+    </p>
+    <a href="{% url 'accounts:register' %}" class="btn btn-gold btn-block btn-lg">{% trans "إنشاء حساب جديد" %}</a>
+    <a href="{% url 'accounts:forgot' %}" class="btn btn-navy btn-block">{% trans "جرب رقم تاني" %}</a>
+    <a href="{% url 'accounts:login' %}" class="text-sm font-bold text-[var(--brand-green)] hover:underline">{% trans "عودة لتسجيل الدخول" %}</a>
+    {% else %}
+    <p class="text-xs text-slate-500 leading-6">{% trans "من رسالتنا اتبع التعليمات علشان تعمل كلمة سر جديدة — الكود صالح لمدة ١٠ دقائق ولمرة واحدة فقط." %}</p>
+
+    <a href="{% url 'accounts:verify' %}" class="btn btn-gold btn-block btn-lg">{% trans "عندي الكود — ادخله الآن" %}</a>
+    <a href="{% url 'accounts:login' %}" class="btn btn-navy btn-block">{% trans "عودة لتسجيل الدخول" %}</a>
+
+    <a href="{% url 'accounts:forgot' %}" class="text-sm font-bold text-[var(--brand-green)] hover:underline">{% trans "لم يصلك الرمز؟ إعادة الإرسال" %}</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ course.name }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-6">
+  <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
+    <a href="{% url 'courses:list' %}" class="hover:text-[var(--brand-navy)]">{% trans "الدورات" %}</a>
+    <span aria-hidden="true">‹</span>
+    <span class="text-[var(--brand-navy)] line-clamp-1">{{ course.name }}</span>
+  </nav>
+
+  <article class="card overflow-hidden">
+    {% if course.cover %}
+      <img src="{{ course.cover.url }}" alt="{{ course.name }}" class="w-full h-48 sm:h-56 object-cover" fetchpriority="high">
+    {% else %}
+    <div class="h-36 flex flex-col items-center justify-center" style="background:linear-gradient(140deg,var(--brand-navy),var(--brand-navy-light));">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6" aria-hidden="true"><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+    </div>
+    {% endif %}
+
+    <div class="p-5">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="badge badge-navy">{{ course.sport.name_ar }}</span>
+        <span class="badge badge-gray">{{ course.get_level_display }}</span>
+        <span class="badge badge-gray">{{ course.get_gender_display }}</span>
+        {% if course.status == 'open' %}<span class="badge badge-green">{% trans "التسجيل مفتوح" %}</span>{% elif course.status == 'ongoing' %}<span class="badge badge-gold">{% trans "جارية" %}</span>{% endif %}
+        {% if course.requires_medical %}<span class="badge badge-red">{% trans "يتطلب إقرارًا صحيًا" %}</span>{% endif %}
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-[var(--brand-navy)] leading-snug mt-3">{{ course.name }}</h1>
+
+      <dl class="grid sm:grid-cols-2 gap-2 text-xs mt-4">
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "المواعيد" %}</dt><dd class="font-extrabold">{{ course.schedule }}</dd></div>
+        <div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "المكان" %}</dt><dd class="font-extrabold">{{ course.location }}</dd></div>
+        {% if course.start_date %}<div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "تبدأ" %}</dt><dd class="font-extrabold">{{ course.start_date|date:"Y-m-d" }} · {{ course.duration_weeks }} {% trans "أسبوع" %}</dd></div>{% endif %}
+        {% if course.coach %}<div class="bg-slate-50 rounded-xl px-3 py-2.5"><dt class="font-bold text-slate-400">{% trans "المدرب" %}</dt><dd class="font-extrabold">{{ course.coach.get_full_name|default:course.coach.phone }}</dd></div>{% endif %}
+      </dl>
+
+      {% if course.description %}<p class="mt-4 leading-8 text-[15px] whitespace-pre-line">{{ course.description }}</p>{% endif %}
+
+      {% if course.groups.all %}
+      <div class="mt-4">
+        <p class="text-xs font-bold text-slate-400 mb-1.5">{% trans "المجموعات المتاحة" %}</p>
+        <div class="flex flex-wrap gap-2">
+          {% for group in course.groups.all %}
+          <span class="badge badge-navy">{{ group.name }}{% if group.schedule %} — {{ group.schedule }}{% endif %} <span class="opacity-60">({{ group.capacity }})</span></span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <p class="text-xs font-bold text-slate-400">{% trans "السعر" %}</p>
+          <p class="text-2xl font-black text-[var(--brand-navy)]">{% if course.price == 0 %}{% trans "مجاني" %}{% else %}{{ course.price }} <small class="text-xs font-bold text-slate-400">{% trans "ج" %} / {{ course.get_price_type_display }}</small>{% endif %}</p>
+        </div>
+        <div class="text-end">
+          <p class="text-xs font-bold text-slate-400">{% trans "المقاعد المتاحة" %}</p>
+          <p class="text-2xl font-black {% if course.seats_left < 5 %}text-red-500{% else %}text-[var(--brand-green)]{% endif %}">{{ course.seats_left }}</p>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        {% if my_enrollment %}
+          {% if my_enrollment.status == 'confirmed' %}
+            <p class="badge badge-green text-sm px-4 py-2 w-full justify-center">{% trans "✓ مسجل — نتمنى لك دورة ممتعة!" %}</p>
+          {% elif my_enrollment.status == 'waitlist' %}
+            <p class="badge badge-gold text-sm px-4 py-2 w-full justify-center">{% trans "في قائمة الانتظار — هنبلغك عند توفر مكان" %}</p>
+          {% elif my_enrollment.status == 'completed' %}
+            <p class="badge badge-navy text-sm px-4 py-2 w-full justify-center">{% trans "أكملت الدورة — شهادة إتمامك بانتظارك في «دوراتي»" %}</p>
+          {% endif %}
+        {% elif course.status == 'open' %}
+          <a href="{% url 'courses:enroll' course.slug %}" class="btn btn-gold btn-block btn-lg">{% trans "سجّل الآن" %}</a>
+        {% elif course.status == 'ongoing' %}
+          <p class="text-center text-sm font-bold text-slate-400">{% trans "الدورة جارية — تواصل مع الاستقبال للانضمام إن توفرت أماكن" %}</p>
+        {% else %}
+          <p class="text-center text-sm font-bold text-slate-400">{% trans "باب التسجيل مغلق" %}</p>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+</div>
+{% endblock %}
