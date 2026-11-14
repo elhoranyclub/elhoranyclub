@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% load i18n dict_filters %}
+{% load i18n dict_filters ld_json %}
 {% block title %}{{ tournament.name }} — {{ site_name }}{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
 {% block og_title %}{{ tournament.name }}{% endblock %}
 {% block og_image %}{% if tournament.cover %}<meta property="og:image" content="{{ tournament.cover.url }}">{% endif %}{% endblock %}
+{% block schema_org %}{% ld_json tournament_schema %}{% endblock %}
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-6">
 
@@ -182,3 +183,5 @@
   {% endif %}
 </div>
 {% endblock %}
+
+

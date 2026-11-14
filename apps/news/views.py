@@ -7,6 +7,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
+from apps.core.seo import article_schema
 from .models import NewsArticle, NewsCategory
 
 
@@ -48,4 +49,5 @@ def article_detail(request, slug):
         "article": article,
         "related": related,
         "meta_description": article.summary or article.title,
+        "article_schema": article_schema(article, request),
     })

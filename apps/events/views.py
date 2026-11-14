@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.core.seo import event_schema
 from .models import Event, EventRegistration
 from .services import cancel_registration, register_for_event
 
@@ -119,6 +120,7 @@ def event_detail(request, slug):
         "can_cancel": can_cancel,
         "cutoff_hours": cutoff_hours,
         "meta_description": (event.description or event.title)[:160],
+        "event_schema": event_schema(event, request),
     })
 
 

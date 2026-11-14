@@ -60,10 +60,19 @@ def site_settings(request):
         except Exception as exc:
             logger.debug("unread_count fallback: %s", exc)
 
+    from .seo import organization_schema
+
     return {
         "site_settings": s,
         "site_name": site_name,
         "site_tagline": tagline,
         "BACKEND_IS_AR": lang == "ar",
         "notifications_unread": unread,
+        # بيانات منظّمة للمركز (JSON-LD) — بتظهر جوجل بالاسم والعنوان والتليفون
+        "schema_org": organization_schema(s, request),
+        "google_site_verification": getattr(settings, "GOOGLE_SITE_VERIFICATION", ""),
+        # لو الصور محفوظة على قرص السيرفر (مش Cloudinary) — نبيه المستخدم
+        "media_is_temporary": not getattr(settings, "USE_CLOUDINARY", False),
+        # الدفع الإلكتروني المباشر (كارت) — مقفول لحد ما تتفعّل بوابة حقيقية
+        "online_payment_enabled": getattr(settings, "ONLINE_PAYMENT_ENABLED", False),
     }

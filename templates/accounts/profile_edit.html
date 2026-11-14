@@ -26,7 +26,10 @@
       <div class="min-w-0">
         <label class="label" for="{{ form.photo.id_for_label }}">{% trans "الصورة الشخصية" %}</label>
         {{ form.photo }}
-        <p class="help-text">{% trans "JPG/PNG/WebP — حتى ٥ ميجابايت. هترفع على Cloudinary في الإنتاج." %}</p>
+        <p class="help-text">{% trans "JPG/PNG/WebP — حتى ٥ ميجابايت. اختار صورة من معرض الصور أو صوّرها بالكاميرا." %}</p>
+        {% if media_is_temporary %}
+        <p class="help-text" style="color:#b45309;">{% trans "ملاحظة: السيرفر دلوقتي بيخزن الصور مؤقتًا — فعّل تخزين سحابي (Cloudinary) قبل النشر النهائي." %}</p>
+        {% endif %}
       </div>
     </div>
 

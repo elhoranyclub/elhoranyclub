@@ -17,6 +17,9 @@ environ.Env.read_env(BASE_DIR / ".env")
 # — من غير كده المتصفح بيconsiderه ملف عادي وبيتجاهل تثبيت التطبيق.
 mimetypes.add_type("application/manifest+json", ".webmanifest")
 
+# الدفع الإلكتروني المباشر (كارت عبر Paymob) — مقفول لحد ما تتفعّل بوابة حقيقية
+ONLINE_PAYMENT_ENABLED = env.bool("ONLINE_PAYMENT_ENABLED", default=False)
+
 # Django 6.0 هيتغيّر سلوك التحقق من الروابط — نفترض https (أأمن) ونكتم التحذير
 FORMS_URLFIELD_ASSUME_HTTPS = True
 

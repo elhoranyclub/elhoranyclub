@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n ld_json %}
 {% block title %}{{ course.name }} — {{ site_name }}{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
+{% block schema_org %}{% ld_json course_schema %}{% endblock %}
 {% block content %}
 <div class="max-w-3xl mx-auto px-4 py-6">
   <nav class="text-xs font-bold text-slate-500 mb-3 flex items-center gap-2" aria-label="breadcrumb">
@@ -84,3 +85,5 @@
   </article>
 </div>
 {% endblock %}
+
+

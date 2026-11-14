@@ -7,6 +7,7 @@ from decimal import Decimal
 
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -43,6 +44,24 @@ def _png_bytes() -> bytes:
 
 @pytest.mark.django_db
 class TestOnlineFlow:
+    def test_online_payment_is_disabled_by_default(self, client):
+        """الدفع بالبطاقة مقفول لحد ما تتفعّل بوابة حقيقية — ظاهر كخيار «غير مفعّل»."""
+        mtype = _mtype()
+        user = _user()
+        membership = _pending_membership(user, mtype)
+        client.force_login(user)
+
+        r = client.get(reverse("payments:checkout", args=[membership.reference]))
+        body = r.content.decode()
+        assert r.status_code == 200
+        assert "غير مفعّل حاليًا" in body
+
+        #<Post> بيرجع برسالة ويحوّل على صفحة الدفع
+        r2 = client.post(reverse("payments:pay_online", args=[membership.reference]))
+        assert r2.status_code == 302
+        assert membership.payments.count() == 0
+
+    @override_settings(ONLINE_PAYMENT_ENABLED=True)
     def test_checkout_online_activates_membership_and_invoice(self, client):
         mtype = _mtype()
         user = _user()

@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.core.seo import course_schema
 from apps.tournaments.models import Sport
 
 from .models import Attendance, Certificate, Course, CourseEnrollment, CourseEvaluation, CourseGroup
@@ -48,6 +49,7 @@ def course_detail(request: HttpRequest, slug: str) -> HttpResponse:
         "course": course,
         "my_enrollment": my_enrollment,
         "meta_description": (course.description or course.name)[:160],
+        "course_schema": course_schema(course, request),
     })
 
 

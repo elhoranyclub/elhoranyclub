@@ -4,8 +4,9 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.generic import RedirectView
+from django.views.static import serve
 
 from apps.core import views as core_views
 from apps.core.sitemaps import CoursesSitemap, EventsSitemap, NewsSitemap, StaticViewSitemap, TournamentsSitemap, TripsSitemap
@@ -65,6 +66,12 @@ urlpatterns += i18n_patterns(
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += staticfiles_urlpatterns()
+elif not getattr(settings, "USE_CLOUDINARY", False):
+    # إنتاج بدون Cloudinary: لازم نقدّم ملفات الـ media بنفينا (وإلا الصور المرفوعة
+    # هتتحفظ بس مش هتظهر). على Render الـ disk مؤقت — فعّل CloudINARY قبل النشر النهائي.
+    urlpatterns += [
+        re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
+    ]
 
 handler404 = "apps.core.views.error_404"
 handler500 = "apps.core.views.error_500"

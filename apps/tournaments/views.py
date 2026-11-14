@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.core.seo import tournament_schema
 from .models import Match, Sport, Standing, Tournament, TournamentCategory, TournamentRegistration
 from .services import (
     check_age,
@@ -58,6 +59,7 @@ def tournament_detail(request, slug):
         "scorers": scorers,
         "my_registration": my_registration,
         "meta_description": (tournament.description or tournament.name)[:160],
+        "tournament_schema": tournament_schema(tournament, request),
     })
 
 

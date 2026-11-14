@@ -11,6 +11,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
+from apps.core.seo import trip_schema
 from apps.accounts.models import Dependent
 
 from .models import GuardianConsent, Trip, TripBooking, TripPassenger
@@ -41,6 +42,7 @@ def trip_detail(request: HttpRequest, slug: str) -> HttpResponse:
         "trip": trip,
         "my_booking": my_booking,
         "meta_description": (trip.description or f"{trip.name} — {trip.destination}")[:160],
+        "trip_schema": trip_schema(trip, request),
     })
 
 

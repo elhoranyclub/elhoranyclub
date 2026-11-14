@@ -6,6 +6,7 @@ from decimal import Decimal, InvalidOperation
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.conf import settings
 from django.core import signing
 from django.core.signing import BadSignature
 from django.http import HttpRequest, HttpResponse
@@ -106,6 +107,9 @@ def _select_method_for(reference: str, request, method: str) -> Payment:
 @login_required
 @require_POST
 def pay_online(request: HttpRequest, reference: str) -> HttpResponse:
+    if not getattr(settings, "ONLINE_PAYMENT_ENABLED", False):
+        messages.error(request, _("الدفع بالبطاقة غير مفعّل حاليًا — استخدم التحويل أو النقد في المركز."))
+        return redirect("payments:checkout", reference=reference)
     payment = _select_method_for(reference, request, Payment.Method.ONLINE)
     if payment.status != Payment.Status.PENDING:
         messages.error(request, _("لا يمكن الدفع لعملية مكتملة."))
